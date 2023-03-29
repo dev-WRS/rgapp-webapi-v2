@@ -1,0 +1,17 @@
+[
+	{
+		"key": "admin",
+		"name": "Admin",
+		"description": "Can access and manage all system features"
+	},
+	{
+		"key": "agent",
+		"name": "Agent",
+		"description": "Can manage Projects, Customers and Certifiers features"
+	},
+	{
+		"key": "staff",
+		"name": "Staff",
+		"description": "Can manage and has limited access to Projects feature actions"
+	}
+]

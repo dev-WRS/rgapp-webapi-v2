@@ -1,0 +1,16 @@
+[
+	{
+		"email": "contact@loopthy.com",
+		"name": "Loopthy Corp",
+		"phone": "7865192541",
+		"emailVerified": true,
+		"active": true
+	},
+	{
+		"email": "borisluis@gmail.com",
+		"name": "Boris Ordunez",
+		"phone": "7865199887",
+		"emailVerified": true,
+		"active": true
+	}
+]

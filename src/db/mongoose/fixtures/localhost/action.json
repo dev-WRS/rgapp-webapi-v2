@@ -1,0 +1,152 @@
+[
+	{
+		"key": "list-projects",
+		"name": "List",
+		"group": "Projects"
+	},
+	{
+		"key": "add-projects",
+		"name": "Add",
+		"group": "Projects"
+	},
+	{
+		"key": "edit-projects",
+		"name": "Edit",
+		"group": "Projects"
+	},
+	{
+		"key": "delete-projects",
+		"name": "Delete",
+		"group": "Projects"
+	},
+	{
+		"key": "change-status-projects",
+		"name": "Change Status",
+		"group": "Projects"
+	},
+	{
+		"key": "list-assets",
+		"name": "List",
+		"group": "Assets"
+	},
+	{
+		"key": "upload-assets",
+		"name": "Upload",
+		"group": "Assets"
+	},
+	{
+		"key": "open-assets",
+		"name": "Open",
+		"group": "Assets"
+	},
+	{
+		"key": "download-assets",
+		"name": "Download",
+		"group": "Assets"
+	},
+	{
+		"key": "delete-assets",
+		"name": "Delete",
+		"group": "Assets"
+	},
+	{
+		"key": "list-customers",
+		"name": "List",
+		"group": "Customers"
+	},
+	{
+		"key": "add-customers",
+		"name": "Add",
+		"group": "Customers"
+	},
+	{
+		"key": "edit-customers",
+		"name": "Edit",
+		"group": "Customers"
+	},
+	{
+		"key": "delete-customers",
+		"name": "Delete",
+		"group": "Customers"
+	},
+	{
+		"key": "list-certifiers",
+		"name": "List",
+		"group": "Certifiers"
+	},
+	{
+		"key": "add-certifiers",
+		"name": "Add",
+		"group": "Certifiers"
+	},
+	{
+		"key": "edit-certifiers",
+		"name": "Edit",
+		"group": "Certifiers"
+	},
+	{
+		"key": "delete-certifiers",
+		"name": "Delete",
+		"group": "Certifiers"
+	},
+	{
+		"key": "list-users",
+		"name": "List",
+		"group": "Users"
+	},
+	{
+		"key": "add-users",
+		"name": "Add",
+		"group": "Users"
+	},
+	{
+		"key": "edit-users",
+		"name": "Edit",
+		"group": "Users"
+	},
+	{
+		"key": "delete-users",
+		"name": "Delete",
+		"group": "Users"
+	},
+	{
+		"key": "activate-users",
+		"name": "Activate",
+		"group": "Users"
+	},
+	{
+		"key": "deactivate-users",
+		"name": "Deactivate",
+		"group": "Users"
+	},
+	{
+		"key": "list-roles",
+		"name": "List",
+		"group": "Roles"
+	},
+	{
+		"key": "edit-roles",
+		"name": "Edit",
+		"group": "Roles"
+	},
+	{
+		"key": "generate-reports",
+		"name": "Generate",
+		"group": "Reports"
+	},
+	{
+		"key": "open-reports",
+		"name": "Open",
+		"group": "Reports"
+	}, 
+	{
+		"key": "download-reports",
+		"name": "Download",
+		"group": "Reports"
+	},
+	{
+		"key": "print-reports",
+		"name": "Print",
+		"group": "Reports"
+	}
+]

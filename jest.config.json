@@ -1,0 +1,16 @@
+{
+	"testEnvironment": "node",
+	"roots": [
+		"<rootDir>", 
+		"<rootDir>/jest/"
+	],
+	"setupFiles": [
+		"<rootDir>/jest/__mocks__/multer-mock.js",
+		"<rootDir>/jest/__mocks__/aws-sdk-mock.js",
+		"<rootDir>/jest/setup-tests.js"
+	],
+	"testRegex": "(/__tests__/.*)(.test.js$)",
+	"transformIgnorePatterns": [
+		"<rootDir>/node_modules/(?!lodash-es)"
+	]
+}

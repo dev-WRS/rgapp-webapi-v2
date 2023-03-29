@@ -1,0 +1,374 @@
+[
+	{
+		"key": "2015-interim-whole-building-automotive",
+		"taxYear": 2015,
+		"buildingType": "Automotive Facility",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-convention",
+		"taxYear": 2015,
+		"buildingType": "Convention Center",
+		"lpd": 1.4
+	},
+	{
+		"key": "2015-interim-whole-building-court",
+		"taxYear": 2015,
+		"buildingType": "Court House",
+		"lpd": 1.4
+	},
+	{
+		"key": "2015-interim-whole-building-dining-bar",
+		"taxYear": 2015,
+		"buildingType": "Dining: Bar Lounge/Leisure",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-dining-cafeteria",
+		"taxYear": 2015,
+		"buildingType": "Dining: Cafeteria/Fast Food",
+		"lpd": 1.8
+	},
+	{
+		"key": "2015-interim-whole-building-dining-family",
+		"taxYear": 2015,
+		"buildingType": "Dining: Family",
+		"lpd": 1.9
+	},
+	{
+		"key": "2015-interim-whole-building-dormitory",
+		"taxYear": 2015,
+		"buildingType": "Dormitory",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-exercise",
+		"taxYear": 2015,
+		"buildingType": "Exercise Center",
+		"lpd": 1.4
+	},
+	{
+		"key": "2015-interim-whole-building-gymnasium",
+		"taxYear": 2015,
+		"buildingType": "Gymnasium",
+		"lpd": 1.7
+	},
+	{
+		"key": "2015-interim-whole-building-hospital",
+		"taxYear": 2015,
+		"buildingType": "Hospital/Healthcare",
+		"lpd": 1.6
+	},
+	{
+		"key": "2015-interim-whole-building-hotel",
+		"taxYear": 2015,
+		"buildingType": "Hotel",
+		"lpd": 1.7
+	},
+	{
+		"key": "2015-interim-whole-building-library",
+		"taxYear": 2015,
+		"buildingType": "Library",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-manufacturing",
+		"taxYear": 2015,
+		"buildingType": "Manufacturing Facility",
+		"lpd": 2.2
+	},
+	{
+		"key": "2015-interim-whole-building-motel",
+		"taxYear": 2015,
+		"buildingType": "Motel",
+		"lpd": 2.0
+	},
+	{
+		"key": "2015-interim-whole-building-motion",
+		"taxYear": 2015,
+		"buildingType": "Motion Picture Theatre",
+		"lpd": 1.6
+	},
+	{
+		"key": "2015-interim-whole-building-multi-family",
+		"taxYear": 2015,
+		"buildingType": "Multi-Family",
+		"lpd": 1.0
+	},
+	{
+		"key": "2015-interim-whole-building-museum",
+		"taxYear": 2015,
+		"buildingType": "Museum",
+		"lpd": 1.6
+	},
+	{
+		"key": "2015-interim-whole-building-office",
+		"taxYear": 2015,
+		"buildingType": "Office",
+		"lpd": 1.3
+	},
+	{
+		"key": "2015-interim-whole-building-parking",
+		"taxYear": 2015,
+		"buildingType": "Parking Garage",
+		"lpd": 0.3
+	},
+	{
+		"key": "2015-interim-whole-building-penitentiary",
+		"taxYear": 2015,
+		"buildingType": "Penitentiary",
+		"lpd": 1.2
+	},
+	{
+		"key": "2015-interim-whole-building-performing",
+		"taxYear": 2015,
+		"buildingType": "Performing Arts Theatre",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-police-station",
+		"taxYear": 2015,
+		"buildingType": "Police/Fire Station",
+		"lpd": 1.3
+	},
+	{
+		"key": "2015-interim-whole-building-post-office",
+		"taxYear": 2015,
+		"buildingType": "Post Office",
+		"lpd": 1.6
+	},
+	{
+		"key": "2015-interim-whole-building-religious",
+		"taxYear": 2015,
+		"buildingType": "Religious Building",
+		"lpd": 2.2
+	},
+	{
+		"key": "2015-interim-whole-building-retail",
+		"taxYear": 2015,
+		"buildingType": "Retail",
+		"lpd": 1.9
+	},
+	{
+		"key": "2015-interim-whole-building-school",
+		"taxYear": 2015,
+		"buildingType": "School/University",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-sports",
+		"taxYear": 2015,
+		"buildingType": "Sports Arena",
+		"lpd": 1.5
+	},
+	{
+		"key": "2015-interim-whole-building-town-hall",
+		"taxYear": 2015,
+		"buildingType": "Town Hall",
+		"lpd": 1.4
+	},
+	{
+		"key": "2015-interim-whole-building-transportation",
+		"taxYear": 2015,
+		"buildingType": "Transportation",
+		"lpd": 1.2
+	},
+	{
+		"key": "2015-interim-whole-building-warehouse",
+		"taxYear": 2015,
+		"buildingType": "Warehouse",
+		"lpd": 1.2
+	},
+	{
+		"key": "2015-interim-whole-building-workshop",
+		"taxYear": 2015,
+		"buildingType": "Workshop",
+		"lpd": 1.7
+	},
+	{
+		"key": "2016-interim-whole-building-automotive",
+		"taxYear": 2016,
+		"buildingType": "Automotive Facility",
+		"lpd": 0.9
+	},
+	{
+		"key": "2016-interim-whole-building-convention",
+		"taxYear": 2016,
+		"buildingType": "Convention Center",
+		"lpd": 1.2
+	},
+	{
+		"key": "2016-interim-whole-building-court",
+		"taxYear": 2016,
+		"buildingType": "Court House",
+		"lpd": 1.2
+	},
+	{
+		"key": "2016-interim-whole-building-dining-bar",
+		"taxYear": 2016,
+		"buildingType": "Dining: Bar Lounge/Leisure",
+		"lpd": 1.3
+	},
+	{
+		"key": "2016-interim-whole-building-dining-cafeteria",
+		"taxYear": 2016,
+		"buildingType": "Dining: Cafeteria/Fast Food",
+		"lpd": 1.4
+	},
+	{
+		"key": "2016-interim-whole-building-dining-family",
+		"taxYear": 2016,
+		"buildingType": "Dining: Family",
+		"lpd": 1.6
+	},
+	{
+		"key": "2016-interim-whole-building-dormitory",
+		"taxYear": 2016,
+		"buildingType": "Dormitory",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-exercise",
+		"taxYear": 2016,
+		"buildingType": "Exercise Center",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-gymnasium",
+		"taxYear": 2016,
+		"buildingType": "Gymnasium",
+		"lpd": 1.1
+	},
+	{
+		"key": "2016-interim-whole-building-hospital",
+		"taxYear": 2016,
+		"buildingType": "Hospital/Healthcare",
+		"lpd": 1.2
+	},
+	{
+		"key": "2016-interim-whole-building-hotel",
+		"taxYear": 2016,
+		"buildingType": "Hotel",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-library",
+		"taxYear": 2016,
+		"buildingType": "Library",
+		"lpd": 1.3
+	},
+	{
+		"key": "2016-interim-whole-building-manufacturing",
+		"taxYear": 2016,
+		"buildingType": "Manufacturing Facility",
+		"lpd": 1.3
+	},
+	{
+		"key": "2016-interim-whole-building-motel",
+		"taxYear": 2016,
+		"buildingType": "Motel",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-motion",
+		"taxYear": 2016,
+		"buildingType": "Motion Picture Theatre",
+		"lpd": 1.2
+	},
+	{
+		"key": "2016-interim-whole-building-multi-family",
+		"taxYear": 2016,
+		"buildingType": "Multi-Family",
+		"lpd": 0.7
+	},
+	{
+		"key": "2016-interim-whole-building-museum",
+		"taxYear": 2016,
+		"buildingType": "Museum",
+		"lpd": 1.1
+	},
+	{
+		"key": "2016-interim-whole-building-office",
+		"taxYear": 2016,
+		"buildingType": "Office",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-parking",
+		"taxYear": 2016,
+		"buildingType": "Parking Garage",
+		"lpd": 0.3
+	},
+	{
+		"key": "2016-interim-whole-building-penitentiary",
+		"taxYear": 2016,
+		"buildingType": "Penitentiary",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-performing",
+		"taxYear": 2016,
+		"buildingType": "Performing Arts Theatre",
+		"lpd": 1.6
+	},
+	{
+		"key": "2016-interim-whole-building-police-station",
+		"taxYear": 2016,
+		"buildingType": "Police/Fire Station",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-post-office",
+		"taxYear": 2016,
+		"buildingType": "Post Office",
+		"lpd": 1.1
+	},
+	{
+		"key": "2016-interim-whole-building-religious",
+		"taxYear": 2016,
+		"buildingType": "Religious Building",
+		"lpd": 1.3
+	},
+	{
+		"key": "2016-interim-whole-building-retail",
+		"taxYear": 2016,
+		"buildingType": "Retail",
+		"lpd": 1.5
+	},
+	{
+		"key": "2016-interim-whole-building-school",
+		"taxYear": 2016,
+		"buildingType": "School/University",
+		"lpd": 1.2
+	},
+	{
+		"key": "2016-interim-whole-building-sports",
+		"taxYear": 2016,
+		"buildingType": "Sports Arena",
+		"lpd": 1.1
+	},
+	{
+		"key": "2016-interim-whole-building-town-hall",
+		"taxYear": 2016,
+		"buildingType": "Town Hall",
+		"lpd": 1.1
+	},
+	{
+		"key": "2016-interim-whole-building-transportation",
+		"taxYear": 2016,
+		"buildingType": "Transportation",
+		"lpd": 1.0
+	},
+	{
+		"key": "2016-interim-whole-building-warehouse",
+		"taxYear": 2016,
+		"buildingType": "Warehouse",
+		"lpd": 0.8
+	},
+	{
+		"key": "2016-interim-whole-building-workshop",
+		"taxYear": 2016,
+		"buildingType": "Workshop",
+		"lpd": 1.4
+	}
+]

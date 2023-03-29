@@ -1,0 +1,322 @@
+[
+	{
+		"key": "2006-permanent-lighting",
+		"taxYear": 2006,
+		"method": "Permanent",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 16.67,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2006-permanent-hvac",
+		"taxYear": 2006,
+		"method": "Permanent",
+		"qualifyingCategory": "HVAC",
+		"savingsRequirement": 16.67,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2006-permanent-envelop",
+		"taxYear": 2006,
+		"method": "Permanent",
+		"qualifyingCategory": "Envelope",
+		"savingsRequirement": 16.67,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2006-permanent-whole-building",
+		"taxYear": 2006,
+		"method": "Permanent",
+		"qualifyingCategory": "Whole Building",
+		"savingsRequirement": 50,
+		"taxDeduction": 1.80
+	},
+	{
+		"key": "2006-interim-whole-lighting-25",
+		"taxYear": 2006,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2006-interim-whole-lighting-40",
+		"taxYear": 2006,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2006-interim-space-lighting-25",
+		"taxYear": 2006,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2006-interim-space-lighting-40",
+		"taxYear": 2006,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2009-permanent-lighting",
+		"taxYear": 2009,
+		"method": "Permanent",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 20,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2009-permanent-hvac",
+		"taxYear": 2009,
+		"method": "Permanent",
+		"qualifyingCategory": "HVAC",
+		"savingsRequirement": 20,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2009-permanent-envelop",
+		"taxYear": 2009,
+		"method": "Permanent",
+		"qualifyingCategory": "Envelope",
+		"savingsRequirement": 10,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2009-permanent-whole-building",
+		"taxYear": 2009,
+		"method": "Permanent",
+		"qualifyingCategory": "Whole Building",
+		"savingsRequirement": 50,
+		"taxDeduction": 1.80
+	},
+	{
+		"key": "2009-interim-whole-lighting-25",
+		"taxYear": 2009,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2009-interim-whole-lighting-40",
+		"taxYear": 2009,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2009-interim-space-lighting-25",
+		"taxYear": 2009,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2009-interim-space-lighting-40",
+		"taxYear": 2009,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2012-permanent-lighting",
+		"taxYear": 2012,
+		"method": "Permanent",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2012-permanent-hvac",
+		"taxYear": 2012,
+		"method": "Permanent",
+		"qualifyingCategory": "HVAC",
+		"savingsRequirement": 15,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2012-permanent-envelop",
+		"taxYear": 2012,
+		"method": "Permanent",
+		"qualifyingCategory": "Envelope",
+		"savingsRequirement": 10,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2012-permanent-whole-building",
+		"taxYear": 2012,
+		"method": "Permanent",
+		"qualifyingCategory": "Whole Building",
+		"savingsRequirement": 50,
+		"taxDeduction": 1.80
+	},
+	{
+		"key": "2012-interim-whole-lighting-25",
+		"taxYear": 2012,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2012-interim-whole-lighting-40",
+		"taxYear": 2012,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2012-interim-space-lighting-25",
+		"taxYear": 2012,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2012-interim-space-lighting-40",
+		"taxYear": 2012,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.60
+	},
+	{
+		"key": "2021-permanent-lighting",
+		"taxYear": 2021,
+		"method": "Permanent",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.61
+	},
+	{
+		"key": "2021-permanent-hvac",
+		"taxYear": 2021,
+		"method": "Permanent",
+		"qualifyingCategory": "HVAC",
+		"savingsRequirement": 15,
+		"taxDeduction": 0.61
+	},
+	{
+		"key": "2021-permanent-envelop",
+		"taxYear": 2021,
+		"method": "Permanent",
+		"qualifyingCategory": "Envelope",
+		"savingsRequirement": 10,
+		"taxDeduction": 0.61
+	},
+	{
+		"key": "2021-permanent-whole-building",
+		"taxYear": 2021,
+		"method": "Permanent",
+		"qualifyingCategory": "Whole Building",
+		"savingsRequirement": 50,
+		"taxDeduction": 1.82
+	},
+	{
+		"key": "2021-interim-whole-lighting-25",
+		"taxYear": 2021,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2021-interim-whole-lighting-40",
+		"taxYear": 2021,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.61
+	},
+	{
+		"key": "2021-interim-space-lighting-25",
+		"taxYear": 2021,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2021-interim-space-lighting-40",
+		"taxYear": 2021,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.61
+	},
+	{
+		"key": "2022-permanent-lighting",
+		"taxYear": 2022,
+		"method": "Permanent",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.63
+	},
+	{
+		"key": "2022-permanent-hvac",
+		"taxYear": 2022,
+		"method": "Permanent",
+		"qualifyingCategory": "HVAC",
+		"savingsRequirement": 15,
+		"taxDeduction": 0.63
+	},
+	{
+		"key": "2022-permanent-envelop",
+		"taxYear": 2022,
+		"method": "Permanent",
+		"qualifyingCategory": "Envelope",
+		"savingsRequirement": 10,
+		"taxDeduction": 0.63
+	},
+	{
+		"key": "2022-permanent-whole-building",
+		"taxYear": 2022,
+		"method": "Permanent",
+		"qualifyingCategory": "Whole Building",
+		"savingsRequirement": 50,
+		"taxDeduction": 1.88
+	},
+	{
+		"key": "2022-interim-whole-lighting-25",
+		"taxYear": 2022,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2022-interim-whole-lighting-40",
+		"taxYear": 2022,
+		"method": "Interim Whole Building",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.63
+	},
+	{
+		"key": "2022-interim-space-lighting-25",
+		"taxYear": 2022,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 25,
+		"taxDeduction": 0.30
+	},
+	{
+		"key": "2022-interim-space-lighting-40",
+		"taxYear": 2022,
+		"method": "Interim Space-by-Space",
+		"qualifyingCategory": "Lighting",
+		"savingsRequirement": 40,
+		"taxDeduction": 0.63
+	}
+]

@@ -1,0 +1,61 @@
+<html>
+<head>
+	<style type="text/css">
+		div {
+			margin: 5px;
+			border-radius: 5px;
+			width: 140px;
+			height: 50px;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" id="primary-color" value="0, 43, 63" width="200"/>
+	<button id="refresh" width="200">Refresh</button>
+	<div class="item"></div>
+	<div class="item"></div>
+	<div class="item"></div>
+	<div class="item"></div>
+	<div class="item"></div>
+	<script type="text/javascript">
+		const refreshButton = document.getElementById('refresh')
+
+		const generateTheme = (baseColor, themeDistances) => {
+			const sum = (a1, a2) => a1.map((b, i) => parseInt(b) + parseInt(a2[i]))
+
+			const colors = themeDistances.reduce((colors, distance) => {
+				colors.push(sum(colors[colors.length - 1], distance))
+				return colors
+			}, [baseColor])
+
+			const elements = document.getElementsByTagName('div')
+
+			Array.from(elements).forEach((element, i) => {
+				const color = colors[i]
+				element.style['background-color'] = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 1)`
+			})
+		}
+
+		refreshButton.addEventListener('click', () => {
+			const primary = document.getElementById('primary-color')
+			// const themeDistances = [
+			// 	[4, 87, 60],
+			// 	[191, 39, -37],
+			// 	[11, -34, -9],
+			// 	[-13, -51, -16]
+			// ]
+
+			const themeDistances = [
+				[70, 70, 70],
+				[70, 70, 70],
+				[70, 70, 70]
+			]
+
+			if (primary && primary.value) {
+				baseColor = primary.value.split(',').map(e => parseInt(e))
+				generateTheme(baseColor, themeDistances)
+			}
+		})
+	</script>
+</body>
+</html>

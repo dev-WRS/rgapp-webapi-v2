@@ -1,0 +1,127 @@
+{
+	"root": true,
+	"plugins": [
+        "jest"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:jest/recommended",
+        "plugin:jest/style"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+	"globals": {
+		"defineFeature": "readonly",
+		"loadFeature": "readonly",
+		"process": "readonly",
+		"global": "readonly",
+		"console": "readonly",
+		"Buffer": "readonly",
+		"Promise": "readonly"
+	},
+	"rules": {
+		/* Silence using a callback in asynchronous tests and hooks */
+		"jest/no-done-callback": "off",
+
+		/* Disallow the use of semicolons.
+			ASI can make your code behave in an unexpected way, whether you use semicolons or not. */
+			"semi": [
+				"error",
+				"never"
+			],
+
+		/* Spots scenarios where a newline looks like it is ending a statement, but is not. */
+		"no-unexpected-multiline": "error",
+
+		/* Discourages the use of var in favor of const or let. */
+		"no-var": "error",
+
+		/* Eliminates assignments from return statements except when using parentheses. */
+		"no-return-assign": [
+			"error",
+			"except-parens"
+		],
+
+		/* Disallows trailing commas. */
+		"comma-dangle": [
+			"error",
+			"never"
+		],
+
+		/* Enforce consistency in string styles. */
+		"quotes": [
+			"error",
+			"single"
+		],
+
+		/* Empty functions can reduce readability because readers need to guess whether it's intentional or not. */
+		"no-empty-function": "error",
+
+		/* Disallows variables declared and not used. Do not check arguments. */
+		"no-unused-vars": [
+			"error",
+			{
+				"args": "none"
+			}
+		],
+
+		/* Enforces the use of tabs instead of spaces. */
+		"indent": [
+			"error",
+			"tab"
+		],
+
+		/* Enforces consistent spacing between keys and values in object literal properties. */
+		"key-spacing": [
+			"error"
+		],
+
+		/* Enforces consistency on keyword spacing. */
+		"keyword-spacing": "error",
+
+		/* Enforces consistency regarding the spaces after words unary operators
+			and after/before nonwords unary operators. */
+		"space-unary-ops": "error",
+
+		/* Maintains consistency around the spacing inside of object literals.
+        	It also applies to EcmaScript 6 destructured assignment and import/export specifiers. */
+			"object-curly-spacing": [
+				"error",
+				"always"
+			],
+
+		/* Enforces space before function parenthesis except for anonymous functions. */
+		"space-before-function-paren": [
+			"error",
+			{
+				"anonymous": "never",
+				"named": "always"
+			}
+		],
+
+		/* Disallow multiple spaces */
+		"no-multi-spaces": "error",
+
+		/* Enforces consistent spacing directly inside of parentheses. */
+		"space-in-parens": [
+			"error",
+			"never"
+		],
+
+		/* Disallows multiple whitespace around logical expressions, conditional expressions,
+			declarations, array elements, object properties, sequences and function parameters. */
+			"no-multiple-empty-lines": [
+				"error",
+				{
+					"max": 1,
+					"maxBOF": 0,
+					"maxEOF": 0
+				}
+			],
+
+		/* Requires spacing around infix operators */
+		"space-infix-ops": "error"
+	}
+}

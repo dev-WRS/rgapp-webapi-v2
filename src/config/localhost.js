@@ -9,11 +9,11 @@ export default {
 		appUrl: 'http://localhost:3000'
 	},
 	aws: {
-		bucketName: 'rgapp-assets-bucket',
+		bucketName: 'rgapp-assets-bucket-production',
 		contentEncoding: 'gzip'
 	},
 	smtp: {
-		sender: 'Loopthy Corp." <dev@loopthy.com>'
+		sender: 'Walker Reid Strategies" <no-reply@walkerreid.com>'
 	},
-	phrase: '4abbef4971c838ac88027e2de675f8e62c5da52872c0631ec17eaf26288b0003'
+	phrase: 'cbccc26abe0bf86da100afbed0886e10f9409e0f5663295a5b055b2d1edb3dcd'
 }

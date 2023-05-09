@@ -21,7 +21,7 @@ const projectSchema = new mongoose.Schema({
 	state: {
 		type: String,
 		required: true,
-		enum: ['AL', 'MT', 'AK', 'NE', 'AZ', 'NV', 'AR', 'NH', 'CA', 'NJ', 'CO', 'NM', 'CT', 'NY', 'DE', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'MO', 'WY']
+		enum: ['AL', 'MT', 'AK', 'NE', 'DC', 'AZ', 'NV', 'AR', 'NH', 'CA', 'NJ', 'CO', 'NM', 'CT', 'NY', 'DE', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'MO', 'WY']
 	},
 	inspectionDate: {
 		type: String
@@ -104,7 +104,7 @@ const projectSchema = new mongoose.Schema({
 		},
 		qualifyingCategories: [{
 			type: String,
-			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV','Envelope', 'Whole Building']
+			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV', 'Envelope', 'Whole Building']
 		}],
 		area: {
 			type: Number

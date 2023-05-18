@@ -388,7 +388,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'Req. LPD',
-					dataIndex: 'ashraeRequiredLpd',
+					renderer: (row) => row.ashraeLpd === undefined ? '' : row.type === 'Warehouse' ? formatNumber(row.ashraeLpd * 0.5) : formatNumber(row.ashraeLpd * 0.6),
 					align: 'right',
 					width: 120
 				}],
@@ -398,7 +398,7 @@ export default async ({
 				columns: [{
 					type: 'string',
 					header: 'Name',
-					dataIndex: 'type',
+					dataIndex: 'name',
 					flex: true
 				}, {
 					type: 'string',

@@ -3,7 +3,7 @@ import helpers, {
 	defaultFont, fonts, 
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
 	formatDate, formatNumber, formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
-	QUALYFYING_CATEGORIES, WHOLE_BUILDING, LIGHTING, ENVELOPE, HVAC
+	asVerbString, asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING, LIGHTING, ENVELOPE, HVAC
 } from './helpers.js'
 
 export default async ({ 
@@ -165,7 +165,10 @@ export default async ({
 	}
 
 	const qualifyingProperty = qualifyingWholeBuilding ? asCommaSeparatedString(QUALYFYING_CATEGORIES) : asCommaSeparatedString(qualifyingCategories)
+	const verbQualifyingProperty = qualifyingWholeBuilding ? 'were' : qualifyingCategories.length > 1 ? 'were' : 'was'
 	const buildingTypesSubject = asBuildingsSubject(buildingTypes, project.buildings.length)
+	const siteVisitString = asSiteVisitString(buildingTypes)
+	const verbString = asVerbString(buildingTypes)
 
 	let license
 
@@ -405,7 +408,7 @@ export default async ({
 			sectionParagraph('Statement for qualifying energy efficient commercial building property:'),
 			...statements,
 			sectionTitleParagraph('04) Energy Reduction Certification'),
-			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems were completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by more than the respective amounts (See Table 4.1) due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined under the Performance Rating Method of Notice 2006-52. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingArea)}.`),
+			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by more than the respective amounts (See Table 4.1) due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined under the Performance Rating Method of Notice 2006-52. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingArea)}.`),
 			sectionTable({
 				title: '4.1) Qualifying Percentages',
 				columnsHeader: false,
@@ -534,7 +537,7 @@ export default async ({
 		sections.push({
 			items: [
 				sectionTitleParagraph('Site Inspection'),
-				sectionParagraph(`On ${project.inspectionDate} a site visit to ${buildingTypesSubject} was performed to verify the installation of energy efficient technology.`),
+				sectionParagraph(`On ${project.inspectionDate}, ${siteVisitString} to ${buildingTypesSubject} ${verbString} performed to verify the installation of energy efficient technology.`),
 				sectionGallery(photos)
 			]
 		})

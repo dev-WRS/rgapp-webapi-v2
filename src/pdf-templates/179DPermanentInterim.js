@@ -2,8 +2,8 @@ import PDFBuilder from '../pdf-builder/index.js'
 import helpers, { 
 	defaultFont, fonts, 
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
-	formatDate, formatNumber, formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
-	QUALYFYING_CATEGORIES, WHOLE_BUILDING, LIGHTING, ENVELOPE, HVAC, METHOD_PERMANENT
+	formatDate, formatNumber, formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject, asVerbString,
+	asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING, LIGHTING, ENVELOPE, HVAC, METHOD_PERMANENT
 } from './helpers.js'
 
 export default async ({ 
@@ -165,7 +165,10 @@ export default async ({
 	}
 
 	const qualifyingProperty = qualifyingWholeBuilding ? asCommaSeparatedString(QUALYFYING_CATEGORIES) : asCommaSeparatedString(qualifyingCategories)
+	const verbQualifyingProperty = qualifyingWholeBuilding ? 'were' : qualifyingCategories.length > 1 ? 'were' : 'was'
 	const buildingTypesSubject = asBuildingsSubject(buildingTypes, project.buildings.length)
+	const siteVisitString = asSiteVisitString(buildingTypes)
+	const verbString = asVerbString(buildingTypes)
 	const buildingsPermanent = project.buildings.filter(building => building.method === METHOD_PERMANENT)
 	const buildingsLigthingInterim = project.buildings.filter(building => building.method != METHOD_PERMANENT && building.qualifyingCategories.indexOf(LIGHTING) !== -1)
 	const totalBuildingsPermanentArea = buildingsPermanent.reduce((result, building) => result + parseFloat(building.area), 0)
@@ -417,7 +420,7 @@ export default async ({
 			sectionParagraph('Statement for qualifying property under Permanent Rule:', {
 				weight: 'bold'
 			}),
-			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems were completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by more than the respective amounts (See Table 4.1) due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined under the Performance Rating Method of Notice 2006-52. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingsPermanentArea)}.`),
+			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by more than the respective amounts (See Table 4.1) due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined under the Performance Rating Method of Notice 2006-52. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingsPermanentArea)}.`),
 			sectionTable({
 				title: '4.1) Qualifying Percentages',
 				columnsHeader: false,
@@ -605,7 +608,7 @@ export default async ({
 		sections.push({
 			items: [
 				sectionTitleParagraph('Site Inspection'),
-				sectionParagraph(`On ${project.inspectionDate} a site visit to ${buildingTypesSubject} was performed to verify the installation of energy efficient technology.`),
+				sectionParagraph(`On ${project.inspectionDate}, ${siteVisitString} to ${buildingTypesSubject} ${verbString} performed to verify the installation of energy efficient technology.`),
 				sectionGallery(photos)
 			]
 		})

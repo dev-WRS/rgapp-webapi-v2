@@ -3,7 +3,7 @@ import helpers, {
 	defaultFont, fonts, 
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
 	formatDate, formatNumber,formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
-	QUALYFYING_CATEGORIES, WHOLE_BUILDING
+	asVerbString, asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING
 } from './helpers.js'
 
 export default async ({ 
@@ -153,7 +153,10 @@ export default async ({
 		}
 	}
 	const qualifyingProperty = qualifyingWholeBuilding ? asCommaSeparatedString(QUALYFYING_CATEGORIES) : asCommaSeparatedString(qualifyingCategories)
+	const verbQualifyingProperty = qualifyingWholeBuilding ? 'were' : qualifyingCategories.length > 1 ? 'were' : 'was'
 	const buildingTypesSubject = asBuildingsSubject(buildingTypes, project.buildings.length)
+	const siteVisitString = asSiteVisitString(buildingTypes)
+	const verbString = asVerbString(buildingTypes)
 
 	let license
 
@@ -372,7 +375,7 @@ export default async ({
 			}),
 			sectionParagraph(`(a) Achieved a reduction in lighting power density of at least 25 percent (50 percent in the case of a warehouse) of the minimum requirements in Table 9.3.1.1 or Table 9.3.1.2 (not including additional interior lighting power allowances) of Standard 90.1-${year};\n(b) Have controls and circuiting that comply fully with the mandatory and prescriptive requirements of Standard 90.1-${year};\n(c) Include provision for bi-level switching in all occupancies except hotel and motel guest rooms, store rooms, restrooms, public lobbies, and garages; and\n(d) Meet the minimum requirements for calculated lighting levels as set forth in the IESNA Lighting Handbook, Performance and Application, Ninth Edition, 2000;`),
 			sectionTitleParagraph('04) Energy Reduction Certification'),
-			sectionParagraph(`The new ${qualifyingProperty} systems were completed in ${buildingTypesSubject}. The ASHRAE/ IESNA 90.1 lighting power density number for the buildings are:`),
+			sectionParagraph(`The new ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The ASHRAE/ IESNA 90.1 lighting power density number for the buildings are:`),
 			sectionTable({
 				columns: [{
 					type: 'string',
@@ -527,7 +530,7 @@ export default async ({
 		sections.push({
 			items: [
 				sectionTitleParagraph('Site Inspection'),
-				sectionParagraph(`On ${project.inspectionDate} a site visit to ${buildingTypesSubject} was performed to verify the installation of energy efficient technology.`),
+				sectionParagraph(`On ${project.inspectionDate}, ${siteVisitString} to ${buildingTypesSubject} ${verbString} performed to verify the installation of energy efficient technology.`),
 				sectionGallery(photos)
 			]
 		})

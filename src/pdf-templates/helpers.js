@@ -52,9 +52,17 @@ export const asItemsSubject = (items) => {
 		const article = (ln > 1) ? 'the' : 
 			['a', 'e', 'i', 'o', 'u'].indexOf(items[0][0].toLowerCase()) !== -1 ? 'an' : 'a'
 
-		return `${article} ${asCommaSeparatedString(items)}`
+		return `${article} ${asCommaSeparatedString(items).toLowerCase()}`
 	}
 	return ''
+}
+
+export const asSiteVisitString = (items) => {
+	return items.length > 1 ? 'site visits' : 'a site visit'
+}
+
+export const asVerbString = (items) => {
+	return items.length > 1 ? 'where' : 'was'
 }
 
 export const asBuildingsSubject = (buildingTypes, buildingsCount) => `${asItemsSubject(buildingTypes)} ${buildingsCount === 1 ? 'building' : 'buildings'}`

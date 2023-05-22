@@ -135,6 +135,7 @@ export default async ({
 	const totalBuildingArea = project.buildings.reduce((result, building) => result + parseFloat(building.area), 0)
 	const totalDeduction = project.buildings.reduce((result, building) => result + (parseFloat(building.area) * parseFloat(building.rate)), 0)
 	const qualifyingPercentages = {}
+	const qualifyingPercentagesRows = []
 	let qualifyingWholeBuilding = false
 	let qualifyingCategories = []
 	let buildingTypes = []
@@ -155,6 +156,10 @@ export default async ({
 			Object.keys(building.savingsRequirement).forEach(name => {
 				if (!qualifyingPercentages[name]) {
 					qualifyingPercentages[name] = building.savingsRequirement[name]
+					qualifyingPercentagesRows.push({
+						name: name,
+						value: `${building.savingsRequirement[name]} %`
+					})
 				}
 			})
 		}
@@ -434,19 +439,7 @@ export default async ({
 					dataIndex: 'value',
 					width: 140
 				}],
-				rows: [{
-					name: 'Lighting',
-					value: (qualifyingPercentages[LIGHTING]) ? `${qualifyingPercentages[LIGHTING]} %` : 'N/A'
-				}, {
-					name: 'HVAC',
-					value: (qualifyingPercentages[HVAC]) ? `${qualifyingPercentages[HVAC]} %` : 'N/A'
-				}, {
-					name: 'Envelope',
-					value: (qualifyingPercentages[ENVELOPE]) ? `${qualifyingPercentages[ENVELOPE]} %` : 'N/A'
-				}, {
-					name: 'Whole Building',
-					value: (qualifyingPercentages[WHOLE_BUILDING]) ? `${qualifyingPercentages[WHOLE_BUILDING]} %` : 'N/A'
-				}]
+				rows: qualifyingPercentagesRows
 			}),
 			sectionParagraph('Statement for qualifying property under Interim Rule:', {
 				weight: 'bold'

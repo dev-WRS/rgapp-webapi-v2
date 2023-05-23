@@ -361,11 +361,11 @@ export default ({ theme }) => {
 		}
 	}
 
-	const sectionSignature = ({ title, printedName, signature, licenseNumber, date }) => ({
+	const sectionSignature = ({ title, printedName, signature, licenseNumber, date, state }) => ({
 		type: 'signature',
 		color: theme.black,
 		size: 11,
-		title, printedName, signature, licenseNumber, date
+		title, printedName, signature, licenseNumber, date, state
 	})
 
 	const sectionCertificate = ({ title, name, description }) => ([{

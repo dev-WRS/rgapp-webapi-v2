@@ -850,7 +850,7 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 						asBuffer(certifier.signature)
 					])
 
-					if (project.photos.length > 0) {
+					if (project.photos && project.photos.length > 0) {
 						photos = await Promise.allSettled(project.photos.map(({ asset, description }) => asBuffer(asset)
 							.then((item) => ({
 								description,

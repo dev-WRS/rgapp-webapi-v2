@@ -169,8 +169,6 @@ export default async ({
 		}
 	}
 
-	console.log('qualifyingPercentagesRows', qualifyingPercentagesRows)
-
 	const qualifyingProperty = qualifyingWholeBuilding ? asCommaSeparatedString(QUALYFYING_CATEGORIES) : asCommaSeparatedString(qualifyingCategories)
 	const verbQualifyingProperty = qualifyingWholeBuilding ? 'were' : qualifyingCategories.length > 1 ? 'were' : 'was'
 	const buildingTypesSubject = asBuildingsSubject(buildingTypes, project.buildings.length)
@@ -511,7 +509,8 @@ export default async ({
 				printedName: certifier.name,
 				signature,
 				licenseNumber: license ? license.number : '',
-				date: formatDate(new Date())
+				date: formatDate(new Date()),
+				state: license ? license.state : ''
 			})
 		]
 	})

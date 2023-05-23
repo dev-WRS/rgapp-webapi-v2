@@ -703,11 +703,12 @@ const signature = async (pdf, item) => {
 		licenseNumber,
 		date,
 		color,
-		size
+		size,
+		state
 	} = item
 	const label = 'Printed Name'
 	const signatureLabel = 'Signature'
-	const licenseNumberLabel = 'License Number'
+	const licenseNumberLabel = `${state} Professional Engineering License No.`
 	const dateLabel = 'Date'
 	const lineHeight = 32
 	const paddingLeft = 24
@@ -788,7 +789,7 @@ const signature = async (pdf, item) => {
 		doc.text(licenseNumberLabel, docX, docY, options)
 
 		doc.font(fontFamily(pdf)({ weight: 'normal' }))
-		doc.text(licenseNumber, docX + labelWidth + paddingLeft, docY, options)
+		doc.text(licenseNumber, docX + labelWidth + paddingLeft + 130, docY, options)
 
 		docY += height
 	}

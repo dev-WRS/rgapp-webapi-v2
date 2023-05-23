@@ -580,7 +580,8 @@ export default async ({
 				printedName: certifier.name,
 				signature,
 				licenseNumber: license ? license.number : '',
-				date: formatDate(new Date())
+				date: formatDate(new Date()),
+				state: license ? license.state : ''
 			})
 		]
 	})

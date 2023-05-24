@@ -1,3 +1,4 @@
+import sharp from 'sharp'
 import _ from 'lodash'
 
 export const computedProps = (pdf) => (item) => {
@@ -656,10 +657,12 @@ const gallery = async (pdf, item) => {
 			docY = doc.y
 		}
 
-		doc.image(image, left, docY, { 
+		const imageResized = await sharp(image).rotate().toBuffer()
+		
+		doc.image(imageResized.buffer, left, docY, { 
 			width, height
 		})
-
+		
 		doc.font(fontFamily(pdf)({ weight: 'bold' }))
 		doc.text(figureIndex, left, docY + height + textPaddingTop, { 
 			continued: true, ...descriptionDefaults 

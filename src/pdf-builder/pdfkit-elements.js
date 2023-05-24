@@ -659,7 +659,7 @@ const gallery = async (pdf, item) => {
 
 		const metadata = await sharp(image).metadata()
 		let imageResized = metadata.size && metadata.size > 1000000
-			? await sharp(image).resize(800, 600).rotate().toBuffer()
+			? await sharp(image).resize(1000, 750).rotate().toBuffer()
 			: await sharp(image).rotate().toBuffer()
 
 		doc.image(imageResized.buffer, left, docY, { 

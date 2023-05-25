@@ -177,6 +177,28 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		}
 	)
 
+	router.post('/projects/:id/copy',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		async (req, res, next) => {
+			try {
+				const { id } = req.params
+				let project = await Project.getProjectById(id)				
+
+				if (project) {
+					delete project._id
+					const projectToCopy = await Project.copyProject(project)
+
+					res.json({ result: asProjectResponse(projectToCopy) })
+				}
+			}
+			catch (error) {
+				next(error)
+			}
+		}
+	)
+
 	router.put('/projects/:id',
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),

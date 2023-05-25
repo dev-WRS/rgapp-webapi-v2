@@ -8,6 +8,10 @@
 		"key": "add-projects",
 		"name": "Add",
 		"group": "Projects"
+	},	{
+		"key": "copy-projects",
+		"name": "Copy",
+		"group": "Projects"
 	},
 	{
 		"key": "edit-projects",

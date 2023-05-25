@@ -10,6 +10,11 @@
 		"group": "Projects"
 	},
 	{
+		"key": "copy-projects",
+		"name": "Copy",
+		"group": "Projects"
+	},
+	{
 		"key": "edit-projects",
 		"name": "Edit",
 		"group": "Projects"

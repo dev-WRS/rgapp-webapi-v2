@@ -58,6 +58,26 @@ export default ({ db, config }) => {
 			}
 		}
 	}
+	const copyProject = async (projectToCopy) => {
+		try {
+			const matchingProjects = await Project.find({ projectID: { $regex: projectToCopy.projectID, $options: '$i' } }).sort({ projectID: 1 }).lean()
+			const lastProjectID = matchingProjects[matchingProjects.length - 1].projectID
+			const lastIndex = lastProjectID.lastIndexOf('(')
+
+			let newProjectID = lastIndex !== -1 
+				? parseInt(lastProjectID.slice(lastIndex + 1, -1)) + 1
+				: 1
+
+			projectToCopy.projectID = `${projectToCopy.projectID} (${newProjectID})` 
+			projectToCopy.name = `${projectToCopy.name} (${newProjectID})`
+			
+			const project = await Project.create(projectToCopy)
+			
+			return await Project.findOne({ _id: project.id }, '-__v').lean()
+		} catch (error) {
+			throw new HttpBadRequestError('Bad request')
+		}
+	}
 	const getProjectById = (id) => Project.findOne({ _id: id }, '-__v').lean()
 	const getProjectByProjectID = async (id) => {
 		let project = {}
@@ -239,6 +259,7 @@ export default ({ db, config }) => {
 		deleteProjectDwellingUnit,
 		addProjectPhoto,
 		updateProjectPhoto,
-		deleteProjectPhoto
+		deleteProjectPhoto,
+		copyProject
 	}
 }

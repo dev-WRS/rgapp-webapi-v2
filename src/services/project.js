@@ -259,7 +259,14 @@ export default ({ db, config }) => {
 	function setDefaultValues (obj, noCopies) {
 		Object.keys(obj).forEach(prop => {
 			if (!['name', 'type', 'address'].includes(prop)) {
-				obj[prop] = typeof obj[prop] === 'string' ? '' : Array.isArray(obj[prop]) ? [] : typeof obj[prop] === 'number' ? 0 : typeof obj[prop] === 'object' ? {} : obj[prop]
+				obj[prop] = typeof obj[prop] === 'string' 
+					? '' : Array.isArray(obj[prop]) 
+						? [] 
+						: typeof obj[prop] === 'number' 
+							? 0 
+							: typeof obj[prop] === 'object' && obj[prop] !== null 
+								? {} 
+								: obj[prop]
 			}
 			if (prop === 'name') {
 				obj[prop] = `${obj[prop]} (Copy ${noCopies})`

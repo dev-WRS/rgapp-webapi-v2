@@ -203,11 +203,21 @@ export default ({ db, config }) => {
 				'buildings.$.ashraeRequiredLpd': ashraeRequiredLpd
 			} }, { returnDocument: 'after' }).lean()
 	}
-	const copyBuilding = ({ id }, { buildingId }) => {
-		const building = Project.findOne({ _id: id, 'buildings._id': buildingId }, { returnDocument: 'after' }).lean()
-		delete building._id
+	const copyBuilding = async (id, buildingId) => {
+		const project = await getProjectById(id)
 
-		return Project.findOneAndUpdate({ _id: id }, { '$push': { 'buildings': { ...building } } }, { returnDocument: 'after' }).lean()
+		if (!project) { throw new HttpBadRequestError('Project not found') }
+		
+		let building = await project.buildings.find(building => building._id == buildingId)
+
+		if (!building) { throw new HttpBadRequestError('Building not found') }
+
+		const noCopies = findBuildingNumber(project.buildings, building.name)
+		console.log(noCopies)
+		const buildingToCopy = setDefaultValues(building, noCopies)
+		delete buildingToCopy._id
+
+		return Project.findOneAndUpdate({ _id: id }, { '$push': { 'buildings': { ...buildingToCopy } } }, { returnDocument: 'after' }).lean()
 	}
 	const deleteProjectBuilding = ({ id }, { buildingId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'buildings': { '_id': buildingId } } }, { returnDocument: 'after' }).lean()
 	const addProjectDwellingUnit = ({ id }, { ...data }) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'dwellingUnits': { ...data } } }, { returnDocument: 'after' }).lean()
@@ -244,6 +254,37 @@ export default ({ db, config }) => {
 		}
 
 		return await project.deleteOne()
+	}
+
+	function setDefaultValues (obj, noCopies) {
+		Object.keys(obj).forEach(prop => {
+			if (!['name', 'type', 'address'].includes(prop)) {
+				obj[prop] = typeof obj[prop] === 'string' ? '' : Array.isArray(obj[prop]) ? [] : typeof obj[prop] === 'number' ? 0 : typeof obj[prop] === 'object' ? {} : obj[prop]
+			}
+			if (prop === 'name') {
+				obj[prop] = `${obj[prop]} (Copy ${noCopies})`
+			}
+		})
+		return obj
+	}
+
+	function findBuildingNumber (buildings, searchValue) {
+		let maxNumber = 0
+
+		buildings.forEach((building) => {
+			if (building.name.includes(searchValue)) {
+				const regex = /Copy (\d+)/i
+				const match = building.name.match(regex)
+				if (match) {
+					const number = parseInt(match[1])
+					if (number > maxNumber) {
+						maxNumber = number
+					}
+				}
+			}
+		})
+
+		return maxNumber > 0 ? maxNumber + 1 : 1
 	}
 
 	return {

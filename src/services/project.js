@@ -203,6 +203,12 @@ export default ({ db, config }) => {
 				'buildings.$.ashraeRequiredLpd': ashraeRequiredLpd
 			} }, { returnDocument: 'after' }).lean()
 	}
+	const copyBuilding = ({ id }, { buildingId }) => {
+		const building = Project.findOne({ _id: id, 'buildings._id': buildingId }, { returnDocument: 'after' }).lean()
+		delete building._id
+
+		return Project.findOneAndUpdate({ _id: id }, { '$push': { 'buildings': { ...building } } }, { returnDocument: 'after' }).lean()
+	}
 	const deleteProjectBuilding = ({ id }, { buildingId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'buildings': { '_id': buildingId } } }, { returnDocument: 'after' }).lean()
 	const addProjectDwellingUnit = ({ id }, { ...data }) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'dwellingUnits': { ...data } } }, { returnDocument: 'after' }).lean()
 	const addProjectDwellingUnits = ({ id }, data) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'dwellingUnits': { $each: data } } }, { returnDocument: 'after' }).lean()
@@ -260,6 +266,7 @@ export default ({ db, config }) => {
 		addProjectPhoto,
 		updateProjectPhoto,
 		deleteProjectPhoto,
-		copyProject
+		copyProject,
+		copyBuilding
 	}
 }

@@ -549,15 +549,31 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		}
 	)
 
+	router.post('/projects/:id/buildings/:buildingId/copy',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		async (req, res, next) => {
+			try {
+				const id = req.params.id
+				const buildingId = req.params.buildingId
+		
+				if (id && buildingId) {
+					const buildingToCopy = await Project.copyBuilding(id, buildingId)
+
+					res.json({ result: asProjectResponse(buildingToCopy) })
+				}
+			}
+			catch (error) {
+				next(error)
+			}
+		}
+	)
+
 	router.put('/projects/:id/buildings/:buildingId',
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),
 		withPassport(passport, config)('jwt'),
-		validatorRequest([
-			check('address')
-				.not().isEmpty()
-				.withMessage('building address is required')
-		]),
 		async (req, res, next) => {
 			try {
 				const { id, buildingId } = req.params

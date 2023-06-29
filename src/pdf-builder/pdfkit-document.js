@@ -81,10 +81,10 @@ class PDFKitDocument {
 		let pageSteps = 0
 
 		if (this.hasDraftCoverPage) {
-			pageSteps++	
+			// pageSteps++	
 		}
 		if (this.hasCoverPage) {
-			pageSteps++	
+			// pageSteps++	
 		}
 		if (this.autoFirstPage) {
 			pageSteps++

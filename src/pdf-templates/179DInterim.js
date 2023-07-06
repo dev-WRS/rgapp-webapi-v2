@@ -158,6 +158,20 @@ export default async ({
 	const siteVisitString = asSiteVisitString(buildingTypes)
 	const verbString = asVerbString(buildingTypes)
 
+	const ashraebldings = project.buildings
+	const groupedData = ashraebldings.reduce((accumulator, building) => {
+		const { type, ashraeLpd, ashraeRequiredLpd } = building
+		if (!accumulator[type]) {
+			accumulator[type] = {
+				type, ashraeLpd: 0, ashraeRequiredLpd: 0
+			}
+		}
+		accumulator[type].ashraeLpd += ashraeLpd
+		accumulator[type].ashraeRequiredLpd += ashraeRequiredLpd
+		return accumulator
+	}, {}) 
+	const resultToAshraeTable = Object.values(groupedData)
+
 	let license
 
 	if (certifier.licenses && certifier.licenses.length > 0) {
@@ -395,7 +409,7 @@ export default async ({
 					align: 'right',
 					width: 120
 				}],
-				rows: project.buildings
+				rows: resultToAshraeTable
 			}),
 			sectionTable({
 				columns: [{

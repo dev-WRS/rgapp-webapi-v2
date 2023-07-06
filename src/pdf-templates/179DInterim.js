@@ -44,46 +44,46 @@ export default async ({
 		sectionTopics
 	} = helpers({ theme })
 
+	const draftCoverArray = { items: [
+		sectionParagraph('INTERNAL REVENUE CODE SECTION 179D\nEPACT COMPLIANCE REPORT OF', {
+			size: 12,
+			align: 'center'
+		}),
+		sectionParagraph(project.legalEntity, {
+			size: 12,
+			align: 'center'	
+		}),
+		sectionParagraph(`${project.name}, ${project.state}`, {
+			size: 12,
+			align: 'center'	
+		}),
+		sectionParagraph(project.taxYear, {
+			size: 12,
+			align: 'center'	,
+			moveDown: 2
+		}),
+		sectionParagraph('ISSUED FOR REVIEW ONLY', {
+			size: 12,
+			align: 'center'
+		}),
+		sectionParagraph(`The enclosed report has been issued by Walker Reid Strategies for review by ${removeEndingDots(project.legalEntity)}. Any and/or all pages watermarked with DRAFT do not meet the regulations of 1.6001-1(a) requiring taxpayers to maintain books and records which are sufficient to establish the entitlement to, and amount of any deduction claimed by the taxpayer. Upon final approval, a final copy will be provided to ${project.legalEntity} meeting the regulations of 1.6001-1(a).`, {
+			moveDown: 10
+		}),
+		sectionParagraph('CONFIDENTIAL', {
+			size: 9,
+			align: 'center'	
+		}),
+		sectionParagraph('The contents of this document are confidential and are exclusive to the intended recipient and Walker Reid Strategies employees. Distribution or sharing of this information with persons or entities for which it is not intended is prohibited, in any form, without the express written consent of Walker Reid Strategies.', {
+			size: 9,
+			align: 'center'
+		})
+	] }
+
 	const pdf = new PDFBuilder({ 
 		size: 'LETTER',
 		defaultFont, fonts,
 		margins: { top: contentMarginTop, right: contentMarginRight, bottom: contentMarginBottom, left: contentMarginLeft },
-		draftCover: {
-			items: [
-				sectionParagraph('INTERNAL REVENUE CODE SECTION 179D\nEPACT COMPLIANCE REPORT OF', {
-					size: 12,
-					align: 'center'
-				}),
-				sectionParagraph(project.legalEntity, {
-					size: 12,
-					align: 'center'	
-				}),
-				sectionParagraph(`${project.name}, ${project.state}`, {
-					size: 12,
-					align: 'center'	
-				}),
-				sectionParagraph(project.taxYear, {
-					size: 12,
-					align: 'center'	,
-					moveDown: 2
-				}),
-				sectionParagraph('ISSUED FOR REVIEW ONLY', {
-					size: 12,
-					align: 'center'
-				}),
-				sectionParagraph(`The enclosed report has been issued by Walker Reid Strategies for review by ${removeEndingDots(project.legalEntity)}. Any and/or all pages watermarked with DRAFT do not meet the regulations of 1.6001-1(a) requiring taxpayers to maintain books and records which are sufficient to establish the entitlement to, and amount of any deduction claimed by the taxpayer. Upon final approval, a final copy will be provided to ${project.legalEntity} meeting the regulations of 1.6001-1(a).`, {
-					moveDown: 10
-				}),
-				sectionParagraph('CONFIDENTIAL', {
-					size: 9,
-					align: 'center'	
-				}),
-				sectionParagraph('The contents of this document are confidential and are exclusive to the intended recipient and Walker Reid Strategies employees. Distribution or sharing of this information with persons or entities for which it is not intended is prohibited, in any form, without the express written consent of Walker Reid Strategies.', {
-					size: 9,
-					align: 'center'
-				})
-			]
-		},
+		draftCover: project.draft ? draftCoverArray : {},
 		cover: {
 			items: [coverImage, 
 				...coverVectors,

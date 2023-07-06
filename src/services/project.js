@@ -156,7 +156,7 @@ export default ({ db, config }) => {
 						customer: customer && customer.id,
 						reportType,
 						software: reportType === '45L' ? null : 'eQuest 3.65',
-						draft: projectFields['PROJECT_FIELD_14'] === 'Yes' ? true : false
+						draft: projectFields['PROJECT_FIELD_14'] === 'No' ? false : true
 					}
 	
 					if (project.reportType === '179D') {

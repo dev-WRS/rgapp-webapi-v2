@@ -33,7 +33,7 @@ export default ({ db, config }) => {
 	}
 	const getProjectsByPhotoAsset = (asset) => Project.find({ photos: { $elemMatch: { asset: asset } } }, { 'photos.$': 1 }).select('status').lean()
 	const getProjectsByPDFAsset = (asset) => Project.find({ $or: [{ certificate45L: asset }, { baselineDesign179D: asset }, { wholeBuildingDesign179D: asset }, { buildingSummary179D: asset }, { softwareCertificate179D: asset }] }).select('status').lean()
-	const createProject = async ({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, software, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, buildingDefaults, buildings, createdBy }) => {
+	const createProject = async ({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, buildingDefaults, buildings, createdBy }) => {
 		try {
 			let softwareCertificate
 
@@ -41,7 +41,7 @@ export default ({ db, config }) => {
 				softwareCertificate = software === 'eQuest 3.65' ? await Asset.findOne({ name: 'eQuest Software Certificate.pdf' }) : await Asset.findOne({ name: 'HAP Software Certificate.pdf' })
 			}
 
-			const project = await Project.create({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status: 'inProgress', certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, softwareCertificate179D: softwareCertificate && softwareCertificate.id, buildingDefaults, buildings, createdBy })
+			const project = await Project.create({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status: 'inProgress', certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, softwareCertificate179D: softwareCertificate && softwareCertificate.id, buildingDefaults, buildings, createdBy })
 			
 			return await Project.findOne({ _id: project.id }, '-__v').lean()
 		} catch (error) {
@@ -155,7 +155,8 @@ export default ({ db, config }) => {
 						certifier: certifier && certifier.id,
 						customer: customer && customer.id,
 						reportType,
-						software: reportType === '45L' ? null : 'eQuest 3.65'
+						software: reportType === '45L' ? null : 'eQuest 3.65',
+						draft: projectFields['PROJECT_FIELD_14'] === 'Yes' ? true : false
 					}
 	
 					if (project.reportType === '179D') {

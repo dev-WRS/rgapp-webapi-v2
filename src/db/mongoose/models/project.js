@@ -92,6 +92,10 @@ const projectSchema = new mongoose.Schema({
 		type: String,
 		enum: ['eQuest 3.65', 'Hourly Analysis Program (HAP) v5.10.', null]
 	},
+	draft: {
+		type: Boolean,
+		default: true
+	},
 	buildingDefaults: {
 		name: {
 			type: String

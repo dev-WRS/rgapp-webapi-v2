@@ -34,20 +34,20 @@ const svg2png = (svg) => sharp(svg, { density: 300 })
 
 const errorMsgChangeStatus = (source, target) => `Project cannot transition from status ${source} to ${target}`
 
-const asProjectResponse = ({ _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, photos, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, certificate45L, software, buildingDefaults, buildings, baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D, report, createdBy }) => ({ 
+const asProjectResponse = ({ _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, photos, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, certificate45L, software, draft, buildingDefaults, buildings, baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D, report, createdBy }) => ({ 
 	id: _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, 
 	photos: photos ? photos.map(({ _id, asset, description }) => ({ id: _id, asset, description })) : [], 
 	dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, 
 	dwellingUnits: dwellingUnits ? dwellingUnits.map(({ _id, address, type, model, building, unit }) => ({ id: _id, address, type, model, building, unit })) : [], 
-	certificate45L, software, 
+	certificate45L, software, draft,
 	buildingDefaults,
 	buildings: buildings ? buildings.map(({ _id, name, address, type, qualifyingCategories, area, rate, method, totalWatts, percentReduction, savingsRequirement }) => ({ id: _id, name, address, type, qualifyingCategories, area, rate, method, totalWatts, percentReduction, savingsRequirement })) : [], 
 	baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D,
 	report,
 	createdBy })
 
-const asProjectByIDResponse = ({ _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, buildingDefaults, softwareCertificate179D, report, createdBy }) => ({ 
-	id: _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, 
+const asProjectByIDResponse = ({ _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, buildingDefaults, softwareCertificate179D, report, createdBy }) => ({ 
+	id: _id, projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, 
 	dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, 
 	buildingDefaults,
 	softwareCertificate179D,
@@ -165,9 +165,9 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		async (req, res, next) => {
 			try {
 				const { id } = req.user
-				const { projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, buildingDefaults, buildings } = req.body
+				const { projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, buildingDefaults, buildings } = req.body
 				
-				const project = await Project.createProject({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, buildingDefaults, buildings, createdBy: id })
+				const project = await Project.createProject({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, buildingDefaults, buildings, createdBy: id })
 
 				res.json({ result: asProjectResponse(project) })
 

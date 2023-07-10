@@ -83,7 +83,7 @@ export default async ({
 		size: 'LETTER',
 		defaultFont, fonts,
 		margins: { top: contentMarginTop, right: contentMarginRight, bottom: contentMarginBottom, left: contentMarginLeft },
-		draftCover: project.draft ? draftCoverArray : {},
+		draftCover: project.draft === true || project.draft === undefined ? draftCoverArray : {},
 		cover: {
 			items: [coverImage, 
 				...coverVectors,

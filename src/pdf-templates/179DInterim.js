@@ -3,7 +3,7 @@ import helpers, {
 	defaultFont, fonts, 
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
 	formatDate, formatNumber,formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
-	asVerbString, asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING
+	asVerbString, asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING, legacyImprove
 } from './helpers.js'
 
 export default async ({ 
@@ -79,6 +79,8 @@ export default async ({
 		})
 	] }
 
+	const legacyImproved = legacyImprove(project.legalEntity)
+
 	const pdf = new PDFBuilder({ 
 		size: 'LETTER',
 		defaultFont, fonts,
@@ -94,7 +96,7 @@ export default async ({
 				repoHeader(reportSubtitle2, {
 					marginBottom: 32
 				}),
-				repoHeader(project.legalEntity, {
+				repoHeader(legacyImproved, {
 					width: 200
 				}),
 				repoHeader(`${project.name}, ${project.state}`, {

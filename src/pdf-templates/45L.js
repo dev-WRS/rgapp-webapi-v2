@@ -1,7 +1,7 @@
 import PDFBuilder from '../pdf-builder/index.js'
 import helpers, { defaultFont, fonts, removeEndingDots,
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, 
-	formatDate, formatCurrency, formatPhone 
+	formatDate, formatCurrency, formatPhone, legacyImprove
 } from './helpers.js'
 
 export default async ({
@@ -80,6 +80,9 @@ export default async ({
 		})
 	] }
 
+	const legacyImproved = legacyImprove(project.legalEntity)
+	console.log('legacyImproved', legacyImproved)
+
 	const pdf = new PDFBuilder({ 
 		size: 'LETTER',
 		defaultFont, fonts,
@@ -95,7 +98,7 @@ export default async ({
 				repoHeader(reportSubtitle2, {
 					marginBottom: 32
 				}),
-				repoHeader(project.legalEntity, {
+				repoHeader(legacyImproved, {
 					width: 200
 				}),
 				repoHeader(`${project.name}, ${project.state}`, {

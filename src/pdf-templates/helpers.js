@@ -450,3 +450,22 @@ export default ({ theme }) => {
 		sectionPdf
 	}
 }
+
+export const legacyImprove = (input) => {
+	const words = input.split(' ')
+	let formattedString = ''
+	let line = ''
+  
+	for (let i = 0; i < words.length; i++) {
+		const word = words[i]
+		if (line.length + word.length <= 23) {
+			line += (line ? ' ' : '') + word
+		} else {
+			formattedString += (formattedString ? '\n' : '') + line
+			line = word
+		}
+	}
+  
+	formattedString += (formattedString ? '\n' : '') + line
+	return formattedString
+}

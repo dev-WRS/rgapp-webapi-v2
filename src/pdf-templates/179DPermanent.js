@@ -3,7 +3,8 @@ import helpers, {
 	defaultFont, fonts, 
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
 	formatDate, formatNumber, formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
-	asVerbString, asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING, LIGHTING, ENVELOPE, HVAC
+	asVerbString, asSiteVisitString, QUALYFYING_CATEGORIES, WHOLE_BUILDING, LIGHTING, ENVELOPE, HVAC, 
+	legacyImprove
 } from './helpers.js'
 
 export default async ({ 
@@ -46,13 +47,15 @@ export default async ({
 		sectionPdf
 	} = helpers({ theme })
 
+	const legacyImproved = legacyImprove(project.legalEntity)
+
 	const draftCoverArray = {
 		items: [
 			sectionParagraph('INTERNAL REVENUE CODE SECTION 179D\nEPACT COMPLIANCE REPORT OF', {
 				size: 12,
 				align: 'center'
 			}),
-			sectionParagraph(project.legalEntity, {
+			sectionParagraph(legacyImproved, {
 				size: 12,
 				align: 'center'	
 			}),

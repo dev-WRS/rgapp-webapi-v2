@@ -295,100 +295,116 @@ export default async ({
 			sectionParagraph('The Section 179D certification for the Energy Efficient Commercial Building Property is enclosed. The certification satisfies statements for Notice 2006-52 §4.01- 4.09 of Internal Revenue Bulletin 2006-26.')
 		]
 	})
-	sections.push({
-		items: [
-			...sectionCertificate({
-				title: 'Certificate of Compliance',
-				name: 'Commercial Buildings Tax Deduction',
-				description: 'Section 179D, Internal Revenue Code',
-				logo
-			}),
-			sectionTable({
-				title: '01) Building Certifier Information',
-				columnsHeader: false,
-				columns: [{
-					type: 'string',
-					dataIndex: 'name',
-					weight: 'bold',
-					width: 140
-				}, {
-					type: 'string',
-					dataIndex: 'value',
-					flex: true
-				}],
-				rows: [{
-					name: 'Certifier Name',
-					value: certifier.name
-				}, {
-					name: `${license ? license.state : ''} License Number`,
-					value: license ? license.number : ''
-				}, {
-					name: 'Address',
-					value: certifier.address
-				}, {
-					name: 'Phone',
-					value: formatPhone(certifier.phone)
-				}]
-			}),
-			sectionTable({
-				title: '02) Building Information',
-				columnsHeader: false,
-				columns: [{
-					type: 'string',
-					dataIndex: 'name',
-					weight: 'bold',
-					width: 140
-				}, {
-					type: 'string',
-					dataIndex: 'value',
-					flex: true
-				}],
-				rows: [{
-					name: 'Building or Owner Name',
-					value: project.private ? project.legalEntity : project.name
-				}, {
-					name: 'Address',
-					value: project.buildings.length == 1 ? project.buildings[0].address : 'Multiple (See Table 2.1)'
-				}],
-				summary: `Energy Efficient System installed and placed in service during: ${project.taxYear}`
-			})
-		]
-	})
+
+	const section_1_2 = [
+		...sectionCertificate({
+			title: 'Certificate of Compliance',
+			name: 'Commercial Buildings Tax Deduction',
+			description: 'Section 179D, Internal Revenue Code',
+			logo
+		}),
+		sectionTable({
+			title: '01) Building Certifier Information',
+			columnsHeader: false,
+			columns: [{
+				type: 'string',
+				dataIndex: 'name',
+				weight: 'bold',
+				width: 140
+			}, {
+				type: 'string',
+				dataIndex: 'value',
+				flex: true
+			}],
+			rows: [{
+				name: 'Certifier Name',
+				value: certifier.name
+			}, {
+				name: `${license ? license.state : ''} License Number`,
+				value: license ? license.number : ''
+			}, {
+				name: 'Address',
+				value: certifier.address
+			}, {
+				name: 'Phone',
+				value: formatPhone(certifier.phone)
+			}]
+		}),
+		sectionTable({
+			title: '02) Building Information',
+			columnsHeader: false,
+			columns: [{
+				type: 'string',
+				dataIndex: 'name',
+				weight: 'bold',
+				width: 140
+			}, {
+				type: 'string',
+				dataIndex: 'value',
+				flex: true
+			}],
+			rows: [{
+				name: 'Building or Owner Name',
+				value: project.private ? project.legalEntity : project.name
+			}, {
+				name: 'Address',
+				value: project.buildings.length == 1 ? project.buildings[0].address : 'Multiple (See Table 2.1)'
+			}],
+			summary: `Energy Efficient System installed and placed in service during: ${project.taxYear}`
+		})
+	]
+
+	const section_2_plus = [
+		// sectionTitleParagraph('Table 2.1) Addresses'),
+		sectionTable({
+			title: {
+				value: 'Table 2.1) Addresses',
+				color: '#000000',
+				size: 12,
+				paddingLeft: 0,
+				lineHeight: 6,
+				weight: 'bold',
+				backgroundColor: '#FFFFFF'
+			},
+			columnDefaults: {
+				paddingLeft: 8,
+				paddingRight: 8,
+				backgroundColor: theme.quaternary
+			},
+			columns: [{
+				type: 'string',
+				header: 'Name',
+				dataIndex: 'name',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'Address',
+				dataIndex: 'address',
+				flex: true
+			}],
+			rows: project.buildings
+		}, true)
+	]
+
 	if (project.buildings.length > 1) {
+		if (project.buildings.length > 3) {
+			sections.push({
+				items: section_1_2
+			})
+			sections.push({
+				items: section_2_plus
+			})
+		} else {
+			sections.push({
+				items: section_1_2.concat(section_2_plus)
+			})
+		}
+	} else {
 		sections.push({
-			items: [
-				// sectionTitleParagraph('Table 2.1) Addresses'),
-				sectionTable({
-					title: {
-						value: 'Table 2.1) Addresses',
-						color: '#000000',
-						size: 12,
-						paddingLeft: 0,
-						lineHeight: 6,
-						weight: 'bold',
-						backgroundColor: '#FFFFFF'
-					},
-					columnDefaults: {
-						paddingLeft: 8,
-						paddingRight: 8,
-						backgroundColor: theme.quaternary
-					},
-					columns: [{
-						type: 'string',
-						header: 'Name',
-						dataIndex: 'name',
-						flex: true
-					}, {
-						type: 'string',
-						header: 'Address',
-						dataIndex: 'address',
-						flex: true
-					}],
-					rows: project.buildings
-				}, true)
-			]
+			items: section_1_2
 		})
 	}
+
 	const statements = []
 	if (qualifyingWholeBuilding) {
 		statements.push(
@@ -412,98 +428,126 @@ export default async ({
 			)
 		}
 	}
-	sections.push({
-		items: [
-			sectionTitleParagraph('03) Qualified Deductions'),
-			sectionParagraph('Statement for qualifying energy efficient commercial building property:'),
-			...statements,
-			sectionTitleParagraph('04) Energy Reduction Certification'),
-			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by more than the respective amounts (See Table 4.1) due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined under the Performance Rating Method of Notice 2006-52. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingArea)}.`),
+
+	const section_3 = [
+		sectionTitleParagraph('03) Qualified Deductions'),
+		sectionParagraph('Statement for qualifying energy efficient commercial building property:'),
+		...statements
+	]
+
+	const section_4 = [
+		sectionTitleParagraph('04) Energy Reduction Certification'),
+		sectionParagraph(`The new energy efficient ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by more than the respective amounts (See Table 4.1) due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined under the Performance Rating Method of Notice 2006-52. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingArea)}.`),
+		sectionTable({
+			title: '4.1) Qualifying Percentages',
+			columnsHeader: false,
+			columns: [{
+				type: 'string',
+				dataIndex: 'name',
+				weight: 'bold',
+				width: 140
+			}, {
+				type: 'string',
+				dataIndex: 'value',
+				width: 140
+			}],
+			rows: qualifyingPercentagesRows
+		})
+	]
+
+	const section_4_plus = [
+		sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:'),
+		(project.buildings.length > 1) ?
 			sectionTable({
-				title: '4.1) Qualifying Percentages',
+				columns: [{
+					type: 'string',
+					header: 'Name',
+					dataIndex: 'name',
+					flex: true
+				}, {
+					type: 'string',
+					header: 'Tax Sq.Ft. (SF)',
+					renderer: (row) => formatNumber(row.area),
+					align: 'right',
+					width: 108
+				}, {
+					type: 'string',
+					header: 'Tax Deduction/SF',
+					renderer: (row) => formatCurrency(row.rate),
+					align: 'right',
+					width: 120
+				}, {
+					type: 'string',
+					header: '179D Deduction',
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+					align: 'right',
+					width: 108
+				}],
+				rows: project.buildings,
+				summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
+			}) :
+			sectionTable({
 				columnsHeader: false,
+				lineColor: null,
+				columnDefaults: {
+					backgroundColor: null
+				},
 				columns: [{
 					type: 'string',
 					dataIndex: 'name',
 					weight: 'bold',
-					width: 140
+					align: 'right',
+					flex: true
 				}, {
 					type: 'string',
 					dataIndex: 'value',
+					align: 'right',
 					width: 140
 				}],
-				rows: qualifyingPercentagesRows
-			}),
-			sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:'),
-			(project.buildings.length > 1) ?
-				sectionTable({
-					columns: [{
-						type: 'string',
-						header: 'Name',
-						dataIndex: 'name',
-						flex: true
-					}, {
-						type: 'string',
-						header: 'Tax Sq.Ft. (SF)',
-						renderer: (row) => formatNumber(row.area),
-						align: 'right',
-						width: 108
-					}, {
-						type: 'string',
-						header: 'Tax Deduction/SF',
-						renderer: (row) => formatCurrency(row.rate),
-						align: 'right',
-						width: 120
-					}, {
-						type: 'string',
-						header: '179D Deduction',
-						renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
-						align: 'right',
-						width: 108
-					}],
-					rows: project.buildings,
-					summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
-				}) :
-				sectionTable({
-					columnsHeader: false,
-					lineColor: null,
-					columnDefaults: {
-						backgroundColor: null
-					},
-					columns: [{
-						type: 'string',
-						dataIndex: 'name',
-						weight: 'bold',
-						align: 'right',
-						flex: true
-					}, {
-						type: 'string',
-						dataIndex: 'value',
-						align: 'right',
-						width: 140
-					}],
-					rows: [{
-						name: 'Total Tax Deduction per square foot:',
-						value: formatCurrency(project.buildings[0].rate)
-					}, {
-						name: 'Total square footage of building:',
-						value: formatNumber(project.buildings[0].area)
-					}, {
-						name: 'Section 179D Deduction:',
-						value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
-					}]
-				}),
-			sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
-			sectionTitleParagraph('05) Field Inspection Statement'),
-			sectionParagraph(`A qualified individual has field inspected the property after the ${qualifyingProperty} systems had been placed into service and certifies that the specified energy efficient systems have been installed and meet the energy-saving targets contained in the design plans and specifications. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.`),
-			sectionTitleParagraph('06) Energy Efficiency Statement'),
-			sectionParagraph('The building owner has received an explanation of the energy efficiency features of the building and its projected annual energy costs.'),
-			sectionTitleParagraph('07) Certified Software'),
-			sectionParagraph(`Qualified computer software was used to calculate energy and power consumption and costs to certify that the required energy cost reductions were obtained. The DOE-approved software used to calculate energy and power consumption and costs is ${project.software}.`),
-			sectionTitleParagraph('08) Components List'),
-			sectionParagraph(`Attached to this document is a list identifying the components of the ${qualifyingProperty} systems installed on or in the building, the energy efficiency features of the building, and its projected annual energy costs.`)
-		]
-	})
+				rows: [{
+					name: 'Total Tax Deduction per square foot:',
+					value: formatCurrency(project.buildings[0].rate)
+				}, {
+					name: 'Total square footage of building:',
+					value: formatNumber(project.buildings[0].area)
+				}, {
+					name: 'Section 179D Deduction:',
+					value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
+				}]
+			})
+	]
+
+	const section_5_8 = [
+		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
+		sectionTitleParagraph('05) Field Inspection Statement'),
+		sectionParagraph(`A qualified individual has field inspected the property after the ${qualifyingProperty} systems had been placed into service and certifies that the specified energy efficient systems have been installed and meet the energy-saving targets contained in the design plans and specifications. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.`),
+		sectionTitleParagraph('06) Energy Efficiency Statement'),
+		sectionParagraph('The building owner has received an explanation of the energy efficiency features of the building and its projected annual energy costs.'),
+		sectionTitleParagraph('07) Certified Software'),
+		sectionParagraph(`Qualified computer software was used to calculate energy and power consumption and costs to certify that the required energy cost reductions were obtained. The DOE-approved software used to calculate energy and power consumption and costs is ${project.software}.`),
+		sectionTitleParagraph('08) Components List'),
+		sectionParagraph(`Attached to this document is a list identifying the components of the ${qualifyingProperty} systems installed on or in the building, the energy efficiency features of the building, and its projected annual energy costs.`)
+	]
+
+	if (project.buildings.length > 3) {
+		sections.push({
+			items: section_3.concat(section_4)
+		})
+		sections.push({
+			items: section_4_plus
+		})
+		sections.push({
+			items: section_5_8
+		})
+	} else {
+		sections.push({
+			items: section_3.concat(section_4).concat(section_4_plus)
+		})
+		sections.push({
+			items: section_5_8
+		})
+	}
+
 	sections.push({
 		items: [
 			sectionTitleParagraph('09) Declaration of Qualifications'),

@@ -322,54 +322,67 @@ export default async ({
 			]
 		})
 	}
+
+	const section3_4 = [
+		sectionTitleParagraph('03) Qualified Dwelling Unit Statement'),
+		sectionParagraph('The listed dwelling units have a projected level of annual heating and cooling energy consumption that is at least 50 percent below the annual level of heating and cooling energy consumption of a reference dwelling unit in the same climate zone; building envelope component improvements alone account for a level of annual heating and cooling energy consumption that is at least 10 percent below the annual level of heating and cooling energy consumption of a reference dwelling unit in the same climate zone; and heating and cooling energy consumption have been calculated in the manner prescribed in section 2.03 of Notice 2008-35.'),
+		sectionTitleParagraph('04) Field Inspection Statement'),
+		sectionParagraph('A qualified individual has field inspected the properties and has confirmed that all features of the home affecting such heating and cooling energy consumption comply with the design specifications provided to the eligible certifier. With respect to builders who build at least 85 homes during a twelve-month period or build subdivisions with the same floor plan using the same subcontractors, a sampling protocol may have been used in accordance with Notice 2008-35 and the ENERGY STAR for Homes Sampling Protocol Guidelines instead of inspecting all of the homes.')
+	]
+
+	const section5 = [sectionTitleParagraph('05) Energy Reduction Certification'),
+		sectionParagraph('The following list includes the dwelling units’ energy efficient building envelope components and their respective energy performance ratings as required by section 401.3 of the 2006 IECC Supplement; and the energy efficient heating and cooling equipment installed in the dwelling units and the energy efficiency performance of such equipment as rated under applicable Department of Energy Appliance Standards test procedures.'),
+		sectionParagraph('The outcome of the attached calculations and information result in the following tax credit, subject to basis qualifications:'),
+		sectionTable({
+			columns: [{
+				type: 'string',
+				header: 'Dwelling Unit Name',
+				dataIndex: 'name',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'Total # Units',
+				dataIndex: 'units',
+				align: 'right',
+				width: 100
+			}, {
+				type: 'string',
+				header: 'Tax Credit/Unit',
+				renderer: (row) => formatCurrency(row.rate),
+				align: 'right',
+				width: 110
+			}, {
+				type: 'string',
+				header: '45L Credit',
+				renderer: (row) => formatCurrency(row.credit),
+				align: 'right',
+				width: 120
+			}],
+			rows: [{
+				name: project.dwellingUnitName,
+				units: project.totalDwellingUnits,
+				rate: benefitRate,
+				credit: project.totalDwellingUnits * benefitRate
+			}],
+			summary: `Total ${formatCurrency(project.totalDwellingUnits * benefitRate)}`
+		}),
+		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) the allowable credit amount.')
+	]
+
+	const section_6 = [
+		sectionTitleParagraph('06) Certified Software'),
+		sectionParagraph('Qualified testing was used to determine that the software program is sufficiently accurate to justify its use in calculating energy consumption to certify that the required energy cost reductions were obtained. The software used to calculate energy consumption is:'),
+		sectionParagraph('Micropas v7.70', { weight: 'bold' })
+	]
+
 	sections.push({
-		items: [
-			sectionTitleParagraph('03) Qualified Dwelling Unit Statement'),
-			sectionParagraph('The listed dwelling units have a projected level of annual heating and cooling energy consumption that is at least 50 percent below the annual level of heating and cooling energy consumption of a reference dwelling unit in the same climate zone; building envelope component improvements alone account for a level of annual heating and cooling energy consumption that is at least 10 percent below the annual level of heating and cooling energy consumption of a reference dwelling unit in the same climate zone; and heating and cooling energy consumption have been calculated in the manner prescribed in section 2.03 of Notice 2008-35.'),
-			sectionTitleParagraph('04) Field Inspection Statement'),
-			sectionParagraph('A qualified individual has field inspected the properties and has confirmed that all features of the home affecting such heating and cooling energy consumption comply with the design specifications provided to the eligible certifier. With respect to builders who build at least 85 homes during a twelve-month period or build subdivisions with the same floor plan using the same subcontractors, a sampling protocol may have been used in accordance with Notice 2008-35 and the ENERGY STAR for Homes Sampling Protocol Guidelines instead of inspecting all of the homes.'),
-			sectionTitleParagraph('05) Energy Reduction Certification'),
-			sectionParagraph('The following list includes the dwelling units’ energy efficient building envelope components and their respective energy performance ratings as required by section 401.3 of the 2006 IECC Supplement; and the energy efficient heating and cooling equipment installed in the dwelling units and the energy efficiency performance of such equipment as rated under applicable Department of Energy Appliance Standards test procedures.'),
-			sectionParagraph('The outcome of the attached calculations and information result in the following tax credit, subject to basis qualifications:'),
-			sectionTable({
-				columns: [{
-					type: 'string',
-					header: 'Dwelling Unit Name',
-					dataIndex: 'name',
-					flex: true
-				}, {
-					type: 'string',
-					header: 'Total # Units',
-					dataIndex: 'units',
-					align: 'right',
-					width: 100
-				}, {
-					type: 'string',
-					header: 'Tax Credit/Unit',
-					renderer: (row) => formatCurrency(row.rate),
-					align: 'right',
-					width: 110
-				}, {
-					type: 'string',
-					header: '45L Credit',
-					renderer: (row) => formatCurrency(row.credit),
-					align: 'right',
-					width: 120
-				}],
-				rows: [{
-					name: project.dwellingUnitName,
-					units: project.totalDwellingUnits,
-					rate: benefitRate,
-					credit: project.totalDwellingUnits * benefitRate
-				}],
-				summary: `Total ${formatCurrency(project.totalDwellingUnits * benefitRate)}`
-			}),
-			sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) the allowable credit amount.'),
-			sectionTitleParagraph('06) Certified Software'),
-			sectionParagraph('Qualified testing was used to determine that the software program is sufficiently accurate to justify its use in calculating energy consumption to certify that the required energy cost reductions were obtained. The software used to calculate energy consumption is:'),
-			sectionParagraph('Micropas v7.70', { weight: 'bold' })
-		]
+		items: section3_4
 	})
+
+	sections.push({
+		items: section5.concat(section_6)
+	})
+
 	sections.push({
 		items: [
 			sectionTitleParagraph('07) Declaration by Certifier'),

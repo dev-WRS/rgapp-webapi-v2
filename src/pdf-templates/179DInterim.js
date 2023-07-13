@@ -289,6 +289,7 @@ export default async ({
 			sectionParagraph('The Section 179D certification for the Energy Efficient Commercial Building Property is enclosed. The certification satisfies statements for Notice 2006-52 §4.01- 4.09 of Internal Revenue Bulletin 2006-26.')
 		]
 	})
+	// section 1 y 2
 	sections.push({
 		items: [
 			...sectionCertificate({
@@ -348,174 +349,217 @@ export default async ({
 			})
 		]
 	})
+	// section 2 tables
+	const itemsSection2_1 = [
+		// sectionTitleParagraph('Table 2.1) Addresses'),
+		sectionTable({
+			title: {
+				value: 'Table 2.1) Addresses',
+				color: '#000000',
+				size: 12,
+				paddingLeft: 0,
+				lineHeight: 6,
+				weight: 'bold',
+				backgroundColor: '#FFFFFF'
+			},
+			columnDefaults: {
+				paddingLeft: 8,
+				paddingRight: 8,
+				backgroundColor: theme.quaternary
+			},
+			columns: [{
+				type: 'string',
+				header: 'Name',
+				dataIndex: 'name',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'Address',
+				dataIndex: 'address',
+				flex: true
+			}],
+			rows: project.buildings
+		}, true)
+	]
+	const itemsSection3 = [
+		sectionTitleParagraph('03) Qualified Deductions'),
+		sectionParagraph('Statement for energy efficient lighting property that satisfied the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interior lighting systems that have been, or are planned to be, incorporated into the building-', {
+			weight: 'bold'
+		}),
+		sectionParagraph(`(a) Achieved a reduction in lighting power density of at least 25 percent (50 percent in the case of a warehouse) of the minimum requirements in Table 9.3.1.1 or Table 9.3.1.2 (not including additional interior lighting power allowances) of Standard 90.1-${year};\n(b) Have controls and circuiting that comply fully with the mandatory and prescriptive requirements of Standard 90.1-${year};\n(c) Include provision for bi-level switching in all occupancies except hotel and motel guest rooms, store rooms, restrooms, public lobbies, and garages; and\n(d) Meet the minimum requirements for calculated lighting levels as set forth in the IESNA Lighting Handbook, Performance and Application, Ninth Edition, 2000;`)]
+	
 	if (project.buildings.length > 1) {
+		if (project.buildings.length < 4) {
+			// section 2 y 3
+			sections.push({
+				items: itemsSection2_1.concat(itemsSection3)
+			})
+		} else {
+			// section 2
+			sections.push({
+				items: itemsSection2_1
+			})	
+			// section 3	
+			sections.push({
+				items: itemsSection3
+			})
+		}
+	}
+
+	const itemsSection4 = [
+		sectionTitleParagraph('04) Energy Reduction Certification'),
+		sectionParagraph(`The new ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The ASHRAE/ IESNA 90.1 lighting power density number for the buildings are:`),
+		sectionTable({
+			columns: [{
+				type: 'string',
+				header: 'ASHRAE 90.1 Bldg. Type',
+				dataIndex: 'type',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'LPD',
+				dataIndex: 'ashraeLpd',
+				align: 'right',
+				width: 108
+			}, {
+				type: 'string',
+				header: 'Req. LPD',
+				renderer: (row) => row.ashraeLpd === undefined ? '' : row.type === 'Warehouse' ? formatNumber(row.ashraeLpd * 0.5) : formatNumber(row.ashraeLpd * 0.6),
+				align: 'right',
+				width: 120
+			}],
+			rows: resultToAshraeTable
+		}),
+		sectionTable({
+			columns: [{
+				type: 'string',
+				header: 'Name',
+				dataIndex: 'name',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'Area',
+				renderer: (row) => formatNumber(row.area),
+				align: 'right',
+				width: 108
+			}, {
+				type: 'string',
+				header: 'LPD',
+				renderer: (row) => formatNumber(row.totalWatts / row.area),
+				align: 'right',
+				width: 120
+			}, {
+				type: 'string',
+				header: '% Reduction',
+				renderer: (row) => `${row.percentReduction} %`,
+				align: 'right',
+				width: 120
+			}],
+			rows: project.buildings
+		}),
+		sectionParagraph('This reduction has been determined under the interim lighting rules of Notice 2006-52.'),
+		sectionParagraph('The actual reduction from the ASHRAE/IESNA 90.1 watt-per-square foot number is needed to determine the allowable tax deduction using the following calculation: 100%-(3-1/3 x (40% –X%), where X is the percentage below the 90.1 level. Multiply the result of this equation against the maximum deduction of 60 cents per square foot.')
+	]
+
+	const itemsSection4_1 = [
+		sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:')
+	]
+
+	const itemsSection4_Tables = [project.buildings.length > 1 ?
+		sectionTable({
+			columns: [{
+				type: 'string',
+				header: 'Name',
+				dataIndex: 'name',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'Tax Sq.Ft. (SF)',
+				renderer: (row) => formatNumber(row.area),
+				align: 'right',
+				width: 108
+			}, {
+				type: 'string',
+				header: 'Tax Deduction/SF',
+				renderer: (row) => formatCurrency(row.rate),
+				align: 'right',
+				width: 120
+			}, {
+				type: 'string',
+				header: '179D Deduction',
+				renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+				align: 'right',
+				width: 108
+			}],
+			rows: project.buildings,
+			summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
+		}) :
+		sectionTable({
+			columnsHeader: false,
+			lineColor: null,
+			columnDefaults: {
+				backgroundColor: null
+			},
+			columns: [{
+				type: 'string',
+				dataIndex: 'name',
+				weight: 'bold',
+				align: 'right',
+				flex: true
+			}, {
+				type: 'string',
+				dataIndex: 'value',
+				align: 'right',
+				width: 140
+			}],
+			rows: [{
+				name: 'Total Tax Deduction per square foot:',
+				value: formatCurrency(project.buildings[0].rate)
+			}, {
+				name: 'Total square footage of building:',
+				value: formatNumber(project.buildings[0].area)
+			}, {
+				name: 'Section 179D Deduction:',
+				value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
+			}]
+		})]
+
+	//section 4
+	if (project.buildings.length < 3) {
 		sections.push({
-			items: [
-				// sectionTitleParagraph('Table 2.1) Addresses'),
-				sectionTable({
-					title: {
-						value: 'Table 2.1) Addresses',
-						color: '#000000',
-						size: 12,
-						paddingLeft: 0,
-						lineHeight: 6,
-						weight: 'bold',
-						backgroundColor: '#FFFFFF'
-					},
-					columnDefaults: {
-						paddingLeft: 8,
-						paddingRight: 8,
-						backgroundColor: theme.quaternary
-					},
-					columns: [{
-						type: 'string',
-						header: 'Name',
-						dataIndex: 'name',
-						flex: true
-					}, {
-						type: 'string',
-						header: 'Address',
-						dataIndex: 'address',
-						flex: true
-					}],
-					rows: project.buildings
-				}, true)
-			]
+			items: itemsSection4.concat(itemsSection4_1)
+		})
+		sections.push({
+			items: itemsSection4_Tables
+		})
+	} else {
+		sections.push({
+			items: itemsSection4
+		})
+		sections.push({
+			items: itemsSection4_1.concat(itemsSection4_Tables)
 		})
 	}
+	//section 5 and bellow
 	sections.push({
 		items: [
-			sectionTitleParagraph('03) Qualified Deductions'),
-			sectionParagraph('Statement for energy efficient lighting property that satisfied the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interior lighting systems that have been, or are planned to be, incorporated into the building-', {
-				weight: 'bold'
-			}),
-			sectionParagraph(`(a) Achieved a reduction in lighting power density of at least 25 percent (50 percent in the case of a warehouse) of the minimum requirements in Table 9.3.1.1 or Table 9.3.1.2 (not including additional interior lighting power allowances) of Standard 90.1-${year};\n(b) Have controls and circuiting that comply fully with the mandatory and prescriptive requirements of Standard 90.1-${year};\n(c) Include provision for bi-level switching in all occupancies except hotel and motel guest rooms, store rooms, restrooms, public lobbies, and garages; and\n(d) Meet the minimum requirements for calculated lighting levels as set forth in the IESNA Lighting Handbook, Performance and Application, Ninth Edition, 2000;`),
-			sectionTitleParagraph('04) Energy Reduction Certification'),
-			sectionParagraph(`The new ${qualifyingProperty} systems ${verbQualifyingProperty} completed in ${buildingTypesSubject}. The ASHRAE/ IESNA 90.1 lighting power density number for the buildings are:`),
-			sectionTable({
-				columns: [{
-					type: 'string',
-					header: 'ASHRAE 90.1 Bldg. Type',
-					dataIndex: 'type',
-					flex: true
-				}, {
-					type: 'string',
-					header: 'LPD',
-					dataIndex: 'ashraeLpd',
-					align: 'right',
-					width: 108
-				}, {
-					type: 'string',
-					header: 'Req. LPD',
-					renderer: (row) => row.ashraeLpd === undefined ? '' : row.type === 'Warehouse' ? formatNumber(row.ashraeLpd * 0.5) : formatNumber(row.ashraeLpd * 0.6),
-					align: 'right',
-					width: 120
-				}],
-				rows: resultToAshraeTable
-			}),
-			sectionTable({
-				columns: [{
-					type: 'string',
-					header: 'Name',
-					dataIndex: 'name',
-					flex: true
-				}, {
-					type: 'string',
-					header: 'Area',
-					renderer: (row) => formatNumber(row.area),
-					align: 'right',
-					width: 108
-				}, {
-					type: 'string',
-					header: 'LPD',
-					renderer: (row) => formatNumber(row.totalWatts / row.area),
-					align: 'right',
-					width: 120
-				}, {
-					type: 'string',
-					header: '% Reduction',
-					renderer: (row) => `${row.percentReduction} %`,
-					align: 'right',
-					width: 120
-				}],
-				rows: project.buildings
-			}),
-			sectionParagraph('This reduction has been determined under the interim lighting rules of Notice 2006-52.'),
-			sectionParagraph('The actual reduction from the ASHRAE/IESNA 90.1 watt-per-square foot number is needed to determine the allowable tax deduction using the following calculation: 100%-(3-1/3 x (40% –X%), where X is the percentage below the 90.1 level. Multiply the result of this equation against the maximum deduction of 60 cents per square foot.'),
-			sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:')
+			sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
+			sectionTitleParagraph('05) Field Inspection Statement'),
+			sectionParagraph('A qualified individual has field inspected the property after the lighting systems had been placed into service and certifies that the specified energy efficient lighting systems were installed and have met the energy-saving targets contained in the design plans and specifications. In addition, each required space contains bi-level switching and meets minimum IES light level requirements. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.'),
+			sectionTitleParagraph('06) Energy Efficiency Statement'),
+			sectionParagraph('The building owner has received an explanation of the energy efficiency features of the building and its projected annual energy costs.'),
+			sectionTitleParagraph('07) Certified Software'),
+			sectionParagraph('This project qualifies using the interim lighting rule. Calculations were performed in compliance with the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interim lighting rules require a calculation of lighting power density (total connected lighting watts divided by building area). The interim rule does not require the calculation of energy and power consumption and costs for the entire building. Qualified computer software is only required to calculate energy and power consumption and costs to certify that the required whole building energy cost reductions were obtained when using the permanent rule.')
 		]
-			.concat(
-				project.buildings.length > 1 ?
-					sectionTable({
-						columns: [{
-							type: 'string',
-							header: 'Name',
-							dataIndex: 'name',
-							flex: true
-						}, {
-							type: 'string',
-							header: 'Tax Sq.Ft. (SF)',
-							renderer: (row) => formatNumber(row.area),
-							align: 'right',
-							width: 108
-						}, {
-							type: 'string',
-							header: 'Tax Deduction/SF',
-							renderer: (row) => formatCurrency(row.rate),
-							align: 'right',
-							width: 120
-						}, {
-							type: 'string',
-							header: '179D Deduction',
-							renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
-							align: 'right',
-							width: 108
-						}],
-						rows: project.buildings,
-						summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
-					}) :
-					sectionTable({
-						columnsHeader: false,
-						lineColor: null,
-						columnDefaults: {
-							backgroundColor: null
-						},
-						columns: [{
-							type: 'string',
-							dataIndex: 'name',
-							weight: 'bold',
-							align: 'right',
-							flex: true
-						}, {
-							type: 'string',
-							dataIndex: 'value',
-							align: 'right',
-							width: 140
-						}],
-						rows: [{
-							name: 'Total Tax Deduction per square foot:',
-							value: formatCurrency(project.buildings[0].rate)
-						}, {
-							name: 'Total square footage of building:',
-							value: formatNumber(project.buildings[0].area)
-						}, {
-							name: 'Section 179D Deduction:',
-							value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
-						}]
-					})
-			)
-			.concat([
-				sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
-				sectionTitleParagraph('05) Field Inspection Statement'),
-				sectionParagraph('A qualified individual has field inspected the property after the lighting systems had been placed into service and certifies that the specified energy efficient lighting systems were installed and have met the energy-saving targets contained in the design plans and specifications. In addition, each required space contains bi-level switching and meets minimum IES light level requirements. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.'),
-				sectionTitleParagraph('06) Energy Efficiency Statement'),
-				sectionParagraph('The building owner has received an explanation of the energy efficiency features of the building and its projected annual energy costs.'),
-				sectionTitleParagraph('07) Certified Software'),
-				sectionParagraph('This project qualifies using the interim lighting rule. Calculations were performed in compliance with the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interim lighting rules require a calculation of lighting power density (total connected lighting watts divided by building area). The interim rule does not require the calculation of energy and power consumption and costs for the entire building. Qualified computer software is only required to calculate energy and power consumption and costs to certify that the required whole building energy cost reductions were obtained when using the permanent rule.'),
-				sectionTitleParagraph('08) Components List'),
-				sectionParagraph('Attached to this document is a list identifying the components of the interior lighting systems installed on or in the building, the energy efficiency features of the building, and it’s projected Lighting Power Density.')
-			])
 	})
+
+	sections.push({
+		items: [
+			sectionTitleParagraph('08) Components List'),
+			sectionParagraph('Attached to this document is a list identifying the components of the interior lighting systems installed on or in the building, the energy efficiency features of the building, and it’s projected Lighting Power Density.')
+		]
+	})
+
 	sections.push({
 		items: [
 			sectionTitleParagraph('09) Declaration of Qualifications'),

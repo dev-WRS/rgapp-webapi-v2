@@ -408,6 +408,30 @@ export default async ({
 		})
 	}
 
+	const statements = []
+	if (qualifyingWholeBuilding) {
+		statements.push(
+			sectionParagraph(`The interior lighting systems, heating, cooling, ventilation, hot water systems, and building envelope that have been, or are planned to be, incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building’s heating, cooling, ventilation, hot water, and interior lighting systems by 50 percent or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
+		)
+	}
+	else {
+		if (qualifyingCategories.indexOf(LIGHTING) !== -1) {
+			statements.push(
+				sectionParagraph(`The interior lighting systems that have been, or are planned to be incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building’s heating, cooling, hot water ventilation, and interior lighting systems by ${qualifyingPercentages[LIGHTING]}% or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
+			)
+		}
+		if (qualifyingCategories.indexOf(HVAC) !== -1) {
+			statements.push(
+				sectionParagraph(`The heating, cooling, ventilation, and hot water systems that have been, or are planned to be incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building cooling, ventilation, hot water, and interior lighting systems by ${qualifyingPercentages[HVAC]}% or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
+			)
+		}
+		if ((qualifyingCategories.indexOf(ENVELOPE) !== -1)) {
+			statements.push(
+				sectionParagraph(`The Building Envelope Systems that have been, or are planned to be incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building cooling, ventilation, hot water, and interior lighting systems by ${qualifyingPercentages[ENVELOPE]}% or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
+			)
+		}
+	}
+
 	const section_3 = [
 		sectionTitleParagraph('03) Qualified Deductions'),
 		sectionParagraph('Statement for energy efficient lighting property that satisfied the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interior lighting systems that have been, or are planned to be, incorporated into the building-', {
@@ -419,6 +443,10 @@ export default async ({
 		}),
 		...statements
 	]
+
+	sections.push({
+		items: section_3
+	})
 
 	const section_4 = [
 		sectionTitleParagraph('04) Energy Reduction Certification'),
@@ -502,6 +530,10 @@ export default async ({
 		sectionParagraph('This reduction has been determined under the interim lighting rules of Notice 2006-52.')
 	]
 
+	sections.push({
+		items: section_4.concat(section_4_1).concat(section_4_2)
+	})
+
 	const section_4_3 = [
 		sectionParagraph('The actual reduction from the ASHRAE/IESNA 90.1 watt-per-square foot number is needed to determine the allowable tax deduction using the following calculation: 100%-(3-1/3 x (40% –X%), where X is the percentage below the 90.1 level. Multiply the result of this equation against the maximum deduction of 60 cents per square foot.'),
 		sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:'),
@@ -562,53 +594,36 @@ export default async ({
 					name: 'Section 179D Deduction:',
 					value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
 				}]	
-			})
+			}),
+		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.')
 	]
 
-	const section_5 = [
-		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
+	sections.push({
+		items: section_4_3
+	})
+
+	const section_5_7 = [
 		sectionTitleParagraph('05) Field Inspection Statement'),
 		sectionParagraph('A qualified individual has field inspected the property after the lighting systems had been placed into service and certifies that the specified energy efficient lighting systems were installed and have met the energy-saving targets contained in the design plans and specifications. In addition, each required space contains bi-level switching and meets minimum IES light level requirements. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.'),
 		sectionTitleParagraph('06) Energy Efficiency Statement'),
 		sectionParagraph('The building owner has received an explanation of the energy efficiency features of the building and its projected annual energy costs.'),
 		sectionTitleParagraph('07) Certified Software'),
 		sectionParagraph(`Qualified computer software was used to calculate energy and power consumption and costs to certify that the required energy cost reductions were obtained. The DOE-approved software used to calculate energy and power consumption and costs is ${project.software}.`),
-		sectionParagraph('Additionally, this project qualifies using the interim lighting rule. Calculations were performed in compliance with the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interim lighting rules require a calculation of lighting power density (total connected lighting watts divided by building area). The interim rule does not require the calculation of energy and power consumption and costs for the entire building. Qualified computer software is only required to calculate energy and power consumption and costs to certify that the required whole building energy cost reductions were obtained when using the permanent rule.'),
+		sectionParagraph('Additionally, this project qualifies using the interim lighting rule. Calculations were performed in compliance with the requirements of the interim rule of section 2.03(1)(b) of Notice 2006-52. The interim lighting rules require a calculation of lighting power density (total connected lighting watts divided by building area). The interim rule does not require the calculation of energy and power consumption and costs for the entire building. Qualified computer software is only required to calculate energy and power consumption and costs to certify that the required whole building energy cost reductions were obtained when using the permanent rule.')
+	]
+
+	const section_8 = [
 		sectionTitleParagraph('08) Components List'),
 		sectionParagraph('Attached to this document is a list identifying the components of the interior lighting systems installed on or in the building, the energy efficiency features of the building, and it’s projected Lighting Power Density.')
 	]
 
-	console.log()
-	console.log(section_3)
-	console.log(section_4)
-	console.log(section_4_1)
-	console.log(section_4_2)
-	console.log(section_4_3)
-	console.log(section_5)
+	sections.push({
+		items: section_5_7
+	})
 
-	const statements = []
-	if (qualifyingWholeBuilding) {
-		statements.push(
-			sectionParagraph(`The interior lighting systems, heating, cooling, ventilation, hot water systems, and building envelope that have been, or are planned to be, incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building’s heating, cooling, ventilation, hot water, and interior lighting systems by 50 percent or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
-		)
-	}
-	else {
-		if (qualifyingCategories.indexOf(LIGHTING) !== -1) {
-			statements.push(
-				sectionParagraph(`The interior lighting systems that have been, or are planned to be incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building’s heating, cooling, hot water ventilation, and interior lighting systems by ${qualifyingPercentages[LIGHTING]}% or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
-			)
-		}
-		if (qualifyingCategories.indexOf(HVAC) !== -1) {
-			statements.push(
-				sectionParagraph(`The heating, cooling, ventilation, and hot water systems that have been, or are planned to be incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building cooling, ventilation, hot water, and interior lighting systems by ${qualifyingPercentages[HVAC]}% or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
-			)
-		}
-		if ((qualifyingCategories.indexOf(ENVELOPE) !== -1)) {
-			statements.push(
-				sectionParagraph(`The Building Envelope Systems that have been, or are planned to be incorporated into the building will reduce the total annual energy and power costs with respect to combined usage of the building cooling, ventilation, hot water, and interior lighting systems by ${qualifyingPercentages[ENVELOPE]}% or more as compared to a Reference Building that meets the minimum requirements of Standard 90.1-${year}.`)
-			)
-		}
-	}
+	sections.push({
+		items: section_8
+	})
 
 	sections.push({
 		items: [

@@ -514,11 +514,11 @@ export default async ({
 					name: 'Section 179D Deduction:',
 					value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
 				}]
-			})
+			}),
+		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.')
 	]
 
 	const section_5_8 = [
-		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
 		sectionTitleParagraph('05) Field Inspection Statement'),
 		sectionParagraph(`A qualified individual has field inspected the property after the ${qualifyingProperty} systems had been placed into service and certifies that the specified energy efficient systems have been installed and meet the energy-saving targets contained in the design plans and specifications. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.`),
 		sectionTitleParagraph('06) Energy Efficiency Statement'),
@@ -540,12 +540,24 @@ export default async ({
 			items: section_5_8
 		})
 	} else {
-		sections.push({
-			items: section_3.concat(section_4).concat(section_4_plus)
-		})
-		sections.push({
-			items: section_5_8
-		})
+		if (qualifyingPercentagesRows.length > 1) {
+			sections.push({
+				items: section_3.concat(section_4)
+			})
+			sections.push({
+				items: section_4_plus
+			})
+			sections.push({
+				items: section_5_8
+			})
+		} else {
+			sections.push({
+				items: section_3.concat(section_4).concat(section_4_plus)
+			})
+			sections.push({
+				items: section_5_8
+			})
+		}
 	}
 
 	sections.push({

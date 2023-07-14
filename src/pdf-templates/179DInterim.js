@@ -465,64 +465,67 @@ export default async ({
 		sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:')
 	]
 
-	const itemsSection4_Tables = [project.buildings.length > 1 ?
-		sectionTable({
-			columns: [{
-				type: 'string',
-				header: 'Name',
-				dataIndex: 'name',
-				flex: true
-			}, {
-				type: 'string',
-				header: 'Tax Sq.Ft. (SF)',
-				renderer: (row) => formatNumber(row.area),
-				align: 'right',
-				width: 108
-			}, {
-				type: 'string',
-				header: 'Tax Deduction/SF',
-				renderer: (row) => formatCurrency(row.rate),
-				align: 'right',
-				width: 120
-			}, {
-				type: 'string',
-				header: '179D Deduction',
-				renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
-				align: 'right',
-				width: 108
-			}],
-			rows: project.buildings,
-			summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
-		}) :
-		sectionTable({
-			columnsHeader: false,
-			lineColor: null,
-			columnDefaults: {
-				backgroundColor: null
-			},
-			columns: [{
-				type: 'string',
-				dataIndex: 'name',
-				weight: 'bold',
-				align: 'right',
-				flex: true
-			}, {
-				type: 'string',
-				dataIndex: 'value',
-				align: 'right',
-				width: 140
-			}],
-			rows: [{
-				name: 'Total Tax Deduction per square foot:',
-				value: formatCurrency(project.buildings[0].rate)
-			}, {
-				name: 'Total square footage of building:',
-				value: formatNumber(project.buildings[0].area)
-			}, {
-				name: 'Section 179D Deduction:',
-				value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
-			}]
-		})]
+	const itemsSection4_Tables = [
+		project.buildings.length > 1 ?
+			sectionTable({
+				columns: [{
+					type: 'string',
+					header: 'Name',
+					dataIndex: 'name',
+					flex: true
+				}, {
+					type: 'string',
+					header: 'Tax Sq.Ft. (SF)',
+					renderer: (row) => formatNumber(row.area),
+					align: 'right',
+					width: 108
+				}, {
+					type: 'string',
+					header: 'Tax Deduction/SF',
+					renderer: (row) => formatCurrency(row.rate),
+					align: 'right',
+					width: 120
+				}, {
+					type: 'string',
+					header: '179D Deduction',
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+					align: 'right',
+					width: 108
+				}],
+				rows: project.buildings,
+				summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
+			}) :
+			sectionTable({
+				columnsHeader: false,
+				lineColor: null,
+				columnDefaults: {
+					backgroundColor: null
+				},
+				columns: [{
+					type: 'string',
+					dataIndex: 'name',
+					weight: 'bold',
+					align: 'right',
+					flex: true
+				}, {
+					type: 'string',
+					dataIndex: 'value',
+					align: 'right',
+					width: 140
+				}],
+				rows: [{
+					name: 'Total Tax Deduction per square foot:',
+					value: formatCurrency(project.buildings[0].rate)
+				}, {
+					name: 'Total square footage of building:',
+					value: formatNumber(project.buildings[0].area)
+				}, {
+					name: 'Section 179D Deduction:',
+					value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
+				}]
+			}),
+		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.')
+	]
 
 	//section 4
 	if (project.buildings.length < 3) {
@@ -543,7 +546,6 @@ export default async ({
 	//section 5 and bellow
 	sections.push({
 		items: [
-			sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.'),
 			sectionTitleParagraph('05) Field Inspection Statement'),
 			sectionParagraph('A qualified individual has field inspected the property after the lighting systems had been placed into service and certifies that the specified energy efficient lighting systems were installed and have met the energy-saving targets contained in the design plans and specifications. In addition, each required space contains bi-level switching and meets minimum IES light level requirements. This inspection was performed in accordance with applicable sections of the National Renewable Energy Laboratory (NREL) as Energy Saving Modeling and Inspection Guidelines for Commercial Building Federal Tax Deductions that were in effect at the time of certification.'),
 			sectionTitleParagraph('06) Energy Efficiency Statement'),

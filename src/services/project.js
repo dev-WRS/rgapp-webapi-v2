@@ -61,15 +61,23 @@ export default ({ db, config }) => {
 	const copyProject = async (projectToCopy) => {
 		try {
 			const matchingProjects = await Project.find({ projectID: { $regex: projectToCopy.projectID, $options: '$i' } }).sort({ projectID: 1 }).lean()
-			const lastProjectID = matchingProjects[matchingProjects.length - 1].projectID
-			const lastIndex = lastProjectID.lastIndexOf('(')
+			const projectIdToCopy = matchingProjects.length === 0 ? projectToCopy.projectID : matchingProjects[matchingProjects.length - 1].projectID
+			const projectNameToCopy = matchingProjects.length === 0 ? projectToCopy.name : matchingProjects[matchingProjects.length - 1].name
+			const match = projectIdToCopy.match(/ \((\d+)\)$/)
+			let copiedProjectId = projectIdToCopy
+			let copiedName = projectNameToCopy
+			let copyCount = 1
+			if (match) {
+				const currentCopyCount = parseInt(match[1], 10)
+				copyCount = currentCopyCount + 1
+				copiedProjectId = copiedProjectId.replace(/ \(\d+\)$/, '')
+				copiedName = copiedName.replace(/ \(\d+\)$/, '')
+			}
+			copiedProjectId += ` (${copyCount})`
+			copiedName += ` (${copyCount})`
 
-			let newProjectID = lastIndex !== -1 
-				? parseInt(lastProjectID.slice(lastIndex + 1, -1)) + 1
-				: 1
-
-			projectToCopy.projectID = `${projectToCopy.projectID} (${newProjectID})` 
-			projectToCopy.name = `${projectToCopy.name} (${newProjectID})`
+			projectToCopy.projectID = copiedProjectId
+			projectToCopy.name = copiedName
 			
 			const project = await Project.create(projectToCopy)
 			

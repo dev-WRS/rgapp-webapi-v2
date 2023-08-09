@@ -44,7 +44,7 @@ export default async ({
 	} = helpers({ theme })
 
 	const benefitRate = 2000
-
+	const nameState = project.state !== 'Multistate' ? `${project.name}, ${project.state}` : `${project.name}` 
 	const draftCoverArray = { items: [
 		sectionParagraph('INTERNAL REVENUE CODE SECTION 45L\nEPACT COMPLIANCE REPORT OF', {
 			size: 12,
@@ -54,7 +54,7 @@ export default async ({
 			size: 12,
 			align: 'center'	
 		}),
-		sectionParagraph(`${project.name}, ${project.state}`, {
+		sectionParagraph(nameState , {
 			size: 12,
 			align: 'center'	
 		}),
@@ -81,7 +81,7 @@ export default async ({
 	] }
 
 	const legacyImproved = legacyImprove(project.legalEntity)
-	console.log('legacyImproved', legacyImproved)
+	console.log('nameState', nameState)
 
 	const pdf = new PDFBuilder({ 
 		size: 'LETTER',
@@ -101,7 +101,7 @@ export default async ({
 				repoHeader(legacyImproved, {
 					width: 200
 				}),
-				repoHeader(`${project.name}, ${project.state}`, {
+				repoHeader(nameState, {
 					size: 12,
 					width: 200
 				}),

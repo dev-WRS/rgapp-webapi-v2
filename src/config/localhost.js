@@ -6,7 +6,7 @@ export default {
 		}
 	},
 	tpl: {
-		appUrl: 'http://localhost:3000'
+		appUrl: 'https://reportsv2.walkerreid.com'
 	},
 	aws: {
 		bucketName: 'rgapp-assets-bucket-production',

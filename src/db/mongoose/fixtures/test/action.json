@@ -40,6 +40,11 @@
 		"group": "Assets"
 	},
 	{
+		"key": "list-assets-dashboard",
+		"name": "List Dashboard",
+		"group": "Assets"
+	},
+	{
 		"key": "upload-assets",
 		"name": "Upload",
 		"group": "Assets"

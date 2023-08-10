@@ -87,6 +87,87 @@ export default ({ db, config }) => {
 		}
 	}
 	const getProjectById = (id) => Project.findOne({ _id: id }, '-__v').lean()
+
+	const updateTasks = async (id, status) => {
+		try {
+			const { data: opportunity } = await axios.request({
+				baseURL: config.pms.apiUrl,
+				url: `/Opportunities/${id}/Links`,
+				method: 'get',
+				headers: {
+					'Authorization': `Basic ${config.pms.apiKey}`
+				}
+			})
+
+			if (opportunity) {
+				const link = opportunity.find(item => item['LINK_OBJECT_NAME'] === 'Project') || {} 
+				const projectId = link.LINK_OBJECT_ID
+
+				const tasksData = await axios.request({
+					baseURL: config.pms.apiUrl,
+					url: `/Projects/${projectId}/Tasks?brief=false&count_total=false`,
+					method: 'get',
+					headers: {
+						'Authorization': `Basic ${config.pms.apiKey}`
+					}
+				})
+				if (tasksData && tasksData.data.length > 0) {
+					const tasks = tasksData.data
+					const task = tasks.find((t) => t['TITLE'] === 'Submit Reports')
+					const taskId = task.TASK_ID.toString()
+		
+					const taskPut = { TASK_ID: taskId, STATUS: status === 'inProgress' ? 'WAITING' : 'COMPLETED' }
+		
+					const updatedTask = await axios.request({
+						baseURL: config.pms.apiUrl,
+						url: `/Tasks/${taskId}`,
+						method: 'put',
+						data: JSON.stringify(taskPut),
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Basic ${config.pms.apiKey}`
+						}
+					})
+
+					const today = new Date()		
+					const stage = {
+						PIPELINE_ID: 903682,
+						STAGE_ID: 3688488,
+						ACTIVITYSET_ASSIGNMENT: {
+							ACTIVITYSET_ID: 1497234,
+							START_DATE: today,
+							END_DATE: today,
+							ACTIVITY_ASSIGNMENTS: [
+								{
+									ACTIVITY_ID: 3208731,
+									RESPONSIBLE_USER_ID: 295846,
+									ASSIGNED_TEAM_ID: null
+								}
+							]
+						}
+					}
+		
+					const updatedStage = await axios.request({
+						baseURL: config.pms.apiUrl,
+						url: `/Projects/${projectId}/PipelineStage`,
+						method: 'put',
+						data: JSON.stringify(stage),
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Basic ${config.pms.apiKey}`
+						}
+					})
+		
+					return { task: updatedTask.data, stage: updatedStage.data }
+				}
+
+			}
+
+		} catch (error) {
+			throw new HttpBadRequestError('Task not found')
+		}
+	}
+
 	const getProjectByProjectID = async (id) => {
 		let project = {}
 
@@ -324,6 +405,7 @@ export default ({ db, config }) => {
 		updateProjectPhoto,
 		deleteProjectPhoto,
 		copyProject,
-		copyBuilding
+		copyBuilding,
+		updateTasks
 	}
 }

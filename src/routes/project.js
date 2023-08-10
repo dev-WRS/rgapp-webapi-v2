@@ -267,6 +267,8 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				}
 
 				const project = await Project.updateProject({ id }, { status })
+				const updateTasks = await Project.updateTasks(project.projectID , status)
+				console.log(updateTasks)
 
 				res.json({ result: asProjectResponse(project) })
 			}

@@ -748,6 +748,42 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		}
 	)
 
+	router.put('/projects/:id/photos/:photoId/change',
+
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		multerUpload.single('asset'),
+		async (req, res, next) => {
+			try {
+				const { id, photoId } = req.params
+				let assetId = ''
+
+				const { id: userId } = req.user
+				let photo = asAsset(req.file)
+
+				if (photo) {
+					const asset = await Asset.createAsset({ ...photo, origin: 'project', createdBy: userId })
+					photo = asset.id
+					assetId = asset.id
+				}
+
+				const assetToDelete = await Asset.getAssetById(photoId)
+				if (assetToDelete) {
+					const { bucket, key } = assetToDelete
+					await assetStorage.deleteObject({ bucket, key })
+				}
+				
+				const project = await Project.updateProjectPhotoChange({ id }, { photoId }, { assetId })
+
+				res.json({ result: asProjectResponse(project) })
+			}
+			catch (error) {
+				next(error)
+			}
+		}
+	)
+
 	router.delete('/projects/:id/photos/:photoId',
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),

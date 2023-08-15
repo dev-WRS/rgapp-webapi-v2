@@ -33,7 +33,7 @@ export default ({ db, config }) => {
 	}
 	const getProjectsByPhotoAsset = (asset) => Project.find({ photos: { $elemMatch: { asset: asset } } }, { 'photos.$': 1 }).select('status').lean()
 	const getProjectsByPDFAsset = (asset) => Project.find({ $or: [{ certificate45L: asset }, { baselineDesign179D: asset }, { wholeBuildingDesign179D: asset }, { buildingSummary179D: asset }, { softwareCertificate179D: asset }] }).select('status').lean()
-	const createProject = async ({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, buildingDefaults, buildings, createdBy }) => {
+	const createProject = async ({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, buildingDefaults, buildings, createdBy }) => {
 		try {
 			let softwareCertificate
 
@@ -41,7 +41,7 @@ export default ({ db, config }) => {
 				softwareCertificate = software === 'eQuest 3.65' ? await Asset.findOne({ name: 'eQuest Software Certificate.pdf' }) : await Asset.findOne({ name: 'HAP Software Certificate.pdf' })
 			}
 
-			const project = await Project.create({ projectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status: 'inProgress', certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, softwareCertificate179D: softwareCertificate && softwareCertificate.id, buildingDefaults, buildings, createdBy })
+			const project = await Project.create({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status: 'inProgress', certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, softwareCertificate179D: softwareCertificate && softwareCertificate.id, buildingDefaults, buildings, createdBy })
 			
 			return await Project.findOne({ _id: project.id }, '-__v').lean()
 		} catch (error) {
@@ -65,6 +65,7 @@ export default ({ db, config }) => {
 			const projectNameToCopy = matchingProjects.length === 0 ? projectToCopy.name : matchingProjects[matchingProjects.length - 1].name
 			const match = projectIdToCopy.match(/ \((\d+)\)$/)
 			let copiedProjectId = projectIdToCopy
+			let originalProjectID = projectIdToCopy
 			let copiedName = projectNameToCopy
 			let copyCount = 1
 			if (match) {
@@ -77,6 +78,7 @@ export default ({ db, config }) => {
 			copiedName += ` (${copyCount})`
 
 			projectToCopy.projectID = copiedProjectId
+			projectToCopy.originalProjectID = originalProjectID
 			projectToCopy.name = copiedName
 			
 			const project = await Project.create(projectToCopy)
@@ -236,6 +238,7 @@ export default ({ db, config }) => {
 			
 					project = {
 						projectID: id,
+						originalProjectID: id,
 						name: projectName,
 						taxYear: projectFields['PROJECT_FIELD_10'],
 						legalEntity: projectFields['PROJECT_FIELD_11'],

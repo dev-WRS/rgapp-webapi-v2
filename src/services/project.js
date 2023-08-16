@@ -131,36 +131,39 @@ export default ({ db, config }) => {
 						}
 					})
 
-					const today = new Date()		
-					const stage = {
-						PIPELINE_ID: 903682,
-						STAGE_ID: 3688488,
-						ACTIVITYSET_ASSIGNMENT: {
-							ACTIVITYSET_ID: 1497234,
-							START_DATE: today,
-							END_DATE: today,
-							ACTIVITY_ASSIGNMENTS: [
-								{
-									ACTIVITY_ID: 3208731,
-									RESPONSIBLE_USER_ID: 295846,
-									ASSIGNED_TEAM_ID: null
-								}
-							]
+					const taskRepBrand = tasks.find((t) => t['TITLE'] === 'Add Report Brand & Perform Initial review')
+					if (!taskRepBrand) {
+						const today = new Date()		
+						const stage = {
+							PIPELINE_ID: 903682,
+							STAGE_ID: 3688488,
+							ACTIVITYSET_ASSIGNMENT: {
+								ACTIVITYSET_ID: 1497234,
+								START_DATE: today,
+								END_DATE: today,
+								ACTIVITY_ASSIGNMENTS: [
+									{
+										ACTIVITY_ID: 3208731,
+										RESPONSIBLE_USER_ID: 295846,
+										ASSIGNED_TEAM_ID: null
+									}
+								]
+							}
 						}
+			
+						await axios.request({
+							baseURL: config.pms.apiUrl,
+							url: `/Projects/${projectId}/PipelineStage`,
+							method: 'put',
+							data: JSON.stringify(stage),
+							headers: {
+								'Content-Type': 'application/json',
+								'Authorization': `Basic ${config.pms.apiKey}`
+							}
+						})
 					}
 		
-					const updatedStage = await axios.request({
-						baseURL: config.pms.apiUrl,
-						url: `/Projects/${projectId}/PipelineStage`,
-						method: 'put',
-						data: JSON.stringify(stage),
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Basic ${config.pms.apiKey}`
-						}
-					})
-		
-					return { task: updatedTask.data, stage: updatedStage.data }
+					return { task: updatedTask.data, stage: 'done' }
 				}
 
 			}

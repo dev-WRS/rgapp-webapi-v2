@@ -90,7 +90,7 @@ export default ({ db, config }) => {
 	}
 	const getProjectById = (id) => Project.findOne({ _id: id }, '-__v').lean()
 
-	const updateTasks = async (id, status) => {
+	const updateTasks = async (id, status, reportType) => {
 		try {
 			const { data: opportunity } = await axios.request({
 				baseURL: config.pms.apiUrl,
@@ -131,36 +131,83 @@ export default ({ db, config }) => {
 						}
 					})
 
-					const taskRepBrand = tasks.find((t) => t['TITLE'] === 'Add Report Brand & Perform Initial review')
+					const taskRepBrand = reportType === '45L' 
+						? tasks.find((t) => t['TITLE'] === 'Perform initial report review')
+						: tasks.find((t) => t['TITLE'] === 'Add Report Brand & Perform Initial review')
+
 					if (!taskRepBrand) {
-						const today = new Date()		
-						const stage = {
-							PIPELINE_ID: 903682,
-							STAGE_ID: 3688488,
-							ACTIVITYSET_ASSIGNMENT: {
-								ACTIVITYSET_ID: 1497234,
-								START_DATE: today,
-								END_DATE: today,
-								ACTIVITY_ASSIGNMENTS: [
-									{
-										ACTIVITY_ID: 3208731,
-										RESPONSIBLE_USER_ID: 295846,
-										ASSIGNED_TEAM_ID: null
-									}
-								]
+						if (reportType !== '45L') {
+							const today = new Date()		
+							const stage = {
+								PIPELINE_ID: 903682,
+								STAGE_ID: 3688488,
+								ACTIVITYSET_ASSIGNMENT: {
+									ACTIVITYSET_ID: 1497234,
+									START_DATE: today,
+									END_DATE: today,
+									ACTIVITY_ASSIGNMENTS: [
+										{
+											ACTIVITY_ID: 3208731,
+											RESPONSIBLE_USER_ID: 295846,
+											ASSIGNED_TEAM_ID: null
+										}
+									]
+								}
 							}
+				
+							await axios.request({
+								baseURL: config.pms.apiUrl,
+								url: `/Projects/${projectId}/PipelineStage`,
+								method: 'put',
+								data: JSON.stringify(stage),
+								headers: {
+									'Content-Type': 'application/json',
+									'Authorization': `Basic ${config.pms.apiKey}`
+								}
+							})
+						} else {
+							const taskPost = {
+								TITLE: 'Perform initial report review',
+								CATEGORY_ID: 847612,
+								DUE_DATE: new Date(),
+								COMPLETED: false,
+								PERCENT_COMPLETE: 0,
+								RESPONSIBLE_USER_ID: 2005164,
+								OWNER_USER_ID: 2005164,
+								PROJECT_ID: projectId,
+								STAGE_ID: 4216736
+							}
+
+							const createdTask = await axios.request({
+								baseURL: config.pms.apiUrl,
+								url: '/Tasks',
+								method: 'post',
+								data: JSON.stringify(taskPost),
+								headers: {
+									'Content-Type': 'application/json',
+									'Authorization': `Basic ${config.pms.apiKey}`
+								}
+							})
+
+							const taskId = createdTask.data['TASK_ID'].toString()
+							const linkPost = {
+								OBJECT_NAME: 'Task',
+								OBJECT_ID: taskId,
+								LINK_OBJECT_NAME: 'Project',
+								LINK_OBJECT_ID: projectId
+							}
+
+							await axios.request({
+								baseURL: config.pms.apiUrl,
+								url: `/Tasks/${taskId}/Links`,
+								method: 'post',
+								data: JSON.stringify(linkPost),
+								headers: {
+									'Content-Type': 'application/json',
+									'Authorization': `Basic ${config.pms.apiKey}`
+								}
+							})
 						}
-			
-						await axios.request({
-							baseURL: config.pms.apiUrl,
-							url: `/Projects/${projectId}/PipelineStage`,
-							method: 'put',
-							data: JSON.stringify(stage),
-							headers: {
-								'Content-Type': 'application/json',
-								'Authorization': `Basic ${config.pms.apiKey}`
-							}
-						})
 					}
 		
 					return { task: updatedTask.data, stage: 'done' }

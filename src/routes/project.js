@@ -184,11 +184,12 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		async (req, res, next) => {
 			try {
 				const { id } = req.params
+				const { id: userId } = req.user
 				let project = await Project.getProjectById(id)				
 
 				if (project) {
 					delete project._id
-					const projectToCopy = await Project.copyProject(project)
+					const projectToCopy = await Project.copyProject(project, userId, assetStorage, Asset)
 
 					res.json({ result: asProjectResponse(projectToCopy) })
 				}

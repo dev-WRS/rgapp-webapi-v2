@@ -244,29 +244,56 @@ export default async ({
 					value: formatPhone(certifier.phone)
 				}]
 			}),
-			sectionTable({
-				title: '02) Dwelling Unit Information',
-				columnsHeader: false,
-				columns: [{
-					type: 'string',
-					dataIndex: 'name',
-					weight: 'bold',
-					width: 140
-				}, {
-					type: 'string',
-					dataIndex: 'value',
-					flex: true
-				}],
-				rows: [{
-					name: 'Residence Name',
-					value: project.private ? project.legalEntity : project.name
-				}, {
-					name: 'Address',
-					value: project.dwellingUnits.length == 1 ? project.dwellingUnitAddress : 'Multiple (See Table 2.1)'
-				}]
-			})
+			project.dwellingUnits.length === 1 
+				? sectionTable ({
+					title: '02) Dwelling Unit Information',
+					columnsHeader: false,
+					columns: [{
+						type: 'string',
+						dataIndex: 'name',
+						weight: 'bold',
+						width: 140
+					}, {
+						type: 'string',
+						dataIndex: 'value',
+						flex: true
+					}],
+					rows: [
+						{
+							name: 'Residence Name',
+							value: project.private ? project.legalEntity : project.name
+						}, {
+							name: 'Model',
+							value: project.dwellingUnits[0].model
+						}, {
+							name: 'Address',
+							value: project.dwellingUnitAddress
+						}]
+				})
+				: sectionTable({
+					title: '02) Dwelling Unit Information',
+					columnsHeader: false,
+					columns: [{
+						type: 'string',
+						dataIndex: 'name',
+						weight: 'bold',
+						width: 140
+					}, {
+						type: 'string',
+						dataIndex: 'value',
+						flex: true
+					}],
+					rows: [{
+						name: 'Residence Name',
+						value: project.private ? project.legalEntity : project.name
+					}, {
+						name: 'Address',
+						value: project.dwellingUnits.length == 1 ? project.dwellingUnitAddress : 'Multiple (See Table 2.1)'
+					}]
+				})
 		]
 	})
+
 	if (project.dwellingUnits.length > 1) {
 		let rowCount = 0
 

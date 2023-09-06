@@ -58,7 +58,7 @@ export default ({ db, config }) => {
 			}
 		}
 	}
-	const copyProject = async (projectToCopy) => {
+	const copyProject = async (projectToCopy, userId, assetStorage, Asset) => {
 		try {
 			const matchingProjects = await Project.find({ projectID: { $regex: projectToCopy.projectID, $options: '$i' } }).sort({ projectID: 1 }).lean()
 			const projectIdToCopy = matchingProjects.length === 0 ? projectToCopy.projectID : matchingProjects[matchingProjects.length - 1].projectID
@@ -80,6 +80,30 @@ export default ({ db, config }) => {
 			projectToCopy.projectID = copiedProjectId
 			projectToCopy.originalProjectID = originalProjectID
 			projectToCopy.name = copiedName
+
+			const photos = []
+
+			if (projectToCopy.photos && projectToCopy.photos.length > 0) {
+				for (const photo of projectToCopy.photos) {
+					const asset = await Asset.getAssetById(photo.asset)
+					if (asset) {
+						const { name, bucket, key, format, size } = asset
+						const stream = await assetStorage.getObjectStream({ bucket, key })
+
+						const assetCopy = await Asset.createAsset({ name: `${copiedName}-${name}`, format, size, bucket, key: `${copiedName}-${key}`, createdBy: userId })
+
+						await assetStorage.uploadObjectStream({
+							contentEncoding: config.aws.contentEncoding,
+							bucket: config.aws.bucketName,
+							key: `${copiedName}-${key}`
+						}, stream)
+
+						photos.push({ asset: assetCopy.id, description: photo.description, id: assetCopy.id })
+					}
+				}
+			}
+
+			projectToCopy.photos = photos
 			
 			const project = await Project.create(projectToCopy)
 			

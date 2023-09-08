@@ -243,11 +243,11 @@ export default async ({
 			sectionParagraph('Notice 2008-40 section 7.01 allows a taxpayer to elect to qualify the building envelope as energy efficient commercial building property by substituting 10 percent efficiency instead of the 16 2/3 percent directed in Notice 2006-52 section 2.05 for property placed in service before December 31, 2008. If this election is made, the lighting and heating, cooling, ventilation and hot water systems must each exceed Standard 90.1-2001 by 20 percent instead of 16 2/3 percent as directed in Notice 2006-52 sections 2.03 and 2.04. For property placed in service after December 31, 2008, taxpayers must meet the updated energy standards of 10/20/20 percent.')
 		]
 	})
-	sections.push({
-		items: [
-			sectionParagraph('H.R. 5771 The Tax Increase Prevention Act of 2014 was enacted into Law (P.L. 113-295) on December 19, 2014 extending the §179D Tax Deduction for an additional Year. The Law Amended Code Sec. 179D(h) by striking "December 31, 2013" and inserting "December 31, 2014". Effective for property placed in service after 12-31-2013. No additional changes were made to qualifying percentages or referenced standards. H.R. 2029 The Consolidated Appropriations Act, 2016 Became Public Law No: 114-113 on December 18, 2015. The law extends Section 179D through the end of 2016 without lapse. The law did modify the energy standard requirements for property placed into service in 2016 to ASHRAE 90.1-2007.')
-		]
-	})
+	// sections.push({
+	// 	items: [
+	// 		sectionParagraph('H.R. 5771 The Tax Increase Prevention Act of 2014 was enacted into Law (P.L. 113-295) on December 19, 2014 extending the §179D Tax Deduction for an additional Year. The Law Amended Code Sec. 179D(h) by striking "December 31, 2013" and inserting "December 31, 2014". Effective for property placed in service after 12-31-2013. No additional changes were made to qualifying percentages or referenced standards. H.R. 2029 The Consolidated Appropriations Act, 2016 Became Public Law No: 114-113 on December 18, 2015. The law extends Section 179D through the end of 2016 without lapse. The law did modify the energy standard requirements for property placed into service in 2016 to ASHRAE 90.1-2007.')
+	// 	]
+	// })
 	sections.push({
 		items: [
 			...sectionTitle('Calculation of Section 179D Deduction'),

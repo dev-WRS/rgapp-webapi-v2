@@ -90,12 +90,17 @@ export default ({ db, config }) => {
 						const { name, bucket, key, format, size } = asset
 						const stream = await assetStorage.getObjectStream({ bucket, key })
 
-						const assetCopy = await Asset.createAsset({ name: `${copiedName}-${name}`, format, size, bucket, key: `${copiedName}-${key}`, createdBy: userId })
+						const dateName = new Date().getTime()
+						const newName = getFileNameAndExtension(name)
+						const newKey = getFileNameAndExtension(key)
+
+						const assetCopy = await Asset.createAsset({ name: `${newName[0]}-${dateName}.${newName[1]}`,
+							format, size, bucket, key: `${newKey[0]}-${dateName}.${newKey[1]}`, createdBy: userId })
 
 						await assetStorage.uploadObjectStream({
 							contentEncoding: config.aws.contentEncoding,
 							bucket: config.aws.bucketName,
-							key: `${copiedName}-${key}`
+							key: `${newKey[0]}-${dateName}.${newKey[1]}`
 						}, stream)
 
 						photos.push({ asset: assetCopy.id, description: photo.description, id: assetCopy.id })
@@ -462,6 +467,18 @@ export default ({ db, config }) => {
 		return maxNumber > 0 ? maxNumber + 1 : 1
 	}
 
+	const getFileNameAndExtension = (originalname) => {
+		const nameSplitted = originalname.split('.')
+		
+		if (nameSplitted.length >= 2) {
+			const extension = nameSplitted.pop()
+			const fileName = nameSplitted.join('.')
+			return [fileName, extension]
+		} else {
+			return [originalname, '']
+		}
+	}
+
 	return {
 		getProjects,
 		getProjectsByPhotoAsset,
@@ -485,6 +502,7 @@ export default ({ db, config }) => {
 		deleteProjectPhoto,
 		copyProject,
 		copyBuilding,
-		updateTasks
+		updateTasks,
+		getFileNameAndExtension
 	}
 }

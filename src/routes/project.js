@@ -750,7 +750,6 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 	)
 
 	router.put('/projects/:id/photos/:photoId/change',
-
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),
 		withPassport(passport, config)('jwt'),
@@ -765,7 +764,6 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 
 				if (photo) {
 					const asset = await Asset.createAsset({ ...photo, origin: 'project', createdBy: userId })
-					photo = asset.id
 					assetId = asset.id
 				}
 
@@ -776,6 +774,8 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				}
 				
 				const project = await Project.updateProjectPhotoChange({ id }, { photoId }, { assetId })
+
+				await Asset.deleteAsset({ id: photoId })
 
 				res.json({ result: asProjectResponse(project) })
 			}

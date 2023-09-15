@@ -408,6 +408,7 @@ export default ({ db, config }) => {
 	}
 	const deleteProjectDwellingUnit = ({ id }, { unitId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'dwellingUnits': { '_id': unitId } } }, { returnDocument: 'after' }).lean()
 	const addProjectPhoto = ({ id }, { ...data }) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'photos': { ...data } } }, { returnDocument: 'after' }).lean()
+	const addProjectMultiplePhoto = ({ id }, data) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'photos': { $each: data } } }, { returnDocument: 'after' }).lean()
 	const updateProjectPhoto = ({ id }, { photoId }, { description }) => Project.findOneAndUpdate({ _id: id, 'photos._id': photoId }, { '$set': { 'photos.$.description': description } }, { returnDocument: 'after' }).lean()
 	const updateProjectPhotoChange = ({ id }, { photoId }, { assetId }) => Project.findOneAndUpdate({ _id: id, 'photos.asset': photoId }, { '$set': { 'photos.$.asset': assetId } }, { returnDocument: 'after' }).lean()
 	const deleteProjectPhoto = ({ id }, { photoId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'photos': { '_id': photoId } } }, { returnDocument: 'after' }).lean()
@@ -497,6 +498,7 @@ export default ({ db, config }) => {
 		updateProjectDwellingUnit,
 		deleteProjectDwellingUnit,
 		addProjectPhoto,
+		addProjectMultiplePhoto,
 		updateProjectPhoto,
 		updateProjectPhotoChange,
 		deleteProjectPhoto,

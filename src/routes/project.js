@@ -725,6 +725,33 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		}
 	)
 
+	router.post('/projects/:id/photosMultiple',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		multerUpload.array('asset', 10),
+		async (req, res, next) => {
+			try {
+				const { id: userId } = req.user
+				const { id } = req.params
+				const photos = req.files
+				const assetIdsDescription = []
+
+				for (const file of photos) {
+					const photo = asAsset(file)
+					if (photo) {
+						const asset = await Asset.createAsset({ ...photo, origin: 'project', createdBy: userId })
+						assetIdsDescription.push({ asset: asset.id, description: '' })
+					}
+				}
+
+				const project = await Project.addProjectMultiplePhoto({ id }, assetIdsDescription)
+				res.json({ result: asProjectResponse(project) })
+			} catch (error) {
+				next(error)
+			}
+		})
+
 	router.put('/projects/:id/photos/:photoId',
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),

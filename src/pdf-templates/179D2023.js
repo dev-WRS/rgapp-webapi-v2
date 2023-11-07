@@ -383,92 +383,64 @@ export default async ({
 			sectionParagraph('Statement for qualifying energy efficient commercial building property:'),
 			...statements,
 			sectionTitleParagraph('04) Energy Reduction Certification'),
-			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems were completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by at least 25% due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined using a Performance Rating Method. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingArea)}.`),			
-			sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:')
+			sectionParagraph(`The new energy efficient ${qualifyingProperty} systems were completed in ${buildingTypesSubject}. The total annual energy and power costs of this building have been reduced by at least 25% due to the installation of Energy Efficient ${qualifyingProperty} systems. This reduction has been determined using a Performance Rating Method. The total area of the building that received new energy efficient systems is ${formatNumber(totalBuildingArea)}.`)
 		]
 	})
+
 	sections.push({
-		horizontal: project.buildings.length > 1,
+		horizontal: true,
 		items: [
-			(project.buildings.length > 1) ?
-				sectionTable({
-					columns: [{
-						type: 'string',
-						header: 'Name',
-						dataIndex: 'name',
-						width: 125
-					}, {
-						type: 'string',
-						header: 'Qualifying Area',
-						renderer: (row) => `${formatNumber(row.area)} sqft`,
-						align: 'right',
-						width: 90
-					}, {
-						type: 'string',
-						header: 'Savings %',
-						renderer: (row) => `${formatNumber(row.percentSaving)} %`,
-						align: 'right',
-						width: 70
-					}, {
-						type: 'string',
-						header: 'Deduction/SF',
-						renderer: (row) => formatCurrency(row.rate),
-						align: 'right',
-						width: 90
-					}, {
-						type: 'string',
-						header: 'Deduction',
-						renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
-						align: 'right',
-						width: 70
-					}, {
-						type: 'string',
-						header: 'PW&A Deduction/SF',
-						renderer: (row) => formatCurrency(row.pwRate),
-						align: 'right',
-						width: 120
-					}, {
-						type: 'string',
-						header: 'PW&A Deduction',
-						renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
-						align: 'right',
-						width: 120
-					}],
-					rows: project.buildings,
-					summary: `Total 179D Deduction: ${formatCurrency(totalDeduction)} \n Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}` 
-				}) :
-				sectionTable({
-					columnsHeader: false,
-					lineColor: null,
-					columnDefaults: {
-						backgroundColor: null
-					},
-					columns: [{
-						type: 'string',
-						dataIndex: 'name',
-						weight: 'bold',
-						align: 'right',
-						flex: true
-					}, {
-						type: 'string',
-						dataIndex: 'value',
-						align: 'right',
-						width: 140
-					}],
-					rows: [{
-						name: 'Total Tax Deduction per square foot:',
-						value: formatCurrency(project.buildings[0].rate)
-					}, {
-						name: 'Total square footage of building:',
-						value: formatNumber(project.buildings[0].area)
-					}, {
-						name: 'Section 179D Deduction:',
-						value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
-					}]
-				}),
+			sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:'),
+			sectionTable({
+				columns: [{
+					type: 'string',
+					header: 'Name',
+					dataIndex: 'name',
+					width: 125
+				}, {
+					type: 'string',
+					header: 'Qualifying Area',
+					renderer: (row) => `${formatNumber(row.area)} sqft`,
+					align: 'right',
+					width: 90
+				}, {
+					type: 'string',
+					header: 'Savings %',
+					renderer: (row) => `${formatNumber(row.percentSaving)} %`,
+					align: 'right',
+					width: 70
+				}, {
+					type: 'string',
+					header: 'Deduction/SF',
+					renderer: (row) => formatCurrency(row.rate),
+					align: 'right',
+					width: 90
+				}, {
+					type: 'string',
+					header: 'Deduction',
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+					align: 'right',
+					width: 70
+				}, {
+					type: 'string',
+					header: 'PW&A Deduction/SF',
+					renderer: (row) => formatCurrency(row.pwRate),
+					align: 'right',
+					width: 120
+				}, {
+					type: 'string',
+					header: 'PW&A Deduction',
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
+					align: 'right',
+					width: 120
+				}],
+				rows: project.buildings,
+				summary: `Total 179D Deduction: ${formatCurrency(totalDeduction)} \n Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}` 
+			}),
 			sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance. Projects started prior to January 30, 2023, do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, to qualify for the increased deduction of 179D(b)(3), the taxpayer must satisfy certain prevailing wage & apprenticeship requirements in accordance with Notice 2022-61.')
 		]
 	})
+
 	sections.push({
 		items: [
 			sectionTitleParagraph('05) Field Inspection Statement'),
@@ -481,6 +453,7 @@ export default async ({
 			sectionParagraph(`Attached to this document is a list identifying the components of the ${qualifyingProperty} systems installed on or in the building, the energy efficiency features of the building, and its projected annual energy costs.`)
 		]
 	})
+
 	sections.push({
 		items: [
 			sectionTitleParagraph('09) Declaration of Qualifications'),
@@ -491,7 +464,8 @@ export default async ({
 				printedName: certifier.name,
 				signature,
 				licenseNumber: license ? license.number : '',
-				date: formatDate(new Date())
+				date: formatDate(new Date()),
+				state: license ? license.state : ''
 			})
 		]
 	})

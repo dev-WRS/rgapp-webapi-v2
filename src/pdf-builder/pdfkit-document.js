@@ -2,6 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import _ from 'lodash'
 import { PassThrough } from 'stream'
+// import { degrees } from 'pdf-lib'
+// import { PageSizes } from 'pdf-lib'
 import PDFDocument from 'pdfkit/js/pdfkit.standalone.js'
 import { textMixin, elements } from './pdfkit-elements.js'
 
@@ -134,7 +136,7 @@ class PDFKitDocument {
 				if (section.embeded !== true) {
 					this.indices[this.currentSection] = { children: [] }
 
-					await this.addPage()
+					await this.addPage(section.horizontal)
 					await this.renderItems(section.items)
 				}
 				else if (section.items[0]/* && section.items[0].isTitle*/) {
@@ -203,7 +205,7 @@ class PDFKitDocument {
 		}
 	}
 
-	addPage () {
+	addPage (horizontal = false) {
 		const { doc, margins } = this
 
 		return new Promise((resolve) => {
@@ -213,9 +215,16 @@ class PDFKitDocument {
 			}
 			doc.addListener('pageAdded', listener)
 
-			doc.addPage({
-				margins
-			})
+			if (horizontal) {
+				doc.addPage({
+					layout: 'landscape',
+					margins
+				})
+			} else {
+				doc.addPage({
+					margins
+				})
+			}
 		})
 	}
 

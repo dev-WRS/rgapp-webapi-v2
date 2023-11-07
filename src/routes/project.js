@@ -11,6 +11,7 @@ import Template45L from '../pdf-templates/45L.js'
 import Template179DPermanet from '../pdf-templates/179DPermanent.js'
 import Template179DInterim from '../pdf-templates/179DInterim.js'
 import Template179DPermanetInterim from '../pdf-templates/179DPermanentInterim.js'
+import Template179D2023 from '../pdf-templates/179D2023.js'
 import createTheme from '../pdf-templates/theme.js'
 
 import { generateS3Key } from '../helpers.js'
@@ -920,22 +921,27 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 					reportSubtitle2 = 'Federal Energy Tax Deduction'
 
 					if (project.buildings.length > 0) {
-						const exists = { permanent: false, interim: false }
 						
-						for (let i = 0, ln = project.buildings.length; i < ln && (!exists.permanent || !exists.interim); i++) {
-							const { method } = project.buildings[i]
-							if (!exists.permanent && method === 'Permanent') exists.permanent = true
-							if (!exists.interim && (method === 'Interim Whole Building' || method === 'Interim Space-by-Space')) exists.interim = true
-						}
-
-						if (exists.permanent && exists.interim) {
-							Template = Template179DPermanetInterim
-						}
-						else if (exists.permanent) {
-							Template = Template179DPermanet
-						}
-						else if (exists.interim) {
-							Template = Template179DInterim
+						if (parseInt(project.taxYear) >= 2023) {
+							Template = Template179D2023
+						} else {
+							const exists = { permanent: false, interim: false }
+						
+							for (let i = 0, ln = project.buildings.length; i < ln && (!exists.permanent || !exists.interim); i++) {
+								const { method } = project.buildings[i]
+								if (!exists.permanent && method === 'Permanent') exists.permanent = true
+								if (!exists.interim && (method === 'Interim Whole Building' || method === 'Interim Space-by-Space')) exists.interim = true
+							}
+	
+							if (exists.permanent && exists.interim) {
+								Template = Template179DPermanetInterim
+							}
+							else if (exists.permanent) {
+								Template = Template179DPermanet
+							}
+							else if (exists.interim) {
+								Template = Template179DInterim
+							}
 						}
 					}
 				}

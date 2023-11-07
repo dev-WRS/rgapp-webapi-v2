@@ -119,6 +119,9 @@ const projectSchema = new mongoose.Schema({
 		rate: {
 			type: Number
 		},
+		pwRate: {
+			type: Number
+		},
 		method: {
 			type: String,
 			enum: ['Permanent', 'Interim Whole Building', 'Interim Space-by-Space', null]
@@ -127,6 +130,9 @@ const projectSchema = new mongoose.Schema({
 			type: Number
 		},
 		percentReduction: {
+			type: Number
+		},
+		percentSaving: {
 			type: Number
 		},
 		savingsRequirement: {
@@ -161,6 +167,9 @@ const projectSchema = new mongoose.Schema({
 		rate: {
 			type: Number
 		},
+		pwRate: {
+			type: Number
+		},
 		method: {
 			type: String,
 			enum: ['Permanent', 'Interim Whole Building', 'Interim Space-by-Space']
@@ -169,6 +178,9 @@ const projectSchema = new mongoose.Schema({
 			type: Number
 		},
 		percentReduction: {
+			type: Number
+		},
+		percentSaving: {
 			type: Number
 		},
 		savingsRequirement: {

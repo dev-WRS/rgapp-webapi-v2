@@ -41,7 +41,7 @@ const asProjectResponse = ({ _id, projectID, originalProjectID, name, taxYear, l
 	dwellingUnits: dwellingUnits ? dwellingUnits.map(({ _id, address, type, model, building, unit }) => ({ id: _id, address, type, model, building, unit })) : [], 
 	certificate45L, software, draft,
 	buildingDefaults,
-	buildings: buildings ? buildings.map(({ _id, name, address, type, qualifyingCategories, area, rate, method, totalWatts, percentReduction, savingsRequirement }) => ({ id: _id, name, address, type, qualifyingCategories, area, rate, method, totalWatts, percentReduction, savingsRequirement })) : [], 
+	buildings: buildings ? buildings.map(({ _id, name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts, percentReduction, percentSaving, savingsRequirement }) => ({ id: _id, name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts, percentReduction, percentSaving, savingsRequirement })) : [], 
 	baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D,
 	report,
 	createdBy })

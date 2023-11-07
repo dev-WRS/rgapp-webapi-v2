@@ -357,7 +357,7 @@ export default ({ db, config }) => {
 	const addProjectBuilding = ({ id }, { ...data }) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'buildings': { ...data } } }, { returnDocument: 'after' }).lean()
 	const addProjectBuildings = ({ id }, data) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'buildings': { $each: data } } }, { returnDocument: 'after' }).lean()
 	const updateProjectBuilding = ({ id }, { buildingId }, { ...data }) => {
-		const { name, address, type, qualifyingCategories, area, rate, method, totalWatts, percentReduction, savingsRequirement, ashraeLpd, ashraeRequiredLpd } = { ...data }
+		const { name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts, percentReduction, percentSaving, savingsRequirement, ashraeLpd, ashraeRequiredLpd } = { ...data }
 		
 		return Project.findOneAndUpdate({ _id: id, 'buildings._id': buildingId }, { 
 			'$set': { 
@@ -367,9 +367,11 @@ export default ({ db, config }) => {
 				'buildings.$.qualifyingCategories': qualifyingCategories, 
 				'buildings.$.area': area, 
 				'buildings.$.rate': rate, 
+				'buildings.$.pwRate': pwRate,
 				'buildings.$.method': method, 
 				'buildings.$.totalWatts': totalWatts, 
 				'buildings.$.percentReduction': percentReduction,
+				'buildings.$.percentSaving': percentSaving,
 				'buildings.$.savingsRequirement': savingsRequirement,
 				'buildings.$.ashraeLpd': ashraeLpd,
 				'buildings.$.ashraeRequiredLpd': ashraeRequiredLpd

@@ -229,7 +229,7 @@ export default async ({
 	let canAddParagraphs1TInSamePage = false
 
 	for (let i = 0, ln = buildings.length; i < ln; i++) {
-		const itemsToAdd = [
+		let itemsToAdd = [
 			sectionTable({
 				columns: [{
 					type: 'string',
@@ -277,7 +277,7 @@ export default async ({
 			})
 		]
 		if (i === ln - 1 && buildings[i].currentTotal < 8) {
-			itemsToAdd.push(paragraphs1Table)
+			itemsToAdd.push(...paragraphs1Table)
 			canAddParagraphs1TInSamePage = true
 		}
 		sections.push({
@@ -412,7 +412,7 @@ export default async ({
 	const paragraph2Table = [sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance. Projects started prior to January 30, 2023, do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, to qualify for the increased deduction of 179D(b)(3), the taxpayer must satisfy certain prevailing wage & apprenticeship requirements in accordance with Notice 2022-61.')]
 	
 	for (let i = 0, ln = buildings.length; i < ln; i++) {
-		const itemsToAdd = []
+		let itemsToAdd = []
 		if (i === 0) {
 			itemsToAdd.push(
 				sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:')
@@ -467,7 +467,7 @@ export default async ({
 			})
 		)
 		if (i === ln - 1 && buildings[i].currentTotal < 8) {
-			itemsToAdd.push(paragraph2Table)
+			itemsToAdd.push(...paragraph2Table)
 			canAddParagraphs2TInSamePage = true
 		}
 		sections.push({

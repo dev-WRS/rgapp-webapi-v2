@@ -481,7 +481,7 @@ export const divideBuildings = (buildings, linesAbove = 0) => {
 		const arraySize = Math.ceil(nameLength / 20)
   
 		if (currentTotal + arraySize > linesToCompare) {
-			arrays.push(currentArray)
+			arrays.push({ currentTotal, array: currentArray })
 			currentArray = []
 			currentTotal = 0
 		}
@@ -491,7 +491,7 @@ export const divideBuildings = (buildings, linesAbove = 0) => {
 	})
   
 	if (currentArray.length > 0) {
-		arrays.push(currentArray)
+		arrays.push({ currentTotal, array: currentArray })
 	}
   
 	return arrays

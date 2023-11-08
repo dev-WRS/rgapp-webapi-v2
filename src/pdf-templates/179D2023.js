@@ -191,7 +191,7 @@ export default async ({
 			...sectionTitle('Statement of Law'),
 			sectionTitleParagraph('Applicable Law'),
 			sectionParagraph('Section 179D provides a deduction for an amount equal to the cost of energy efficient commercial building property placed in service during the taxable year. Unless otherwise indicated, section references are to the Internal Revenue Code of 1986, as amended and the regulations there under. In order to qualify for this deduction, the energy efficient commercial building property must receive proper "certification" by "qualified individuals" using "qualified computer software" as meeting various energy efficiency standards. These terms are further defined in Section 179D. This report has been prepared in accordance with these standards.'),
-			sectionParagraph('Section 179D(b) provides that the maximum deduction for any building in a given taxable year shall not exceed the excess of $0.50, increased by $0.02 for each percentage point above 25% in certified annual energy and power cost savings, but not more than $1.00, multiplied by the "building square footage" less the aggregate amount of deductions for that building for the three taxable years immediately preceding the current taxable year (four taxable years in the case of a deduction allowable to a person primarily responsible for designing the property, as opposed to the owner of the property). If any property meets the requirements of Prevailing Wages (179D(b)(4))and Apprenticeship (179D(b)(5)) in accordance with guiadance from Notice 2022-61, the applicable dollar value qualifies for an increased deduction of up to $2.50 (not more than $5.00) per square foot. However, for properties placed in service after December 31, 2022, a cost-of-living adjustment is determined in accordance with IRC Section 1(f)(3) (see IRC 179D(f)) and is published by the Internal Revenue Service (IRS) in Revenue Procedure 2022-38. This adjustment allows for a rate of up to $0.54 to $1.07 per square foot ($0.02 for each percentage point above 25% in certified annual energy and power savings) and $2.65 to $5.36 ($0.11 for each percentage point above 25% in certified annual energy and power savings) per square foot for properties meeting the requirements of Prevailing Wages and Apprenticeship.'),
+			sectionParagraph('Section 179D(b) provides that the maximum deduction for any building in a given taxable year shall not exceed the excess of $0.50, increased by $0.02 for each percentage point above 25% in certified annual energy and power cost savings, but not more than $1.00, multiplied by the "building square footage" less the aggregate amount of deductions for that building for the three taxable years immediately preceding the current taxable year (four taxable years in the case of a deduction allowable to a person primarily responsible for designing the property, as opposed to the owner of the property). If any property meets the requirements of Prevailing Wages (179D(b)(4))and Apprenticeship (179D(b)(5)) in accordance with guidance from Notice 2022-61, the applicable dollar value qualifies for an increased deduction of up to $2.50 (not more than $5.00) per square foot. However, for properties placed in service after December 31, 2022, a cost-of-living adjustment is determined in accordance with IRC Section 1(f)(3) (see IRC 179D(f)) and is published by the Internal Revenue Service (IRS) in Revenue Procedure 2022-38. This adjustment allows for a rate of up to $0.54 to $1.07 per square foot ($0.02 for each percentage point above 25% in certified annual energy and power savings) and $2.65 to $5.36 ($0.11 for each percentage point above 25% in certified annual energy and power savings) per square foot for properties meeting the requirements of Prevailing Wages and Apprenticeship.'),
 			sectionParagraph('Section 179D(c)(1) defines the term "energy efficient commercial building property" to be property with respect to which depreciation is allowable, which is:'),
 			sectionList([
 				'Installed on or in any building located in the United States and within the scope of Standard 90.1.',
@@ -220,6 +220,13 @@ export default async ({
 	})
 
 	let buildings = divideBuildings(project.buildings)
+	const paragraphs1Table = [
+		sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
+		sectionParagraph(`Total 179D Deduction: ${formatCurrency(totalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
+		sectionParagraph(`Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
+		sectionParagraph('Note: Projects started prior to January 30, 2023, Do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, must meet prevailing wage & apprenticeship requirements to qualify for the $2.50 to $5.00/SF deduction.')
+	]
+	let canAddParagraphs1TInSamePage = false
 
 	for (let i = 0, ln = buildings.length; i < ln; i++) {
 		const itemsToAdd = [
@@ -266,21 +273,23 @@ export default async ({
 					align: 'right',
 					width: 105
 				}],
-				rows: buildings[i]
+				rows: buildings[i].array
 			})
 		]
-		if (i === ln - 1) {
-			itemsToAdd.push(
-				sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
-				sectionParagraph(`Total 179D Deduction: ${formatCurrency(totalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
-				sectionParagraph(`Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
-				sectionParagraph('Note: Projects started prior to January 30, 2023, Do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, must meet prevailing wage & apprenticeship requirements to qualify for the $2.50 to $5.00/SF deduction.')
-			)
+		if (i === ln - 1 && buildings[i].currentTotal < 8) {
+			itemsToAdd.push(paragraphs1Table)
+			canAddParagraphs1TInSamePage = true
 		}
 		sections.push({
 			horizontal: true,
 			items: itemsToAdd
 			
+		})
+	}
+	if (canAddParagraphs1TInSamePage === false) {
+		sections.push({
+			horizontal: true,
+			items: paragraphs1Table
 		})
 	}
 	sections.push({
@@ -399,6 +408,9 @@ export default async ({
 	})
 
 	buildings = divideBuildings(project.buildings, 1)
+	let canAddParagraphs2TInSamePage = false
+	const paragraph2Table = [sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance. Projects started prior to January 30, 2023, do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, to qualify for the increased deduction of 179D(b)(3), the taxpayer must satisfy certain prevailing wage & apprenticeship requirements in accordance with Notice 2022-61.')]
+	
 	for (let i = 0, ln = buildings.length; i < ln; i++) {
 		const itemsToAdd = []
 		if (i === 0) {
@@ -450,18 +462,24 @@ export default async ({
 					align: 'right',
 					width: 105
 				}],
-				rows: buildings[i],
+				rows: buildings[i].array,
 				summary: i === ln - 1 ? `Total 179D Deduction: ${formatCurrency(totalDeduction)} \n Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}` : ''
 			})
 		)
-		if (i === ln - 1) {
-			itemsToAdd.push(
-				sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance. Projects started prior to January 30, 2023, do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, to qualify for the increased deduction of 179D(b)(3), the taxpayer must satisfy certain prevailing wage & apprenticeship requirements in accordance with Notice 2022-61.')
-			)
+		if (i === ln - 1 && buildings[i].currentTotal < 8) {
+			itemsToAdd.push(paragraph2Table)
+			canAddParagraphs2TInSamePage = true
 		}
 		sections.push({
 			horizontal: true,
 			items: itemsToAdd
+		})
+	}
+
+	if (canAddParagraphs2TInSamePage === false) {
+		sections.push({
+			horizontal: true,
+			items: paragraph2Table
 		})
 	}
 

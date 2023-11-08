@@ -469,3 +469,30 @@ export const legacyImprove = (input) => {
 	formattedString += (formattedString ? '\n' : '') + line
 	return formattedString
 }
+
+export const divideBuildings = (buildings, linesAbove = 0) => {
+	const arrays = []
+	let currentArray = []
+	let currentTotal = 0
+	const linesToCompare = linesAbove === 0 ? 16 : 15 - linesAbove
+  
+	buildings.forEach((building) => {
+		const nameLength = building.name.length
+		const arraySize = Math.ceil(nameLength / 20)
+  
+		if (currentTotal + arraySize > linesToCompare) {
+			arrays.push(currentArray)
+			currentArray = []
+			currentTotal = 0
+		}
+  
+		currentArray.push(building)
+		currentTotal += arraySize
+	})
+  
+	if (currentArray.length > 0) {
+		arrays.push(currentArray)
+	}
+  
+	return arrays
+}

@@ -1,6 +1,6 @@
 import PDFBuilder from '../pdf-builder/index.js'
 import helpers, { 
-	defaultFont, fonts, 
+	defaultFont, fonts, divideBuildings,
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
 	formatDate, formatNumber, formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
 	QUALYFYING_CATEGORIES, WHOLE_BUILDING
@@ -218,15 +218,17 @@ export default async ({
 			sectionParagraph(`Based on the energy model calculations, the ${qualifyingProperty} systems will qualify as Energy Efficient Commercial Building Property. Therefore, the property will qualify for a deduction limited to the cost of the qualifying systems. This calculation is based upon a total combined square footage of ${formatNumber(totalBuildingArea)}.`)
 		]
 	})
-	sections.push({
-		horizontal: true,
-		items: [
+
+	let buildings = divideBuildings(project.buildings)
+
+	for (let i = 0, ln = buildings.length; i < ln; i++) {
+		const itemsToAdd = [
 			sectionTable({
 				columns: [{
 					type: 'string',
 					header: 'Name',
 					dataIndex: 'name',
-					width: 125
+					width: 120
 				}, {
 					type: 'string',
 					header: 'Qualifying Area',
@@ -250,7 +252,7 @@ export default async ({
 					header: 'Deduction',
 					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
 					align: 'right',
-					width: 70
+					width: 85
 				}, {
 					type: 'string',
 					header: 'PW&A Deduction/SF',
@@ -262,16 +264,25 @@ export default async ({
 					header: 'PW&A Deduction',
 					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
 					align: 'right',
-					width: 120
+					width: 105
 				}],
-				rows: project.buildings
-			}),
-			sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
-			sectionParagraph(`Total 179D Deduction: ${formatCurrency(totalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
-			sectionParagraph(`Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
-			sectionParagraph('Note: Projects started prior to January 30, 2023, Do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, must meet prevailing wage & apprenticeship requirements to qualify for the $2.50 to $5.00/SF deduction.')
+				rows: buildings[i]
+			})
 		]
-	})
+		if (i === ln - 1) {
+			itemsToAdd.push(
+				sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
+				sectionParagraph(`Total 179D Deduction: ${formatCurrency(totalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
+				sectionParagraph(`Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
+				sectionParagraph('Note: Projects started prior to January 30, 2023, Do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, must meet prevailing wage & apprenticeship requirements to qualify for the $2.50 to $5.00/SF deduction.')
+			)
+		}
+		sections.push({
+			horizontal: true,
+			items: itemsToAdd
+			
+		})
+	}
 	sections.push({
 		items: [
 			...sectionTitle('Section 179D Certification Report'),
@@ -387,16 +398,21 @@ export default async ({
 		]
 	})
 
-	sections.push({
-		horizontal: true,
-		items: [
-			sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:'),
+	buildings = divideBuildings(project.buildings, 1)
+	for (let i = 0, ln = buildings.length; i < ln; i++) {
+		const itemsToAdd = []
+		if (i === 0) {
+			itemsToAdd.push(
+				sectionParagraph('The outcome of the attached calculations and information result in the following tax deduction:')
+			)
+		}
+		itemsToAdd.push(
 			sectionTable({
 				columns: [{
 					type: 'string',
 					header: 'Name',
 					dataIndex: 'name',
-					width: 125
+					width: 120
 				}, {
 					type: 'string',
 					header: 'Qualifying Area',
@@ -420,7 +436,7 @@ export default async ({
 					header: 'Deduction',
 					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
 					align: 'right',
-					width: 70
+					width: 85
 				}, {
 					type: 'string',
 					header: 'PW&A Deduction/SF',
@@ -432,14 +448,22 @@ export default async ({
 					header: 'PW&A Deduction',
 					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
 					align: 'right',
-					width: 120
+					width: 105
 				}],
-				rows: project.buildings,
-				summary: `Total 179D Deduction: ${formatCurrency(totalDeduction)} \n Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}` 
-			}),
-			sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance. Projects started prior to January 30, 2023, do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, to qualify for the increased deduction of 179D(b)(3), the taxpayer must satisfy certain prevailing wage & apprenticeship requirements in accordance with Notice 2022-61.')
-		]
-	})
+				rows: buildings[i],
+				summary: i === ln - 1 ? `Total 179D Deduction: ${formatCurrency(totalDeduction)} \n Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}` : ''
+			})
+		)
+		if (i === ln - 1) {
+			itemsToAdd.push(
+				sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance. Projects started prior to January 30, 2023, do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, to qualify for the increased deduction of 179D(b)(3), the taxpayer must satisfy certain prevailing wage & apprenticeship requirements in accordance with Notice 2022-61.')
+			)
+		}
+		sections.push({
+			horizontal: true,
+			items: itemsToAdd
+		})
+	}
 
 	sections.push({
 		items: [

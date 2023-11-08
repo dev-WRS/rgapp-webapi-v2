@@ -387,8 +387,9 @@ export default ({ db, config }) => {
 		if (!building) { throw new HttpBadRequestError('Building not found') }
 
 		const noCopies = findBuildingNumber(project.buildings, building.name)
-		console.log(noCopies)
-		const buildingToCopy = setDefaultValues(building, noCopies)
+		
+		const buildingToCopy = project.taxYear >= 2023 ? setDefaultValues2023(building, noCopies) :	setDefaultValues(building, noCopies)
+		
 		delete buildingToCopy._id
 
 		return Project.findOneAndUpdate({ _id: id }, { '$push': { 'buildings': { ...buildingToCopy } } }, { returnDocument: 'after' }).lean()
@@ -435,6 +436,25 @@ export default ({ db, config }) => {
 	function setDefaultValues (obj, noCopies) {
 		Object.keys(obj).forEach(prop => {
 			if (!['name', 'type', 'address'].includes(prop)) {
+				obj[prop] = typeof obj[prop] === 'string' 
+					? '' : Array.isArray(obj[prop]) 
+						? [] 
+						: typeof obj[prop] === 'number' 
+							? 0 
+							: typeof obj[prop] === 'object' && obj[prop] !== null 
+								? {} 
+								: obj[prop]
+			}
+			if (prop === 'name') {
+				obj[prop] = `${obj[prop]} (Copy ${noCopies})`
+			}
+		})
+		return obj
+	}
+
+	function setDefaultValues2023 (obj, noCopies) {
+		Object.keys(obj).forEach(prop => {
+			if (!['name', 'type', 'address', 'area', 'percentSaving', 'rate', 'pwRate'].includes(prop)) {
 				obj[prop] = typeof obj[prop] === 'string' 
 					? '' : Array.isArray(obj[prop]) 
 						? [] 

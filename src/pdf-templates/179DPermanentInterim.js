@@ -251,45 +251,55 @@ export default async ({
 	// 		sectionParagraph('H.R. 5771 The Tax Increase Prevention Act of 2014 was enacted into Law (P.L. 113-295) on December 19, 2014 extending the §179D Tax Deduction for an additional Year. The Law Amended Code Sec. 179D(h) by striking "December 31, 2013" and inserting "December 31, 2014". Effective for property placed in service after 12-31-2013. No additional changes were made to qualifying percentages or referenced standards. H.R. 2029 The Consolidated Appropriations Act, 2016 Became Public Law No: 114-113 on December 18, 2015. The law extends Section 179D through the end of 2016 without lapse. The law did modify the energy standard requirements for property placed into service in 2016 to ASHRAE 90.1-2007.')
 	// 	]
 	// })
+	const itemsDeduction = [
+		...sectionTitle('Calculation of Section 179D Deduction'),
+		sectionTitleParagraph('Summary of Deduction Calculation'),
+		sectionParagraph(`Based on the energy model and LPD reduction calculations, the ${qualifyingProperty} systems will qualify as Energy Efficient Commercial Building Property. Therefore, the property will qualify for a deduction limited to the cost of the qualifying systems. This calculation is based upon a total combined square footage of ${formatNumber(totalBuildingArea)}.`),
+		sectionTable({
+			columns: [{
+				type: 'string',
+				header: 'Name',
+				dataIndex: 'name',
+				flex: true
+			}, {
+				type: 'string',
+				header: 'Square Footage',
+				renderer: (row) => formatNumber(row.area),
+				align: 'right',
+				width: 110
+			}, {
+				type: 'string',
+				header: 'Benefit Rate',
+				renderer: (row) => formatCurrency(row.rate),
+				align: 'right',
+				width: 110
+			}, {
+				type: 'string',
+				header: '179D Deduction',
+				renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+				align: 'right',
+				width: 110
+			}],
+			rows: project.buildings
+		})
+	]
+	
+	const length = project.buildings.length
+	const lastBuilding = project.buildings[length - 1]
+	if (lastBuilding.name.length > 39) {
+		itemsDeduction.push(sectionParagraph(''))	
+	}
+	itemsDeduction.push(...[
+		sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
+		sectionParagraph(formatCurrency(totalDeduction), { 
+			fullWidth: true,
+			align: 'center',
+			weight: 'bold' 
+		})
+	])
+
 	sections.push({
-		items: [
-			...sectionTitle('Calculation of Section 179D Deduction'),
-			sectionTitleParagraph('Summary of Deduction Calculation'),
-			sectionParagraph(`Based on the energy model and LPD reduction calculations, the ${qualifyingProperty} systems will qualify as Energy Efficient Commercial Building Property. Therefore, the property will qualify for a deduction limited to the cost of the qualifying systems. This calculation is based upon a total combined square footage of ${formatNumber(totalBuildingArea)}.`),
-			sectionTable({
-				columns: [{
-					type: 'string',
-					header: 'Name',
-					dataIndex: 'name',
-					flex: true
-				}, {
-					type: 'string',
-					header: 'Square Footage',
-					renderer: (row) => formatNumber(row.area),
-					align: 'right',
-					width: 110
-				}, {
-					type: 'string',
-					header: 'Benefit Rate',
-					renderer: (row) => formatCurrency(row.rate),
-					align: 'right',
-					width: 110
-				}, {
-					type: 'string',
-					header: '179D Deduction',
-					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
-					align: 'right',
-					width: 110
-				}],
-				rows: project.buildings
-			}),
-			sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
-			sectionParagraph(formatCurrency(totalDeduction), { 
-				fullWidth: true,
-				align: 'center',
-				weight: 'bold' 
-			})
-		]
+		items: itemsDeduction
 	})
 	sections.push({
 		items: [
@@ -526,9 +536,13 @@ export default async ({
 				width: 120
 			}],
 			rows: buildingsLigthingInterim
-		}),
-		sectionParagraph('This reduction has been determined under the interim lighting rules of Notice 2006-52.')
+		})
 	]
+
+	if (lastBuilding.name.length > 39) {
+		section_4_2.push(sectionParagraph(''))
+	}
+	section_4_2.push(sectionParagraph('This reduction has been determined under the interim lighting rules of Notice 2006-52.'))
 
 	sections.push({
 		items: section_4.concat(section_4_1).concat(section_4_2)

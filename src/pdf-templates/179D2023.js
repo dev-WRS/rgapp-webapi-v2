@@ -239,7 +239,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'Qualifying Area',
-					renderer: (row) => `${formatNumber(row.area)} sqft`,
+					renderer: (row) => `${formatNumber(row.area)} SF`,
 					align: 'right',
 					width: 90
 				}, {
@@ -433,7 +433,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'Qualifying Area',
-					renderer: (row) => `${formatNumber(row.area)} sqft`,
+					renderer: (row) => `${formatNumber(row.area)} SF`,
 					align: 'right',
 					width: 90
 				}, {

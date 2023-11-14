@@ -279,7 +279,7 @@ export default async ({
 		if (i === ln - 1 && buildings[i].currentTotal < 8) {
 			const length = buildings[i].array.length
 			const lastBuilding = buildings[i].array[length - 1]
-			if (lastBuilding.name.length > 39) {
+			if (lastBuilding.name.length > 32) {
 				itemsToAdd.push(sectionParagraph(''))
 			}
 			itemsToAdd.push(...paragraphs1Table)

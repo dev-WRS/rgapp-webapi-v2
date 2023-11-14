@@ -224,7 +224,7 @@ export default async ({
 		sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
 		sectionParagraph(`Total 179D Deduction: ${formatCurrency(totalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
 		sectionParagraph(`Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
-		sectionParagraph('Note: Projects started prior to January 30, 2023, Do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, must meet prevailing wage & apprenticeship requirements to qualify for the $2.50 to $5.00/SF deduction.')
+		sectionParagraph('Note: Projects started prior to January 30, 2023, Do not need to meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction. Any construction or installation started on or after January 30, 2023, must meet prevailing wage & apprenticeship requirements to qualify for the $2.65 to $5.36/SF deduction.')
 	]
 	let canAddParagraphs1TInSamePage = false
 

@@ -224,7 +224,7 @@ export default async ({
 		sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
 		sectionParagraph(`Total 179D Deduction: ${formatCurrency(totalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
 		sectionParagraph(`Total 179D(b)(3) Deduction (with PW&A): ${formatCurrency(pwTotalDeduction)}`, { fullWidth: true, align: 'center', weight: 'bold' }),
-		sectionParagraph('Note: Projects that meet the requirements of Section .02(2)(i) or (ii) (Physical Work Test or Five Percent Safe Harbor) of Notice 2022-61 before January 30, 2023, are exempt from the prevailing wage and apprenticeship requirements and can qualify for the deduction ranging from $2.65 to $5.36 per square foot. For any construction or installation initiated on or after January 30, 2023, in order to qualify for the increased deduction under 179D(b)(3), taxpayers must adhere to specific prevailing wage and apprenticeship requirements as outlined in Notice 2022-61')
+		sectionParagraph('Note: Projects that meet the requirements of Section .02(2)(i) or (ii) (Physical Work Test or Five Percent Safe Harbor) of Notice 2022-61 before January 30, 2023, are exempt from the prevailing wage and apprenticeship requirements and can qualify for the deduction ranging from $2.65 to $5.36 per square foot. For any property placed-in-service on or after January 1, 2023, and which does not meet the exemption above, in order to qualify for the increased deduction level under 179D(b)(3), taxpayers must adhere to specific prevailing wage and apprenticeship requirements as outlined in Notice 2022-61')
 	]
 	let canAddParagraphs1TInSamePage = false
 
@@ -414,7 +414,7 @@ export default async ({
 
 	buildings = divideBuildings(project.buildings, 1)
 	let canAddParagraphs2TInSamePage = false
-	const paragraph2Table = [sectionParagraph('Note: The deduction amount is determined as the lesser of two options: (1) the capitalized cost incurred for energy-efficient property or (2) the per-square-foot allowance. Projects that meet the requirements of Section .02(2)(i) or (ii) (Physical Work Test or Five Percent Safe Harbor) of Notice 2022-61 before January 30, 2023, are exempt from the prevailing wage and apprenticeship requirements and can qualify for the deduction ranging from $2.65 to $5.36 per square foot. For any construction or installation initiated on or after January 30, 2023, in order to qualify for the increased deduction under 179D(b)(3), taxpayers must adhere to specific prevailing wage and apprenticeship requirements as outlined in Notice 2022-61')]
+	const paragraph2Table = [sectionParagraph('Note: The deduction amount is determined as the lesser of two options: (1) the capitalized cost incurred for energy-efficient property or (2) the per-square-foot allowance. Projects that meet the requirements of Section .02(2)(i) or (ii) (Physical Work Test or Five Percent Safe Harbor) of Notice 2022-61 before January 30, 2023, are exempt from the prevailing wage and apprenticeship requirements and can qualify for the deduction ranging from $2.65 to $5.36 per square foot. For any property placed-in-service on or after January 1, 2023, and which does not meet the exemption above, in order to qualify for the increased deduction level under 179D(b)(3), taxpayers must adhere to specific prevailing wage and apprenticeship requirements as outlined in Notice 2022-61')]
 	
 	for (let i = 0, ln = buildings.length; i < ln; i++) {
 		let itemsToAdd = []

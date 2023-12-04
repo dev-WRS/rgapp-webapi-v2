@@ -896,6 +896,58 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		}
 	)
 
+	router.post('/projects/deleteProjects',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		async (req, res, next) => {
+			try {
+				const { ids } = req.body
+				const result = []
+
+				_.forEach(ids, async (id) => {
+					const project = await Project.getProjectById(id)
+
+					if (project) {
+						const pdfs = ['certificate45L', 'baselineDesign179D', 'wholeBuildingDesign179D', 'buildingSummary179D']
+						const photos = project.photos
+	
+						const deleteAssetStorage = (assetId) => Asset.getAssetById(assetId)
+							.then(asset => {
+								if (asset) {
+									const { bucket, key } = asset
+									return assetStorage.deleteObject({ bucket, key })
+								}
+								return
+							})
+	
+						await Promise.all(photos.map(photo => {
+							return deleteAssetStorage(photo.asset)
+						}))	
+	
+						await Promise.all(pdfs.map(name => {
+							if (project[name]) {
+								return deleteAssetStorage(project[name])
+							}
+							return
+						}))
+	
+						if (project.report) {
+							await deleteAssetStorage(project.report)
+						}
+					}
+	
+					const { deletedCount } = await Project.deleteProject({ id })
+					result.push((deletedCount === 1) ? { 'done': id } : { 'error': id })
+					
+					res.json({ result })
+				})
+			} catch (error) {
+				next(error)
+			}
+		}
+	)
+
 	router.put('/projects/:id/report',
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),

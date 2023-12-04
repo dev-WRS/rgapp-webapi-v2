@@ -902,7 +902,7 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		withPassport(passport, config)('jwt'),
 		async (req, res, next) => {
 			try {
-				const { ids } = req.body
+				const ids = req.body
 				const result = []
 
 				_.forEach(ids, async (id) => {

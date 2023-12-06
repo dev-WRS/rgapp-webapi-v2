@@ -31,6 +31,24 @@ export default ({ db, config }) => {
 
 		return Project.find(findQuery, '-__v').sort(sortQuery).lean()
 	}
+	const getProjectByReportDates = async (startDate, endDate) => {
+		try {
+			const reports = await Asset.find({
+				'createDate': {
+					$gte: startDate,
+					$lte: endDate
+				}
+			})
+			const reportIds = reports.map(report => report._id)
+			const projects = await Project.find({
+				'report': { $in: reportIds }
+			}).lean()
+		
+			return projects
+		} catch (error) {
+			throw new HttpBadRequestError(`Error fetching projects with report created between ${startDate} and ${endDate}`)
+		}
+	}
 	const getProjectsByPhotoAsset = (asset) => Project.find({ photos: { $elemMatch: { asset: asset } } }, { 'photos.$': 1 }).select('status').lean()
 	const getProjectsByPDFAsset = (asset) => Project.find({ $or: [{ certificate45L: asset }, { baselineDesign179D: asset }, { wholeBuildingDesign179D: asset }, { buildingSummary179D: asset }, { softwareCertificate179D: asset }] }).select('status').lean()
 	const createProject = async ({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, buildingDefaults, buildings, createdBy }) => {
@@ -504,6 +522,7 @@ export default ({ db, config }) => {
 
 	return {
 		getProjects,
+		getProjectByReportDates,
 		getProjectsByPhotoAsset,
 		getProjectsByPDFAsset,
 		createProject,

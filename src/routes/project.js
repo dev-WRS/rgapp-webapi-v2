@@ -120,6 +120,23 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		}
 	)
 
+	router.post('/projects/reportsByDates',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		async (req, res, next) => {
+			try {
+				
+				const { startDate, endDate } = req.body
+				const projects = await Project.getProjectByReportDates(new Date(startDate), new Date(endDate))
+
+				res.json({ result: projects.map(asProjectResponse) })
+			} catch (err) {
+				next(err)
+			}
+		}
+	)
+
 	router.get('/projects/:projectID/lookup',
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),

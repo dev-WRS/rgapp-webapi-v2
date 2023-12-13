@@ -57,11 +57,18 @@ export default ({ db, config }) => {
 	}
 	const getAssetById = (id) => Asset.findOne({ _id: id }, '-__v').lean({ virtuals: true })
 	const deleteAsset = ({ id }) => Asset.deleteOne({ _id: id })
+	const getAssetKeysByIds = async (ids) => {
+		const assets = await Asset.find({ _id: { $in: ids } }, 'key')
+		const keys = assets.map(asset => asset.key)
+	
+		return keys
+	}
 
 	return {
 		getAssets,
 		createAsset,
 		getAssetById,
-		deleteAsset
+		deleteAsset,
+		getAssetKeysByIds
 	}
 }

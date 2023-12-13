@@ -921,44 +921,47 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 			try {
 				const ids = req.body
 				const result = []
+				let allAssets = []
+				let allKeys = []
 
-				_.forEach(ids, async (id) => {
+				for (const id of ids) {
 					const project = await Project.getProjectById(id)
 
 					if (project) {
 						const pdfs = ['certificate45L', 'baselineDesign179D', 'wholeBuildingDesign179D', 'buildingSummary179D']
 						const photos = project.photos
-	
-						const deleteAssetStorage = (assetId) => Asset.getAssetById(assetId)
-							.then(asset => {
-								if (asset) {
-									const { bucket, key } = asset
-									return assetStorage.deleteObject({ bucket, key })
-								}
-								return
-							})
-	
-						await Promise.all(photos.map(photo => {
-							return deleteAssetStorage(photo.asset)
-						}))	
-	
-						await Promise.all(pdfs.map(name => {
-							if (project[name]) {
-								return deleteAssetStorage(project[name])
-							}
-							return
-						}))
-	
-						if (project.report) {
-							await deleteAssetStorage(project.report)
+
+						const photoAssets = photos.map(photo => photo.asset)
+
+						const pdfAsset = pdfs.map(name => project[name]).filter(key => key !== undefined)
+
+						if (project.report !== undefined) {
+							allAssets.push(project.report)
 						}
+
+						const assetIds = [...photoAssets, ...pdfAsset]
+						allAssets = allAssets.concat(assetIds)
+
+						if (project.report !== undefined) {
+							assetIds.push(project.report)
+						}
+						const keysFound = await Asset.getAssetKeysByIds(assetIds)
+						allKeys = allKeys.concat(keysFound)
 					}
-	
-					const { deletedCount } = await Project.deleteProject({ id })
-					result.push((deletedCount === 1) ? { 'done': id } : { 'error': id })
-					
-					res.json({ result })
-				})
+
+					await Project.deleteProject({ id })
+					result.push(id)
+				}
+				if (allKeys.length > 1000) {
+					while (allKeys.length > 0) {
+						const keysToDelete = allKeys.splice(0, 1000)
+						await assetStorage.deleteObjects({ bucket: 'rgapp-assets-bucket-production', keys: keysToDelete })
+					}
+				} else {
+					await assetStorage.deleteObjects({ bucket: 'rgapp-assets-bucket-production', keys: allKeys })
+				}
+
+				res.json({ result })
 			} catch (error) {
 				next(error)
 			}

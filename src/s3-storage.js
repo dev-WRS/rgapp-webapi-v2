@@ -31,6 +31,10 @@ const init = async ({ config, services }) => {
 			s3.deleteObject({ Bucket: bucket, Key: key }, (error, data) => error ? reject(error) : resolve(data))
 		}),
 
+		deleteObjects: ({ bucket, keys }) => new Promise((resolve, reject) => {
+			s3.deleteObjects({ Bucket: bucket, Delete: { Objects: keys.map(key => ({ Key: key })) } }, (error, data) => error ? reject(error) : resolve(data))
+		}),
+
 		getObject: ({ bucket, key }) => new Promise((resolve, reject) => {
 			s3.getObject({ 
 				Bucket: bucket, 

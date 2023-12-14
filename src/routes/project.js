@@ -128,7 +128,22 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 			try {
 				
 				const { startDate, endDate } = req.body
-				const projects = await Project.getProjectByReportDates(new Date(startDate), new Date(endDate))
+				let parts = startDate.split('-')
+
+				let year = +parts[0]
+				let month = +parts[1] - 1
+				let day = +parts[2]
+				const start = new Date(year, month, day)
+				start.setHours(0, 0, 0, 0)
+
+				parts = endDate.split('-')
+				year = +parts[0]
+				month = +parts[1] - 1
+				day = +parts[2]
+				const end = new Date(year, month, day)
+				end.setHours(23, 59, 59, 999)
+
+				const projects = await Project.getProjectByReportDates(start, end)
 
 				res.json({ result: projects.map(asProjectResponse) })
 			} catch (err) {

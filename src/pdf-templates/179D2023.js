@@ -262,13 +262,13 @@ export default async ({
 					width: 85
 				}, {
 					type: 'string',
-					header: 'PW&A Deduction/SF*',
+					header: 'PW&A Deduction/SF',
 					renderer: (row) => formatCurrency(row.pwRate),
 					align: 'right',
 					width: 120
 				}, {
 					type: 'string',
-					header: 'PW&A Deduction*',
+					header: 'PW&A Deduction',
 					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
 					align: 'right',
 					width: 105
@@ -456,13 +456,13 @@ export default async ({
 					width: 85
 				}, {
 					type: 'string',
-					header: 'PW&A Deduction/SF*',
+					header: 'PW&A Deduction/SF',
 					renderer: (row) => formatCurrency(row.pwRate),
 					align: 'right',
 					width: 120
 				}, {
 					type: 'string',
-					header: 'PW&A Deduction*',
+					header: 'PW&A Deduction',
 					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
 					align: 'right',
 					width: 105

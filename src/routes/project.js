@@ -6,6 +6,7 @@ import _ from 'lodash'
 import sharp from 'sharp'
 
 import { middlewares, validator, errors } from 'lts-server'
+import moment from 'moment'
 
 import Template45L from '../pdf-templates/45L.js'
 import Template179DPermanet from '../pdf-templates/179DPermanent.js'
@@ -35,17 +36,30 @@ const svg2png = (svg) => sharp(svg, { density: 300 })
 
 const errorMsgChangeStatus = (source, target) => `Project cannot transition from status ${source} to ${target}`
 
-const asProjectResponse = ({ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, photos, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, certificate45L, software, draft, buildingDefaults, buildings, baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D, report, createdBy }) => ({ 
+const asProjectResponse = (
+	{ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status,
+		certifier, customer, photos, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, 
+		certificate45L, software, draft, buildingDefaults, buildings, baselineDesign179D, wholeBuildingDesign179D,
+		buildingSummary179D, softwareCertificate179D, report, createdBy, createDate, reportCreateDate
+	}) => ({ 
 	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, 
-	photos: photos ? photos.map(({ _id, asset, description }) => ({ id: _id, asset, description })) : [], 
+	photos: photos 
+		? photos.map(({ _id, asset, description }) => ({ id: _id, asset, description }))
+		: [], 
 	dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, 
-	dwellingUnits: dwellingUnits ? dwellingUnits.map(({ _id, address, type, model, building, unit }) => ({ id: _id, address, type, model, building, unit })) : [], 
-	certificate45L, software, draft,
-	buildingDefaults,
-	buildings: buildings ? buildings.map(({ _id, name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts, percentReduction, percentSaving, savingsRequirement }) => ({ id: _id, name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts, percentReduction, percentSaving, savingsRequirement })) : [], 
-	baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D,
-	report,
-	createdBy })
+	dwellingUnits: dwellingUnits 
+		? dwellingUnits.map(({ _id, address, type, model, building, unit }) => ({ id: _id, address, type, model, building, unit })) 
+		: [], 
+	certificate45L, software, draft, buildingDefaults,
+	buildings: buildings 
+		? buildings.map((
+			{ _id, name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts, percentReduction,
+				percentSaving, savingsRequirement }) => ({ id: _id, name, address, type, qualifyingCategories, area, rate, pwRate, method, totalWatts,
+			percentReduction, percentSaving, savingsRequirement })) 
+		: [], 
+	baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D, report, createdBy,
+	createDate: createDate ? moment(createDate).format('MM/DD/YYYY HH:mm') : '-',
+	reportCreateDate: reportCreateDate ? moment(reportCreateDate).format('MM/DD/YYYY HH:mm') : '-' })
 
 const asProjectByIDResponse = ({ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, buildingDefaults, softwareCertificate179D, report, createdBy }) => ({ 
 	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, 

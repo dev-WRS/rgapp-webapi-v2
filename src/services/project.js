@@ -1,5 +1,5 @@
 import { errors } from 'lts-server'
-import { searchSyntax, filterSyntax, sortOrderSyntax } from '../db/mongoose/index.js'
+import { searchSyntax, filterSyntax } from '../db/mongoose/index.js'
 import axios from 'axios'
 
 const { HttpBadRequestError } = errors
@@ -8,12 +8,11 @@ export default ({ db, config }) => {
 	const { mongoose } = db
 	const { Project, Asset, Customer, Certifier } = mongoose
 
-	const getProjects = (query) => {
+	const getProjects = async (query) => {
 		const findQuery = {}
 		const andQuery = []
 		const searchQuery = searchSyntax(query.search, ['name', 'address', 'phone'])
 		const filterQuery = filterSyntax(query.filter)
-		const sortQuery = sortOrderSyntax(query.sort)
 
 		if (searchQuery) {
 			andQuery.push({
@@ -29,8 +28,66 @@ export default ({ db, config }) => {
 			findQuery.$and = andQuery
 		}
 
-		return Project.find(findQuery, '-__v').sort(sortQuery).lean()
+		try {
+			return await Project.aggregate([
+				{ $match: findQuery },
+				{
+					$lookup: {
+						from: 'assets',
+						localField: 'report',
+						foreignField: '_id',
+						as: 'reportData'
+					}
+				},
+				{
+					$unwind: {
+						path: '$reportData',
+						preserveNullAndEmptyArrays: true
+					}
+				},
+				{
+					$project: {
+						_id: 1,
+						projectID: 1,
+						originalProjectID: 1,
+						name: 1,
+						taxYear: 1,
+						legalEntity: 1,
+						state: 1,
+						inspectionDate: 1,
+						reportType: 1,
+						status: 1,
+						certifier: 1,
+						customer: 1,
+						photos: 1,
+						dwellingUnitName: 1,
+						dwellingUnitAddress: 1,
+						totalDwellingUnits: 1,
+						dwellingUnits: 1,
+						certificate45L: 1,
+						software: 1,
+						draft: 1,
+						buildingDefaults: 1,
+						buildings: 1,
+						baselineDesign179D: 1,
+						wholeBuildingDesign179D: 1,
+						buildingSummary179D: 1,
+						softwareCertificate179D: 1,
+						report: 1,
+						createdBy: 1,
+						createDate: 1,
+						reportCreateDate: '$reportData.createDate'
+					}
+				}
+			])
+		} catch (error) {
+			console.error('Error en getProjects:', error)
+			throw error
+		}
+
+		// return Project.find(findQuery, '-__v').sort(sortQuery).lean()
 	}
+	
 	const getProjectByReportDates = async (startDate, endDate) => {
 		try {
 			const reports = await Asset.find({

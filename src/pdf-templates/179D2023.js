@@ -64,7 +64,7 @@ export default async ({
 					size: 12,
 					align: 'center'	
 				}),
-				sectionParagraph(project.taxYear, {
+				sectionParagraph(project.taxYear.toString(), {
 					size: 12,
 					align: 'center'	,
 					moveDown: 2
@@ -103,7 +103,7 @@ export default async ({
 					size: 12,
 					width: 200
 				}),
-				repoHeader(project.taxYear, {
+				repoHeader(project.taxYear.toString(), {
 					size: 12,
 					width: 200
 				})
@@ -359,7 +359,7 @@ export default async ({
 					name: 'Address',
 					value: project.buildings.length == 1 ? project.buildings[0].address : 'Multiple (See Table 2.1)'
 				}],
-				summary: `Energy Efficient System installed and placed in service during: ${project.taxYear}`
+				summary: `Energy Efficient System installed and placed in service during: ${project.taxYear.toString()}`
 			})
 		]
 	})

@@ -324,6 +324,12 @@ export default ({ db, config }) => {
 		}
 	}
 
+	const parseIntSafe = (value) => {
+		if (!value) return 0
+		const parsed = parseInt(value, 10)
+		return isNaN(parsed) ? 0 : parsed
+	}
+
 	const getProjectByProjectID = async (id) => {
 		let project = {}
 
@@ -394,7 +400,7 @@ export default ({ db, config }) => {
 						projectID: id,
 						originalProjectID: id,
 						name: projectName,
-						taxYear: projectFields['PROJECT_FIELD_10'],
+						taxYear: parseIntSafe(projectFields['PROJECT_FIELD_10']),
 						legalEntity: projectFields['PROJECT_FIELD_11'],
 						state: projectFields['PROJECT_FIELD_15'],
 						inspectionDate: projectFields['PROJECT_FIELD_9'],
@@ -404,6 +410,13 @@ export default ({ db, config }) => {
 						software: reportType === '45L' ? null : 'eQuest 3.65',
 						draft: projectFields['PROJECT_FIELD_14'] === 'No' ? false : true
 					}
+
+					let qualifyingCategories = null
+					if (project.taxYear >= 2023) {
+						qualifyingCategories = 'Whole Building'
+					} else if (!['25%','50%', 'Possible 25%', ' Possible 50%'].includes(projectFields['PROJECT_FIELD_3'])) {
+						projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Lighting' : projectFields['PROJECT_FIELD_3']
+					}
 	
 					if (project.reportType === '179D') {
 						project.buildingDefaults = {
@@ -411,13 +424,10 @@ export default ({ db, config }) => {
 							type: projectFields['Building_Type__c'],
 							address: projectFields['PROJECT_FIELD_1'],
 							area: projectFields['PROJECT_FIELD_2'],
-							qualifyingCategories: projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Lighting' : projectFields['PROJECT_FIELD_3'], 
-							method: projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Permanent' : null
+							qualifyingCategories: qualifyingCategories
 							// buildingPossibleCategory: projectFields['PROJECT_FIELD_22']
 						}
 					}
-			
-					// console.log(project)	
 				}
 			}
 		} catch (error) {

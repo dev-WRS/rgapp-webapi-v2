@@ -14,7 +14,7 @@ const projectSchema = new mongoose.Schema({
 		required: true
 	},
 	taxYear: {
-		type: String,
+		type: Number,
 		required: true
 	},
 	legalEntity: {

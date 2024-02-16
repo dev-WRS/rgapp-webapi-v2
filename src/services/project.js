@@ -366,15 +366,17 @@ export default ({ db, config }) => {
 					if (projectFields['PROJECT_FIELD_7']) {
 						const certifierName = projectFields['PROJECT_FIELD_7']
 						const words = certifierName.split(' ')
-	
-						for (let i = 0; i < words.length; i++) {
+
+						for (const word of words) {
 							if (reportType === '179D') {
-								certifier = await Certifier.findOne({ name: { $regex: new RegExp(words[i]), $options: 'i' }, licenses: { $elemMatch: { state: projectFields['PROJECT_FIELD_15'] } } })
+								certifier = await Certifier.findOne({ name: { $regex: new RegExp(word), $options: 'i' }, licenses: { $elemMatch: { state: projectFields['PROJECT_FIELD_15'] } } })
 							} else {
-								certifier = await Certifier.findOne({ name: { $regex: new RegExp(words[i]), $options: 'i' } })
+								certifier = await Certifier.findOne({ name: { $regex: new RegExp(word), $options: 'i' } })
 							}
-							
-							if (certifier) { break }
+
+							if (certifier) {
+								break
+							}
 						}
 					}
 
@@ -408,14 +410,14 @@ export default ({ db, config }) => {
 						customer: customer && customer.id,
 						reportType,
 						software: reportType === '45L' ? null : 'eQuest 3.65',
-						draft: projectFields['PROJECT_FIELD_14'] === 'No' ? false : true
+						draft: projectFields['PROJECT_FIELD_14'] !== 'No'
 					}
 
 					let qualifyingCategories = null
 					if (project.taxYear >= 2023) {
 						qualifyingCategories = 'Whole Building'
-					} else if (!['25%','50%', 'Possible 25%', ' Possible 50%'].includes(projectFields['PROJECT_FIELD_3'])) {
-						projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Lighting' : projectFields['PROJECT_FIELD_3']
+					} else if (!['25%', '50%', 'Possible 25%', ' Possible 50%'].includes(projectFields['PROJECT_FIELD_3'])) {
+						qualifyingCategories = projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Lighting' : projectFields['PROJECT_FIELD_3']
 					}
 	
 					if (project.reportType === '179D') {
@@ -520,15 +522,20 @@ export default ({ db, config }) => {
 
 	function setDefaultValues (obj, noCopies) {
 		Object.keys(obj).forEach(prop => {
+			let value
 			if (!['name', 'type', 'address'].includes(prop)) {
-				obj[prop] = typeof obj[prop] === 'string' 
-					? '' : Array.isArray(obj[prop]) 
-						? [] 
-						: typeof obj[prop] === 'number' 
-							? 0 
-							: typeof obj[prop] === 'object' && obj[prop] !== null 
-								? {} 
-								: obj[prop]
+				if (typeof obj[prop] === 'string') {
+					value = ''
+				} else if (Array.isArray(obj[prop])) {
+					value = []
+				} else if (typeof obj[prop] === 'number') {
+					value = 0
+				} else if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+					value = {}
+				} else {
+					value = obj[prop]
+				}
+				obj[prop] = value
 			}
 			if (prop === 'name') {
 				obj[prop] = `${obj[prop]} (Copy ${noCopies})`
@@ -539,15 +546,20 @@ export default ({ db, config }) => {
 
 	function setDefaultValues2023 (obj, noCopies) {
 		Object.keys(obj).forEach(prop => {
+			let value
 			if (!['name', 'type', 'address', 'area', 'percentSaving', 'rate', 'pwRate'].includes(prop)) {
-				obj[prop] = typeof obj[prop] === 'string' 
-					? '' : Array.isArray(obj[prop]) 
-						? [] 
-						: typeof obj[prop] === 'number' 
-							? 0 
-							: typeof obj[prop] === 'object' && obj[prop] !== null 
-								? {} 
-								: obj[prop]
+				if (typeof obj[prop] === 'string') {
+					value = ''
+				} else if (Array.isArray(obj[prop])) {
+					value = []
+				} else if (typeof obj[prop] === 'number') {
+					value = 0
+				} else if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+					value = {}
+				} else {
+					value = obj[prop]
+				}
+				obj[prop] = value
 			}
 			if (prop === 'name') {
 				obj[prop] = `${obj[prop]} (Copy ${noCopies})`

@@ -474,7 +474,7 @@ export const divideBuildings = (buildings, linesAbove = 0) => {
 	const arrays = []
 	let currentArray = []
 	let currentTotal = 0
-	const linesToCompare = linesAbove === 0 ? 16 : 15 - linesAbove
+	const linesToCompare = linesAbove === 0 ? 15 : 15 - linesAbove
   
 	buildings.forEach((building) => {
 		const nameLength = building.name.length

@@ -776,7 +776,7 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		withScope('webapp'),
 		withPassport(passport, config)('apikey'),
 		withPassport(passport, config)('jwt'),
-		multerUpload.array('asset', 10),
+		multerUpload.array('asset', 20),
 		async (req, res, next) => {
 			try {
 				const { id: userId } = req.user

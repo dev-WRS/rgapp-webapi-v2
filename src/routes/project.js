@@ -6,7 +6,7 @@ import _ from 'lodash'
 import sharp from 'sharp'
 
 import { middlewares, validator, errors } from 'lts-server'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 import Template45L from '../pdf-templates/45L.js'
 import Template179DPermanet from '../pdf-templates/179DPermanent.js'
@@ -58,8 +58,8 @@ const asProjectResponse = (
 			percentReduction, percentSaving, savingsRequirement })) 
 		: [], 
 	baselineDesign179D, wholeBuildingDesign179D, buildingSummary179D, softwareCertificate179D, report, createdBy,
-	createDate: createDate ? moment(createDate).format('MM/DD/YYYY HH:mm') : '-',
-	reportCreateDate: reportCreateDate ? moment(reportCreateDate).format('MM/DD/YYYY HH:mm') : '-' })
+	createDate: createDate ? moment(createDate).tz('America/New_York').format('MM/DD/YYYY HH:mm') : '-',
+	reportCreateDate: reportCreateDate ? moment(reportCreateDate).tz('America/New_York').format('MM/DD/YYYY HH:mm') : '-' })
 
 const asProjectByIDResponse = ({ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, buildingDefaults, softwareCertificate179D, report, createdBy }) => ({ 
 	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, 

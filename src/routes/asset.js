@@ -1,5 +1,6 @@
 /* eslint-disable no-empty-function */
 import { middlewares, errors } from 'lts-server'
+import moment from 'moment-timezone'
 
 import { auditEventLogger } from '../event-logger.js'
 
@@ -8,7 +9,10 @@ const { HttpBadRequestError } = errors
 
 // const errorMsgDeleteConstraint = (source, target) => `${source} could not be deleted because is associated with a ${target}`
 
-const asAssetResponse = ({ id, name, format, size, origin, createDate, createdBy }) => ({ id, name, format, size, origin, createDate, createdBy })
+const asAssetResponse = ({ id, name, format, size, origin, createDate, createdBy }) => (
+	{ id, name, format, size, origin, 
+		createDate: moment(createDate).tz('America/New_York').format('MM/DD/YYYY HH:mm'), 
+		createdBy })
 
 export default ({ passport, config, services, assetStorage, multerUpload, router }) => {
 	const { Asset, Project, AuditLog } = services

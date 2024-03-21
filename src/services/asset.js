@@ -1,5 +1,6 @@
 import { errors } from 'lts-server'
 import { searchSyntax, filterSyntax, sortOrderSyntax } from '../db/mongoose/index.js'
+import moment from 'moment'
 
 const { HttpBadRequestError } = errors
 
@@ -48,7 +49,9 @@ export default ({ db, config }) => {
 				name = `${parsed.name} ${count}.${parsed.ext}`
 			}
 
-			const asset = await Asset.create({ name, format, size, origin, bucket, key, createdBy })
+			const createDate = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+
+			const asset = await Asset.create({ name, format, size, origin, bucket, key, createdBy, createDate })
 
 			return await Asset.findOne({ _id: asset.id }, '-__v').lean({ virtuals: true })
 		} catch (error) {

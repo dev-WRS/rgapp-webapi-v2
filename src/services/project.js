@@ -1,6 +1,7 @@
 import { errors } from 'lts-server'
 import { searchSyntax, filterSyntax } from '../db/mongoose/index.js'
 import axios from 'axios'
+import moment from 'moment'
 
 const { HttpBadRequestError } = errors
 
@@ -116,7 +117,9 @@ export default ({ db, config }) => {
 				softwareCertificate = software === 'eQuest 3.65' ? await Asset.findOne({ name: 'eQuest Software Certificate.pdf' }) : await Asset.findOne({ name: 'HAP Software Certificate.pdf' })
 			}
 
-			const project = await Project.create({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status: 'inProgress', certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, softwareCertificate179D: softwareCertificate && softwareCertificate.id, buildingDefaults, buildings, createdBy })
+			const createDate = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+			
+			const project = await Project.create({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status: 'inProgress', certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, softwareCertificate179D: softwareCertificate && softwareCertificate.id, buildingDefaults, buildings, createdBy, createDate })
 			
 			return await Project.findOne({ _id: project.id }, '-__v').lean()
 		} catch (error) {
@@ -155,6 +158,9 @@ export default ({ db, config }) => {
 			projectToCopy.projectID = copiedProjectId
 			projectToCopy.originalProjectID = originalProjectID
 			projectToCopy.name = copiedName
+
+			const createDate = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+			projectToCopy.createDate = createDate
 
 			const photos = []
 

@@ -263,7 +263,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'Deduction',
-					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate.toFixed(2))),
 					align: 'right',
 					width: 85
 				}, {
@@ -457,7 +457,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'Deduction',
-					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate)),
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.rate.toFixed(2))),
 					align: 'right',
 					width: 85
 				}, {
@@ -469,7 +469,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'PW&A Deduction',
-					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate.toFixed(2))),
 					align: 'right',
 					width: 105
 				}],

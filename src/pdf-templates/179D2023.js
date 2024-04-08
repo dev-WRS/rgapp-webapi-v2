@@ -139,7 +139,7 @@ export default async ({
 
 	const year = project.taxYear > 2015 ? '2007' : '2001'
 	const totalBuildingArea = project.buildings.reduce((result, building) => result + parseFloat(building.area), 0)
-	const totalDeduction = project.buildings.reduce((result, building) => result + (parseFloat(building.area) * parseFloat(building.rate)), 0)
+	const totalDeduction = project.buildings.reduce((result, building) => result + (parseFloat(building.area) * parseFloat(building.rate.toFixed(2))), 0)
 	const qualifyingPercentages = {}
 	let qualifyingWholeBuilding = false
 	let qualifyingCategories = []
@@ -215,7 +215,7 @@ export default async ({
 		]
 	})
 
-	let pwTotalDeduction = project.buildings.reduce((acc, row) => acc + (parseFloat(row.area) * parseFloat(row.pwRate)), 0)
+	let pwTotalDeduction = project.buildings.reduce((acc, row) => acc + (parseFloat(row.area) * parseFloat(row.pwRate.toFixed(2))), 0)
 
 	sections.push({ 
 		items: [
@@ -275,7 +275,7 @@ export default async ({
 				}, {
 					type: 'string',
 					header: 'PW&A Deduction',
-					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate)),
+					renderer: (row) => formatCurrency(parseFloat(row.area) * parseFloat(row.pwRate.toFixed(2))),
 					align: 'right',
 					width: 105
 				}],

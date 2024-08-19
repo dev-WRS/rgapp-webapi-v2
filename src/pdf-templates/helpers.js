@@ -478,7 +478,7 @@ export const divideBuildings = (buildings, linesAbove = 0) => {
   
 	buildings.forEach((building) => {
 		const nameLength = building.name.length
-		const arraySize = Math.ceil(nameLength / 20)
+		const arraySize = Math.ceil(nameLength / 12)
   
 		if (currentTotal + arraySize > linesToCompare) {
 			arrays.push({ currentTotal, array: currentArray })

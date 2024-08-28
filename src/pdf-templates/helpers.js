@@ -72,7 +72,7 @@ export const removeEndingDots = (legalEntity) => legalEntity.replace(/\.+$/, '')
 const coverImg = fs.readFileSync(path.join(process.cwd(), 'src', 'pdf-templates', 'images', 'coverImg.jpg'))
 coverImg._isBuffer = true
 
-export default ({ theme }) => {
+export default ({ theme, noBrand }) => {
 	const coverImage = {
 		type: 'image',
 		top: 0,
@@ -85,35 +85,35 @@ export default ({ theme }) => {
 	const coverVectors = [{
 		type: 'polygon',
 		points: '283.56 809.01 421.1 809.01 421.1 672.91 283.63 592.43 283.56 592.39 283.56 809.01',
-		backgroundColor: theme.secondary
+		backgroundColor: noBrand ? theme.white : theme.secondary
 	}, {
 		type: 'polygon',
 		points: '558.63 270.31 421.1 350.83 558.63 431.35 629.01 390.13 629.01 229.13 558.63 270.31',
-		backgroundColor: theme.secondary
+		backgroundColor: noBrand ? theme.white : theme.secondary
 	}, {
 		type: 'polygon',
 		points: '558.63 592.39 421.09 672.91 421.09 511.87 558.63 592.39',
-		backgroundColor: theme.secondary
+		backgroundColor: noBrand ? theme.white : theme.secondary
 	}, {
 		type: 'polygon',
 		points: '0 275.3 0 809.01 283.56 809.01 283.56 592.39 421.1 672.91 421.1 350.83 283.56 270.3 146.04 189.78 0 275.3',
-		backgroundColor: theme.primary
+		backgroundColor: noBrand ? theme.white : theme.primary
 	}, {
 		type: 'polygon',
 		points: '0 114.23 0 275.53 146.04 189.78 146.04 28.74 0 114.23',
-		backgroundColor: theme.tertiary
+		backgroundColor: noBrand ? theme.white : theme.tertiary
 	}, {
 		type: 'polygon',
 		points: '421.1 511.86 283.56 592.39 421.1 672.91 421.1 511.87 421.1 511.86',
-		backgroundColor: theme.tertiary
+		backgroundColor: noBrand ? theme.white : theme.tertiary
 	}, {
 		type: 'polygon',
 		points: '421.09 511.86 421.09 511.87 558.63 592.39 629.01 633.6 629.01 472.54 558.63 431.35 421.09 350.83 421.09 511.86',
-		backgroundColor: theme.tertiary
+		backgroundColor: noBrand ? theme.white : theme.tertiary
 	}, {
 		type: 'polygon',
 		points: '0 0 0 104.28 8.49 109.25 8.5 109.24 8.5 109.25 146.04 28.73 96.96 0 0 0',
-		backgroundColor: theme.secondary
+		backgroundColor: noBrand ? theme.white : theme.secondary
 	}]
 
 	const footer = {
@@ -124,7 +124,7 @@ export default ({ theme }) => {
 				left: 0,
 				fullWidth: true,
 				height: 40,
-				backgroundColor: theme.quaternary	
+				backgroundColor: noBrand ? theme.white : theme.quaternary	
 			},
 			bulletImage: {
 				type: 'rect',
@@ -132,13 +132,13 @@ export default ({ theme }) => {
 				left: (self) => self.doc.page.width - 80,
 				width: 80, 
 				height: 18,
-				backgroundColor: theme.secondary		
+				backgroundColor: noBrand ? theme.white : theme.secondary		
 			},
 			pageNumber: {
 				type: 'text',
 				top: (self) => self.doc.page.height - 48,
 				left: (self) => self.doc.page.width - 60,
-				color: theme.white,
+				color: noBrand ? theme.black : theme.white,
 				width: 80
 			}
 		}
@@ -150,7 +150,7 @@ export default ({ theme }) => {
 		left: 0,
 		fullWidth: true,
 		height: 100,
-		backgroundColor: theme.quaternary
+		backgroundColor: noBrand ? theme.white : theme.quaternary
 	}
 
 	const headerLogo = {
@@ -174,7 +174,7 @@ export default ({ theme }) => {
 		left: 0,
 		width: 20, 
 		height: 40,
-		backgroundColor: theme.secondary	
+		backgroundColor: noBrand ? theme.white : theme.secondary	
 	}
 
 	const coverLogo = (logo) => ({
@@ -185,13 +185,13 @@ export default ({ theme }) => {
 		value: logo
 	})
 
-	const docTitle = (title, options) => [{
+	const docTitle = (title, noBrand ,options) => [{
 		type: 'text',
 		relative: true,
 		marginTop: 180,
 		moveDown: 1,
 		left: contentMarginLeft,
-		color: theme.white,
+		color: noBrand ? theme.black : theme.white,
 		size: 52,
 		value: title,
 		...options
@@ -203,44 +203,44 @@ export default ({ theme }) => {
 		left: contentMarginLeft,
 		width: 72,
 		height: 4,
-		backgroundColor: theme.secondary	
+		backgroundColor: noBrand ? theme.black : theme.secondary	
 	}]
 
-	const repoTitle = (title) => ({
+	const repoTitle = (title, noBrand) => ({
 		type: 'text',
 		relative: true,
 		lineHeight: 12,
 		moveDown: 1,
 		left: contentMarginLeft,
-		color: theme.white,
+		color: noBrand ? theme.black : theme.white,
 		size: 20,
 		value: title	
 	})
 
-	const repoSubtitle = (subtitle) => ({
+	const repoSubtitle = (subtitle, noBrand) => ({
 		type: 'text',
 		relative: true,
 		lineHeight: 12,
 		moveDown: 1,
 		left: contentMarginLeft,
-		color: theme.white,
+		color: noBrand ? theme.black : theme.white,
 		size: 16,
 		value: subtitle	
 	})
 
-	const repoHeader = (name, options) => ({
+	const repoHeader = (name, noBrand, options) => ({
 		type: 'text',
 		relative: true,
 		lineHeight: 12,
 		moveDown: 1,
 		left: contentMarginLeft,
-		color: theme.white,
+		color: noBrand ? theme.black : theme.white,
 		size: 16,
 		value: name,
 		...options	
 	})
 
-	const sectionTitle = (title, options) => [{
+	const sectionTitle = (title, noBrand, options) => [{
 		type: 'text',
 		relative: true,
 		moveDown: 1,
@@ -258,7 +258,7 @@ export default ({ theme }) => {
 		left: contentMarginLeft,
 		width: 96,
 		height: 4,
-		backgroundColor: theme.secondary
+		backgroundColor: noBrand ? theme.black : theme.secondary
 	}]
 	
 	const sectionSubtitle = (title) => ({
@@ -304,7 +304,7 @@ export default ({ theme }) => {
 		value
 	})
 
-	const sectionTable = ({ title, summary, columns, rows, columnDefaults, ...options }, lean) => {
+	const sectionTable = ({ title, summary, columns, rows, columnDefaults, noBrand, ...options }, lean) => {
 		if (lean === true) {
 			columns = columns.filter(column => {
 				return column.renderer || rows.findIndex(row => !!row[column.dataIndex]) !== -1
@@ -314,11 +314,11 @@ export default ({ theme }) => {
 			type: 'table',
 			relative: true,
 			color: theme.black,
-			lineColor: theme.tertiary,
+			lineColor: noBrand ? theme.black : theme.tertiary,
 			size: 10,
 			lineHeight: 2,
 			title: merge({
-				color: theme.white,
+				color: noBrand ? theme.black : theme.white,
 				size: 10,
 				lineHeight: 2,
 				value: title,
@@ -340,7 +340,7 @@ export default ({ theme }) => {
 				paddingRight: 8
 			} : undefined,
 			headerDefaults: {
-				color: theme.white,
+				color: noBrand ? theme.black : theme.white,
 				lineHeight: 2,
 				backgroundColor: theme.primary,
 				paddingTop: 4,

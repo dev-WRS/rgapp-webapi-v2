@@ -45,7 +45,7 @@ export default async ({
 		sectionGallery,
 		sectionTopics,
 		sectionPdf
-	} = helpers({ theme })
+	} = helpers({ theme, noBrand: customer.name == 'No Brand' })
 
 	const legacyImproved = legacyImprove(project.legalEntity)
 
@@ -86,29 +86,30 @@ export default async ({
 		]
 	}
 
+	const noBrand = customer.name == 'No Brand'
+	const coverImageVectors = noBrand ? [] : [coverImage, ...coverVectors, coverLogo(logo)]
+
 	const pdf = new PDFBuilder({ 
 		size: 'LETTER',
 		defaultFont, fonts,
 		margins: { top: contentMarginTop, right: contentMarginRight, bottom: contentMarginBottom, left: contentMarginLeft },
 		draftCover: project.draft === true || project.draft === undefined ? draftCoverArray : {},
 		cover: {
-			items: [coverImage, 
-				...coverVectors,
-				coverLogo(logo),
-				...docTitle('Certification'),
-				repoTitle(reportTitle),
-				repoSubtitle(reportSubtitle1),
-				repoHeader(reportSubtitle2, {
+			items: [...coverImageVectors,
+				...docTitle('Certification', noBrand),
+				repoTitle(reportTitle, noBrand),
+				repoSubtitle(reportSubtitle1, noBrand),
+				repoHeader(reportSubtitle2, noBrand, {
 					marginBottom: 32
 				}),
-				repoHeader(project.legalEntity, {
+				repoHeader(project.legalEntity, noBrand, {
 					width: 200
 				}),
-				repoHeader(`${project.name}, ${project.state}`, {
+				repoHeader(`${project.name}, ${project.state}`, noBrand, {
 					size: 12,
 					width: 200
 				}),
-				repoHeader(project.taxYear.toString(), {
+				repoHeader(project.taxYear.toString(), noBrand, {
 					size: 12,
 					width: 200
 				})
@@ -116,7 +117,7 @@ export default async ({
 		},
 		tableOfContent: {
 			items: [
-				...sectionTitle('Table of Contents', { 
+				...sectionTitle('Table of Contents', noBrand, { 
 					isTitle: false
 				}),
 				sectionTopics()
@@ -188,7 +189,7 @@ export default async ({
 
 	sections.push({
 		items: [
-			...sectionTitle('Scope of Study'),
+			...sectionTitle('Scope of Study', noBrand),
 			sectionParagraph('The purpose of this study is to determine whether the subject building contains energy efficient commercial property which qualifies for a tax deduction under Section 179D of the Internal Revenue Code and to provide documentation of said qualification as required under Section l79D, Notice 2006-52 and Notice 2008-40.'),
 			sectionParagraph('The scope of our study included, but was not limited to the following:'),
 			sectionList([
@@ -208,7 +209,7 @@ export default async ({
 	// })
 	sections.push({
 		items: [
-			...sectionTitle('Statement of Law'),
+			...sectionTitle('Statement of Law', noBrand),
 			sectionTitleParagraph('Applicable Law'),
 			sectionParagraph('Section 179D provides a deduction for an amount equal to the cost of energy efficient commercial building property placed in service during the taxable year. Unless otherwise indicated, section references are to the Internal Revenue Code of 1986, as amended and the regulations there under. In order to qualify for this deduction, the energy efficient commercial building property must receive proper "certification" by "qualified individuals" using "qualified computer software" as meeting various energy efficiency standards. These terms are further defined in Section 179D and Notice 2006-52. This report has been prepared in accordance with these standards.'),
 			sectionParagraph('Section 179D(b) provides that the maximum deduction with respect to any building for any taxable year shall not exceed the excess (if any) of $1.80 multiplied by the "building square footage" over the aggregate amount of deductions claimed in prior years for energy efficient commercial building property for the same property. Under Section 179D(b), the maximum deduction allowed under Section 179D for a qualifying commercial building is up to $1.80/sf for an entire building. This is for the lifetime of the building and includes the aggregate amount of all Section 179D deductions allowed with respect to the building for all prior taxable years. The deduction cannot exceed the excess (if any) of $1.80 multiplied by the "building square footage" over the aggregate number of deductions claimed in prior years. However, for properties placed in service after Dec. 31, 2020, there is a cost-of-living adjustment that is determined in accordance with IRC Section 1(f)(3) (See IRC 179D(d)(1)(A) and (g)) and as published by the Internal Revenue Service (IRS) in the Revenue Procedure 2021-45. Such adjustment shall allow for a partial allowance of $0.62 per square foot and a maximum allowance of $1.82 per square foot for tax years beginning in 2021, and $0.63 per square foot and $1.88 per square foot, respectively, for tax years beginning in 2022.'),
@@ -250,7 +251,7 @@ export default async ({
 	// })
 	sections.push({
 		items: [
-			...sectionTitle('Calculation of Section 179D Deduction'),
+			...sectionTitle('Calculation of Section 179D Deduction', noBrand),
 			sectionTitleParagraph('Summary of Deduction Calculation'),
 			sectionParagraph(`Based on the energy model calculations, the ${qualifyingProperty} systems will qualify as Energy Efficient Commercial Building Property. Therefore, the property will qualify for a deduction limited to the cost of the qualifying systems. This calculation is based upon a total combined square footage of ${formatNumber(totalBuildingArea)}.`),
 			sectionTable({
@@ -278,7 +279,8 @@ export default async ({
 					align: 'right',
 					width: 110
 				}],
-				rows: project.buildings
+				rows: project.buildings,
+				noBrand: noBrand
 			}),
 			sectionParagraph('Based on the square footage calculation, limited to the cost of the qualifying systems, the total deduction for the buildings will be:'),
 			sectionParagraph(formatCurrency(totalDeduction), { 
@@ -290,7 +292,7 @@ export default async ({
 	})
 	sections.push({
 		items: [
-			...sectionTitle('Section 179D Certification Report'),
+			...sectionTitle('Section 179D Certification Report', noBrand),
 			sectionTitleParagraph('Qualifying Certification Satisfying Notice 2006-52'),
 			sectionParagraph('The Section 179D certification for the Energy Efficient Commercial Building Property is enclosed. The certification satisfies statements for Notice 2006-52 §4.01- 4.09 of Internal Revenue Bulletin 2006-26.')
 		]
@@ -328,7 +330,8 @@ export default async ({
 			}, {
 				name: 'Phone',
 				value: formatPhone(certifier.phone)
-			}]
+			}],
+			noBrand: noBrand
 		}),
 		sectionTable({
 			title: '02) Building Information',
@@ -350,7 +353,8 @@ export default async ({
 				name: 'Address',
 				value: project.buildings.length == 1 ? project.buildings[0].address : 'Multiple (See Table 2.1)'
 			}],
-			summary: `Energy Efficient System installed and placed in service during: ${project.taxYear.toString()}`
+			summary: `Energy Efficient System installed and placed in service during: ${project.taxYear.toString()}`,
+			noBrand: noBrand
 		})
 	]
 
@@ -382,7 +386,8 @@ export default async ({
 				dataIndex: 'address',
 				flex: true
 			}],
-			rows: project.buildings
+			rows: project.buildings,
+			noBrand: noBrand
 		}, true)
 	]
 
@@ -451,7 +456,8 @@ export default async ({
 				dataIndex: 'value',
 				width: 140
 			}],
-			rows: qualifyingPercentagesRows
+			rows: qualifyingPercentagesRows,
+			noBrand: noBrand
 		})
 	]
 
@@ -484,7 +490,8 @@ export default async ({
 					width: 108
 				}],
 				rows: project.buildings,
-				summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`
+				summary: `Total Section 179D Deduction: ${formatCurrency(totalDeduction)}`,
+				noBrand: noBrand
 			}) :
 			sectionTable({
 				columnsHeader: false,
@@ -513,7 +520,8 @@ export default async ({
 				}, {
 					name: 'Section 179D Deduction:',
 					value: formatCurrency(parseFloat(project.buildings[0].area) * parseFloat(project.buildings[0].rate))
-				}]
+				}],
+				noBrand: noBrand
 			}),
 		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) per-square foot allowance.')
 	]
@@ -578,7 +586,7 @@ export default async ({
 	let charCode = 97
 	sections.push({
 		items: [
-			...sectionTitle('Section 179D Energy Study Report')
+			...sectionTitle('Section 179D Energy Study Report', noBrand)
 		]
 			.concat(
 				(photos.length > 0) ? 

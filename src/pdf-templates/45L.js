@@ -41,7 +41,7 @@ export default async ({
 		sectionGallery,
 		sectionTopics,
 		sectionPdf
-	} = helpers({ theme })
+	} = helpers({ theme, noBrand: customer.name == 'No Brand' })
 
 	const benefitRate = 2000
 	const nameState = project.state !== 'Multistate' ? `${project.name}, ${project.state}` : `${project.name}` 
@@ -81,7 +81,8 @@ export default async ({
 	] }
 
 	const legacyImproved = legacyImprove(project.legalEntity)
-	console.log('nameState', nameState)
+	const noBrand = customer.name == 'No Brand'
+	const coverImageVectors = noBrand ? [] : [coverImage, ...coverVectors, coverLogo(logo)]
 
 	const pdf = new PDFBuilder({ 
 		size: 'LETTER',
@@ -89,23 +90,21 @@ export default async ({
 		margins: { top: contentMarginTop, right: contentMarginRight, bottom: contentMarginBottom, left: contentMarginLeft },
 		draftCover: project.draft === true || project.draft === undefined ? draftCoverArray : {},
 		cover: {
-			items: [coverImage, 
-				...coverVectors,
-				coverLogo(logo),
-				...docTitle('Certification'),
-				repoTitle(reportTitle),
-				repoSubtitle(reportSubtitle1),
-				repoHeader(reportSubtitle2, {
+			items: [...coverImageVectors,	
+				...docTitle('Certification', noBrand),
+				repoTitle(reportTitle, noBrand),
+				repoSubtitle(reportSubtitle1, noBrand),
+				repoHeader(reportSubtitle2, noBrand, {
 					marginBottom: 32
 				}),
-				repoHeader(legacyImproved, {
+				repoHeader(legacyImproved, noBrand, {
 					width: 200
 				}),
-				repoHeader(nameState, {
+				repoHeader(nameState, noBrand, {
 					size: 12,
 					width: 200
 				}),
-				repoHeader(project.taxYear.toString(), {
+				repoHeader(project.taxYear.toString(), noBrand, {
 					size: 12,
 					width: 200
 				})
@@ -113,7 +112,7 @@ export default async ({
 		},
 		tableOfContent: {
 			items: [
-				...sectionTitle('Table of Contents', { 
+				...sectionTitle('Table of Contents', noBrand, { 
 					isTitle: false
 				}),
 				sectionTopics()
@@ -141,7 +140,7 @@ export default async ({
 
 	sections.push({
 		items: [
-			...sectionTitle('Scope of Study'),
+			...sectionTitle('Scope of Study', noBrand),
 			sectionParagraph('The purpose of this study is to determine whether the subject dwelling units contain energy efficient property which qualifies for a tax credit under Section 45L of the Internal Revenue Code and to provide documentation of said qualification as required under Section 45L, Notice 2006-27, Notice 2008-35 and Notice 2008-36.'),
 			sectionParagraph('The scope of our study included, but was not limited to the following:'),
 			sectionList([
@@ -154,7 +153,7 @@ export default async ({
 	})
 	sections.push({
 		items: [
-			...sectionTitle('Statement of Law'),
+			...sectionTitle('Statement of Law', noBrand),
 			sectionTitleParagraph('Background'),
 			sectionParagraph('Section 1332 of the Energy Policy Act of 2005 enacted Section 45L of the Internal Revenue Code, which provides tax credits for qualifying energy-efficient residential units placed in service between January 1, 2006 and December 31, 2007. The Tax Relief and Health Care Act of 2006 extended the provision to December 31, 2008. The Energy Improvement and Extension Act of 2008 extended the credit through 2009, followed by the Tax Relief, Unemployment Insurance Reauthorization, and Job Creation Act of 2010 and the American Taxpayer Relief Act of 2012, which extended it through 2011 and 2013, respectively. The Consolidated Appropriations Act, 2016 extended Section 45L through December 31, 2016. The Bipartisan Budget Act of 2018 extended Section 45L through December 31, 2017. The H.R. 1865 the Further Consolidated Appropriations Act, 2020 extended Section 45L retroactively from January 1st, 2018 through December 31st, 2020. Most recently, The H.R. 133: Consolidated Appropriations Act, 2021 extended Section 45L from January 1st, 2021 through December 31st, 2021.'),
 			sectionParagraph('The American Taxpayer Relief Act of 2012 also updated the comparable standard from the 2003 IECC to the 2006 IECC for homes acquired after December 31, 2011. The most recent clarifying procedures are published in Notice 2008-35 and Notice 2008-36.')
@@ -171,7 +170,7 @@ export default async ({
 	})
 	sections.push({
 		items: [
-			...sectionTitle('Calculation of Section 45L Credit'),
+			...sectionTitle('Calculation of Section 45L Credit', noBrand),
 			sectionTitleParagraph('Summary of Credit Calculation'),
 			sectionParagraph('Based on the energy calculations, the following units qualify for credit certification:'),
 			sectionTable({
@@ -204,13 +203,14 @@ export default async ({
 					units: project.totalDwellingUnits,
 					rate: benefitRate,
 					credit: formatCurrency(parseFloat(project.totalDwellingUnits) * parseFloat(benefitRate))
-				}]
+				}],
+				noBrand: noBrand
 			})
 		]
 	})
 	sections.push({
 		items: [
-			...sectionTitle('Section 45L Certification Report'),
+			...sectionTitle('Section 45L Certification Report', noBrand),
 			sectionSubtitle('a. Qualifying Certification Satisfying Notice 2008-35'),
 			sectionParagraph('The Section 45L certification for the Energy Efficient Home Credit is enclosed. The certification satisfies statements for Notice 2008-35, Section 3.')
 		]
@@ -242,7 +242,8 @@ export default async ({
 				}, {
 					name: 'Phone',
 					value: formatPhone(certifier.phone)
-				}]
+				}],
+				noBrand: noBrand
 			}),
 			project.dwellingUnits.length === 1 
 				? sectionTable ({
@@ -268,7 +269,8 @@ export default async ({
 						}, {
 							name: 'Address',
 							value: project.dwellingUnitAddress
-						}]
+						}],
+					noBrand: noBrand
 				})
 				: sectionTable({
 					title: '02) Dwelling Unit Information',
@@ -289,7 +291,8 @@ export default async ({
 					}, {
 						name: 'Address',
 						value: project.dwellingUnits.length == 1 ? project.dwellingUnitAddress : 'Multiple (See Table 2.1)'
-					}]
+					}],
+					noBrand: noBrand
 				})
 		]
 	})
@@ -344,7 +347,8 @@ export default async ({
 						dataIndex: 'unit',
 						width: 45
 					}],
-					rows: project.dwellingUnits
+					rows: project.dwellingUnits,
+					noBrand: noBrand
 				}, true)
 			]
 		})
@@ -391,7 +395,8 @@ export default async ({
 				rate: benefitRate,
 				credit: project.totalDwellingUnits * benefitRate
 			}],
-			summary: `Total ${formatCurrency(project.totalDwellingUnits * benefitRate)}`
+			summary: `Total ${formatCurrency(project.totalDwellingUnits * benefitRate)}`,
+			noBrand: noBrand
 		}),
 		sectionParagraph('Note: The amount of the deduction is equal to the lesser of: (1) the capitalized cost incurred with respect to the energy efficient property and (2) the allowable credit amount.')
 	]

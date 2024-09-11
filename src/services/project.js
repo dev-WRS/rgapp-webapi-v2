@@ -338,6 +338,7 @@ export default ({ db, config }) => {
 
 	const getProjectByProjectID = async (id) => {
 		let project = {}
+		const definedStates = ['Multistate','AL', 'MT', 'AK', 'NE', 'DC', 'AZ', 'NV', 'AR', 'NH', 'CA', 'NJ', 'CO', 'NM', 'CT', 'NY', 'DE', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'MO', 'WY']
 
 		try {
 			const { data: opportunity } = await axios.request({
@@ -403,6 +404,8 @@ export default ({ db, config }) => {
 					} else {
 						customer = await Customer.findOne({ name: customerName })
 					}
+
+					const stateFromInsightly = definedStates.includes(projectFields['PROJECT_FIELD_15']) ? projectFields['PROJECT_FIELD_15'] : 'Multistate'
 			
 					project = {
 						projectID: id,
@@ -410,7 +413,7 @@ export default ({ db, config }) => {
 						name: projectName,
 						taxYear: parseIntSafe(projectFields['PROJECT_FIELD_10']),
 						legalEntity: projectFields['PROJECT_FIELD_11'],
-						state: projectFields['PROJECT_FIELD_15'],
+						state: stateFromInsightly,
 						inspectionDate: projectFields['PROJECT_FIELD_9'],
 						certifier: certifier && certifier.id,
 						customer: customer && customer.id,
@@ -422,7 +425,7 @@ export default ({ db, config }) => {
 					let qualifyingCategories = null
 					if (project.taxYear >= 2023) {
 						qualifyingCategories = 'Whole Building'
-					} else if (!['25%', '50%', 'Possible 25%', ' Possible 50%'].includes(projectFields['PROJECT_FIELD_3'])) {
+					} else if (!['25%', '50%', 'Possible 25%', 'Possible 50%'].includes(projectFields['PROJECT_FIELD_3'])) {
 						qualifyingCategories = projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Lighting' : projectFields['PROJECT_FIELD_3']
 					}
 	

@@ -288,7 +288,7 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				const statusOptions = {
 					inProgress: 'In Progress',
 					readyForReview: 'Ready For Review',
-					approved: 'Approved',
+					approved: 'Dale',
 					closed: 'Closed'
 				}
 

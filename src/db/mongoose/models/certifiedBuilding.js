@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const certifiedBuildingSchema = new mongoose.Schema({
-    projectID: {
+    projectId: {
 		type: String,
 		required: true,
 	},

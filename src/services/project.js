@@ -338,7 +338,7 @@ export default ({ db, config }) => {
 			const certifiedBuildingData = {
 			_id: project._id,
 			name: project.name,
-			projectID:
+			projectId:
 				project.originalProjectID === undefined ||
 				project.originalProjectID === ""
 				? project.projectID

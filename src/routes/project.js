@@ -317,6 +317,10 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				const project = await Project.updateProject({ id }, { status })
 
 				await Project.updateTasks(project.originalProjectID ,status, project.reportType)
+
+				if (status === 'approved') {
+					await Project.createCertifiedBuilding(project)
+				}
 				
 				res.json({ result: asProjectResponse(project) })
 			}

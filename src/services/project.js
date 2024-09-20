@@ -7,7 +7,7 @@ const { HttpBadRequestError } = errors
 
 export default ({ db, config }) => {
 	const { mongoose } = db
-	const { Project, Asset, Customer, Certifier } = mongoose
+	const { Project, Asset, Customer, Certifier, CertifiedBuilding } = mongoose
 
 	const getProjects = async (query) => {
 		const findQuery = {}
@@ -329,6 +329,48 @@ export default ({ db, config }) => {
 			throw new HttpBadRequestError('Task not found')
 		}
 	}
+	const createCertifiedBuilding = async (project) => {
+		try {
+			const certifier = await Certifier.findOne({ _id: project.certifier });
+			const customer = await Customer.findOne({ _id: project.customer });
+
+			// Construir los datos comunes
+			const certifiedBuildingData = {
+			_id: project._id,
+			name: project.name,
+			projectId:
+				project.originalProjectID === undefined ||
+				project.originalProjectID === ""
+				? project.projectID
+				: project.originalProjectID,
+			taxYear: project.taxYear,
+			legalEntity: project.legalEntity,
+			state: project.state,
+			inspectionDate: project.inspectionDate,
+			reportType: project.reportType,
+			certifiedDate: new Date(),
+			certifier: certifier.name,
+			customer: customer.name,
+			};
+
+			if (project.reportType === '45L') {
+				certifiedBuildingData.totalDwellingUnits = project.totalDwellingUnits;
+			} else {
+				certifiedBuildingData.buildings = project.buildings;
+			}
+
+			const options = { upsert: true, new: true };
+
+			const certifiedBuilding = await CertifiedBuilding.findOneAndUpdate(
+				{ _id: certifiedBuildingData._id },
+				certifiedBuildingData,
+				options
+			);
+			
+		} catch (error) {
+			throw new HttpBadRequestError('Certified Building not created');
+		}
+	};
 
 	const parseIntSafe = (value) => {
 		if (!value) return 0
@@ -634,6 +676,7 @@ export default ({ db, config }) => {
 		copyProject,
 		copyBuilding,
 		updateTasks,
-		getFileNameAndExtension
+		getFileNameAndExtension,
+		createCertifiedBuilding
 	}
 }

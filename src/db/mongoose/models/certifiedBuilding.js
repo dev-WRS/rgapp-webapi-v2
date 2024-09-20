@@ -31,7 +31,7 @@ const certifiedBuildingSchema = new mongoose.Schema({
 		enum: ['179D', '45L']
 	},
     certifiedDate: {
-		type: String
+		type: Date
 	},
     certifier: {
 		type: String

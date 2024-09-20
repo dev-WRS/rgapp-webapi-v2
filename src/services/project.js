@@ -361,12 +361,12 @@ export default ({ db, config }) => {
 
 			const options = { upsert: true, new: true };
 
-			const certifiedBuilding = await CertifiedBuilding.findOneAndUpdate(
+			await CertifiedBuilding.findOneAndUpdate(
 				{ _id: certifiedBuildingData._id },
 				certifiedBuildingData,
 				options
 			);
-			
+
 		} catch (error) {
 			throw new HttpBadRequestError('Certified Building not created');
 		}

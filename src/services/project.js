@@ -338,7 +338,7 @@ export default ({ db, config }) => {
 			const certifiedBuildingData = {
 			_id: project._id,
 			name: project.name,
-			projectId:
+			projectID:
 				project.originalProjectID === undefined ||
 				project.originalProjectID === ""
 				? project.projectID
@@ -349,14 +349,14 @@ export default ({ db, config }) => {
 			inspectionDate: project.inspectionDate,
 			reportType: project.reportType,
 			certifiedDate: new Date(),
-			certifier: certifier.name,
-			customer: customer.name,
+			certifier: (certifier && certifier.name) ?? '',
+			customer: (customer && customer.name) ?? '',
 			};
 
 			if (project.reportType === '45L') {
 				certifiedBuildingData.totalDwellingUnits = project.totalDwellingUnits;
 			} else {
-				certifiedBuildingData.buildings = project.buildings;
+				certifiedBuildingData.buildings = project.buildings ?? [];
 			}
 
 			const options = { upsert: true, new: true };
@@ -368,7 +368,7 @@ export default ({ db, config }) => {
 			);
 
 		} catch (error) {
-			throw new HttpBadRequestError('Certified Building not created');
+			throw new HttpBadRequestError('Certified Building not created: ' + error);
 		}
 	};
 

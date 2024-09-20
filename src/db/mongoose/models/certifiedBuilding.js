@@ -4,7 +4,6 @@ const certifiedBuildingSchema = new mongoose.Schema({
     projectID: {
 		type: String,
 		required: true,
-		unique: true
 	},
 	name: {
 		type: String,

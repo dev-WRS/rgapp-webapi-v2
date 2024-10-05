@@ -5,6 +5,16 @@
 		"group": "Projects"
 	},
 	{
+		"key": "list-certified-buildings",
+		"group": "CertifiedBuildings",
+		"name": "List"
+	},
+		{
+		"key": "view-certified-buildings",
+		"group": "CertifiedBuildings",
+		"name": "Edit"
+	},
+	{
 		"key": "add-projects",
 		"name": "Add",
 		"group": "Projects"
@@ -163,5 +173,10 @@
 		"key": "print-reports",
 		"name": "Print",
 		"group": "Reports"
+	},
+	{
+		"key": "export-excel",
+		"group": "Reports",
+		"name": "Download"
 	}
 ]

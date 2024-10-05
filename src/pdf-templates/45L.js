@@ -262,7 +262,7 @@ export default async ({
 					rows: [
 						{
 							name: 'Residence Name',
-							value: project.private ? project.legalEntity : project.name
+							value: project.privateProject ? project.legalEntity : project.name
 						}, {
 							name: 'Model',
 							value: project.dwellingUnits[0].model
@@ -287,7 +287,7 @@ export default async ({
 					}],
 					rows: [{
 						name: 'Residence Name',
-						value: project.private ? project.legalEntity : project.name
+						value: project.privateProject ? project.legalEntity : project.name
 					}, {
 						name: 'Address',
 						value: project.dwellingUnits.length == 1 ? project.dwellingUnitAddress : 'Multiple (See Table 2.1)'

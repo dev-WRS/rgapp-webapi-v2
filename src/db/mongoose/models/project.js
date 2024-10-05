@@ -33,6 +33,10 @@ const projectSchema = new mongoose.Schema({
 		type: String,
 		enum: ['179D', '45L']
 	},
+	privateProject: {
+		type: Boolean,
+		default: true
+	},
 	status: {
 		type: String,
 		enum: ['inProgress', 'readyForReview', 'approved', 'closed']

@@ -362,7 +362,7 @@ export default async ({
 				}],
 				rows: [{
 					name: 'Building or Owner Name',
-					value: project.private ? project.legalEntity : project.name
+					value: project.privateProject ? project.legalEntity : project.name
 				}, {
 					name: 'Address',
 					value: project.buildings.length == 1 ? project.buildings[0].address : 'Multiple (See Table 2.1)'

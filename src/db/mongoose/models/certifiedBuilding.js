@@ -29,6 +29,10 @@ const certifiedBuildingSchema = new mongoose.Schema({
 		type: String,
 		enum: ['179D', '45L']
 	},
+	privateProject: {
+		type: Boolean,
+		default: true
+	},
     certifiedDate: {
 		type: Date
 	},

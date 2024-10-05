@@ -37,12 +37,12 @@ const svg2png = (svg) => sharp(svg, { density: 300 })
 const errorMsgChangeStatus = (source, target) => `Project cannot transition from status ${source} to ${target}`
 
 const asProjectResponse = (
-	{ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status,
+	{ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, status,
 		certifier, customer, photos, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, 
 		certificate45L, software, draft, buildingDefaults, buildings, baselineDesign179D, wholeBuildingDesign179D,
 		buildingSummary179D, softwareCertificate179D, report, createdBy, createDate, reportCreateDate
 	}) => ({ 
-	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, 
+	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, status, certifier, customer, 
 	photos: photos 
 		? photos.map(({ _id, asset, description }) => ({ id: _id, asset, description }))
 		: [], 
@@ -61,8 +61,76 @@ const asProjectResponse = (
 	createDate: createDate ? moment(createDate).tz('America/New_York').format('MM/DD/YYYY HH:mm') : '-',
 	reportCreateDate: reportCreateDate ? moment(reportCreateDate).tz('America/New_York').format('MM/DD/YYYY HH:mm') : '-' })
 
-const asProjectByIDResponse = ({ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, buildingDefaults, softwareCertificate179D, report, createdBy }) => ({ 
-	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, status, certifier, customer, software, draft, 
+	const asCertifiedBuildingResponse= (certifiedBuilding) => {
+		const result = [];
+
+		certifiedBuilding.forEach((doc) => {
+			if (doc.reportType === '45L') {
+				const combinedData = {
+					projectName: doc?.name ?? 'No Project Name available',
+					projectId: doc?.projectId ?? 'No Project Id available',
+					taxYear: doc?.taxYear ?? 2020,
+					legalEntity: doc?.legalEntity ?? 'No Legal Entity available',
+					state: doc?.state ?? 'FL',
+					inspectionDate: doc?.inspectionDate ?? 'No Inspection Date available',
+					reportType: doc?.reportType ?? 'No Report Type available',
+					privateProject: doc?.privateProject ?? doc?.reportType == '45L' ? true : false,
+					certifiedDate: doc?.certifiedDate ? new Date(doc.certifiedDate).toLocaleDateString("en-US") : 'No Certified Date available',
+					certifier: doc?.certifier ?? 'No Certifier available',
+					customer: doc?.customer === "Walker Reid Strategies" ? doc?.legalEntity : doc?.customer ?? 'No Customer Name available',
+					totalDwellingUnits: doc?.totalDwellingUnits ?? 0,
+					buildingId: 'No Building Id available',
+					buildingName: 'No Building Name available',
+					address: 'No Address available',
+					type: 'No Type available',
+					area: 0,
+					rate: 0,
+					pwRate: 0,
+					deduction: '0.00',
+					pwDeduction: '0.00',
+					method: 'No Method available',
+					percentSaving: 0,
+				};
+
+			result.push(combinedData);
+			} else if (doc.reportType === '179D') {
+			doc.buildings.forEach((building) => {
+				const combinedData = {
+					projectName: doc?.name ?? 'No Project Name available',
+					projectId: doc?.projectId ?? 'No Project Id available',
+					taxYear: doc?.taxYear ?? 2020,
+					legalEntity: doc?.legalEntity ?? 'No Legal Entity available',
+					state: doc?.state ?? 'FL',
+					inspectionDate: doc?.inspectionDate ?? 'No Inspection Date available',
+					reportType: doc?.reportType ?? 'No Report Type available',
+					privateProject: doc?.privateProject ?? doc?.reportType == '45L' ? true : false,
+					certifiedDate: doc?.certifiedDate ? new Date(doc.certifiedDate).toLocaleDateString("en-US") : 'No Certified Date available',
+					certifier: doc?.certifier ?? 'No Certifier available',
+					customer: doc?.customer === "Walker Reid Strategies" ? doc?.legalEntity : doc?.customer ?? 'No Customer available ',
+					totalDwellingUnits: doc?.totalDwellingUnits ?? 0,
+					buildingId: building?._id?.toString() ?? 'No Building Id available',
+					buildingName: building?.name ?? 'No Building Name available',
+					address: building?.address ?? 'No Address available',
+					type: building?.type ?? 'No Type available',
+					area: building?.area ?? 0,
+					rate: building?.rate ?? 0,
+					pwRate: building?.pwRate ?? 0,
+					deduction: building?.area && building?.rate ? (building.area * building.rate).toFixed(2).toLocaleString("en-US") : '0.00',
+					pwDeduction: building?.area && building?.pwRate ? (building.area * building.pwRate).toFixed(2).toLocaleString("en-US") : '0.00',
+					method: building?.method ?? 'No Method available',
+					percentSaving: building?.percentSaving ?? 0,
+					totalDwellingUnits: 0,
+				};
+				result.push(combinedData);
+			});
+			}
+		});
+
+		return result;
+	};
+
+const asProjectByIDResponse = ({ _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, status, certifier, customer, software, draft, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, buildingDefaults, softwareCertificate179D, report, createdBy }) => ({ 
+	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, status, certifier, customer, software, draft, 
 	dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, 
 	buildingDefaults,
 	softwareCertificate179D,
@@ -86,7 +154,7 @@ const checkFile = (name, message) => {
 }
 
 export default ({ passport, config, services, assetStorage, multerUpload, router }) => {
-	const { Project, Asset, Customer, Certifier } = services
+	const { Project, Asset, Customer, Certifier, Auth } = services;
 
 	const asBuffer = (id) => Asset.getAssetById(id)
 		.then(({ bucket, key, format }) => {
@@ -212,9 +280,9 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 		async (req, res, next) => {
 			try {
 				const { id } = req.user
-				const { projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, buildingDefaults, buildings } = req.body
+				const { projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, buildingDefaults, buildings } = req.body
 				
-				const project = await Project.createProject({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, buildingDefaults, buildings, createdBy: id })
+				const project = await Project.createProject({ projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, certifier, customer, dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, dwellingUnits, software, draft, buildingDefaults, buildings, createdBy: id })
 
 				res.json({ result: asProjectResponse(project) })
 
@@ -319,7 +387,17 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				await Project.updateTasks(project.originalProjectID ,status, project.reportType)
 
 				if (status === 'approved') {
-					await Project.createCertifiedBuilding(project)
+					const certifiedBuildingCreated = await Project.createCertifiedBuilding(project)
+					// const certifiedBuildingResponse = asCertifiedBuildingResponse([certifiedBuildingCreated])
+					
+					if (project.taxYear >= 2023) {
+						const buffer = await Project.exportToExcel(certifiedBuildingCreated);
+
+						res.setHeader('Content-Disposition', `attachment; filename=Form7205-${project.projectId}.xlsx`);
+						res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+						return res.status(200).send(buffer);
+					}
 				}
 				
 				res.json({ result: asProjectResponse(project) })
@@ -1163,7 +1241,51 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				next(error)
 			}
 		}
-	)
+    )
+
+    router.post('/projects/certifiedBuildings',
+        withScope('webapp'),
+        withPassport(passport, config)('apikey'),
+        withPassport(passport, config)('jwt'),
+        async (req, res, next) => {
+            try {
+                const query = req.query
+
+				const userId = req.user.id;
+				const user = await Auth.getUserById(userId);
+				const role = user.role.key;
+
+                const certifiedBuildingsData = await Project.getCertifiedBuildings(query);
+
+				const processedData = asCertifiedBuildingResponse(certifiedBuildingsData);
+				if (role === 'staff') {
+					processedData.forEach(certifiedBuilding => {
+						certifiedBuilding.customer = 'Walker Reid Strategies';
+						certifiedBuilding.certifier = 'No Certifier Available';
+					});
+				}
+                res.json({ result: processedData })
+            } catch (error) {
+                next(error)
+            }
+        }
+    )
+
+	router.post('/projects/certifiedBuildings/:id',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+			async (req, res, next) => {
+				try {
+					const { id } = req.params;
+					const certifiedBuilding = await Project.getCertifiedBuildingsById(id);
+
+					res.json({ result: asCertifiedBuildingResponse(certifiedBuilding) });
+					} catch (error) {
+						next(error);
+					}
+			}
+	);
 
 	return router
 }

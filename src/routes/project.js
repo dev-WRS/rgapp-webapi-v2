@@ -387,17 +387,7 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 				await Project.updateTasks(project.originalProjectID ,status, project.reportType)
 
 				if (status === 'approved') {
-					const certifiedBuildingCreated = await Project.createCertifiedBuilding(project)
-					// const certifiedBuildingResponse = asCertifiedBuildingResponse([certifiedBuildingCreated])
-					
-					if (project.taxYear >= 2023) {
-						const buffer = await Project.exportToExcel(certifiedBuildingCreated);
-
-						res.setHeader('Content-Disposition', `attachment; filename=Form7205-${project.projectId}.xlsx`);
-						res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-
-						return res.status(200).send(buffer);
-					}
+					await Project.createCertifiedBuilding(project)
 				}
 				
 				res.json({ result: asProjectResponse(project) })
@@ -1281,6 +1271,22 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 					const certifiedBuilding = await Project.getCertifiedBuildingsById(id);
 
 					res.json({ result: asCertifiedBuildingResponse(certifiedBuilding) });
+					} catch (error) {
+						next(error);
+					}
+			}
+	);
+
+	router.post('/projects/certifiedBuildings/:id/exportExcel',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+			async (req, res, next) => {
+				try {
+					const { id } = req.params;
+					const certifiedBuilding = await Project.getCertifiedBuildingsById(id);
+
+					res.json({ result: certifiedBuilding});
 					} catch (error) {
 						next(error);
 					}

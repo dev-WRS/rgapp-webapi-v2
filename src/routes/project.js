@@ -43,9 +43,11 @@ const asProjectResponse = (
 		buildingSummary179D, softwareCertificate179D, report, createdBy, createDate, reportCreateDate
 	}) => ({ 
 	id: _id, projectID, originalProjectID, name, taxYear, legalEntity, state, inspectionDate, reportType, privateProject, status, certifier, customer, 
-	photos: photos 
-		? photos.map(({ _id, asset, description }) => ({ id: _id, asset, description }))
-		: [], 
+    photos: photos 
+        ? photos
+            .map(({ _id, asset, description, position }) => ({ id: _id, asset, description, position }))
+            .sort((a, b) => a.position - b.position)
+        : [],
 	dwellingUnitName, dwellingUnitAddress, totalDwellingUnits, 
 	dwellingUnits: dwellingUnits 
 		? dwellingUnits.map(({ _id, address, type, model, building, unit }) => ({ id: _id, address, type, model, building, unit })) 
@@ -930,6 +932,36 @@ export default ({ passport, config, services, assetStorage, multerUpload, router
 			}
 		}
 	)
+
+	router.post('/projects/:id/photos/reorderPhotos',
+		withScope('webapp'),
+		withPassport(passport, config)('apikey'),
+		withPassport(passport, config)('jwt'),
+		multerUpload.array('asset', 20),
+		validatorRequest([
+			check('photos')
+				.isArray()
+				.withMessage('photos must be an array'),
+			check('photos.*.id')
+				.not().isEmpty()
+				.withMessage('Each photo must have an id'),
+			check('photos.*.position')
+				.isNumeric()
+				.withMessage('Each photo must have a numeric position')
+		]),
+		async (req, res, next) => {
+			try {
+				const { id } = req.params;
+				const { photos } = req.body;
+
+				const updatedProject = await Project.reorderProjectPhotos({ id }, photos);
+
+				res.json({ result: asProjectResponse(updatedProject) });
+			} catch (error) {
+				next(error);
+			}
+		}
+	);
 
 	router.delete('/projects/:id/photos/:photoId',
 		withScope('webapp'),

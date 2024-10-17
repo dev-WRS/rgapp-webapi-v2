@@ -562,6 +562,20 @@ export default ({ db, config }) => {
 	const updateProjectPhoto = ({ id }, { photoId }, { description }) => Project.findOneAndUpdate({ _id: id, 'photos._id': photoId }, { '$set': { 'photos.$.description': description } }, { returnDocument: 'after' }).lean()
 	const updateProjectPhotoChange = ({ id }, { photoId }, { assetId }) => Project.findOneAndUpdate({ _id: id, 'photos.asset': photoId }, { '$set': { 'photos.$.asset': assetId } }, { returnDocument: 'after' }).lean()
 	const deleteProjectPhoto = ({ id }, { photoId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'photos': { '_id': photoId } } }, { returnDocument: 'after' }).lean()
+	
+	const reorderProjectPhotos = async ({ id }, photos) => {
+		const bulkOps = photos.map((photo, index) => ({
+			updateOne: {
+				filter: { _id: id, 'photos._id': photo.id },
+				update: { '$set': { 'photos.$.position': photo.position ?? index } }
+			}
+		}));
+
+		await Project.bulkWrite(bulkOps);
+
+		return Project.findOne({ _id: id }).lean();
+	};
+
 	const deleteProject = async ({ id }) => {
 		const project = await Project.findOne({ _id: id })
 		const { photos, report } = project
@@ -1599,6 +1613,7 @@ export default ({ db, config }) => {
 		createCertifiedBuilding,
 		getCertifiedBuildings,
 		getCertifiedBuildingsById,
-		exportToExcel
+		exportToExcel,
+		reorderProjectPhotos
 	}
 }

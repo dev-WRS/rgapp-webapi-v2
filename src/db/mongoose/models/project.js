@@ -57,6 +57,10 @@ const projectSchema = new mongoose.Schema({
 		description: {
 			type: String,
 			required: true
+		},
+		position: {
+			type: Number,
+			default: 0
 		}
 	}],
 	// Specific fields for 45L

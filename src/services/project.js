@@ -557,8 +557,34 @@ export default ({ db, config }) => {
 			} }, { returnDocument: 'after' }).lean()
 	}
 	const deleteProjectDwellingUnit = ({ id }, { unitId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'dwellingUnits': { '_id': unitId } } }, { returnDocument: 'after' }).lean()
-	const addProjectPhoto = ({ id }, { ...data }) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'photos': { ...data } } }, { returnDocument: 'after' }).lean()
-	const addProjectMultiplePhoto = ({ id }, data) => Project.findOneAndUpdate({ _id: id }, { '$push': { 'photos': { $each: data } } }, { returnDocument: 'after' }).lean()
+	const addProjectPhoto = async ({ id }, { ...data }) => {
+		const project = await Project.findById(id);
+		const currentLength = project.photos.length;
+
+		const photosWithPosition = [{...data, position: data.position = currentLength}]
+
+		return Project.findOneAndUpdate(
+			{ _id: id },
+			{ '$push': { 'photos': { $each: photosWithPosition } } },
+			{ returnDocument: 'after' }
+		).lean();
+	}
+
+	const addProjectMultiplePhoto = async ({ id }, data) => {
+		const project = await Project.findById(id);
+		const currentLength = project.photos.length;
+
+		const photosWithPosition = data.map((photo, index) => ({
+			...photo,
+			position: currentLength + index
+		}));
+
+		return Project.findOneAndUpdate(
+			{ _id: id },
+			{ '$push': { 'photos': { $each: photosWithPosition } } },
+			{ returnDocument: 'after' }
+		).lean();
+	};
 	const updateProjectPhoto = ({ id }, { photoId }, { description }) => Project.findOneAndUpdate({ _id: id, 'photos._id': photoId }, { '$set': { 'photos.$.description': description } }, { returnDocument: 'after' }).lean()
 	const updateProjectPhotoChange = ({ id }, { photoId }, { assetId }) => Project.findOneAndUpdate({ _id: id, 'photos.asset': photoId }, { '$set': { 'photos.$.asset': assetId } }, { returnDocument: 'after' }).lean()
 	const deleteProjectPhoto = ({ id }, { photoId }) => Project.findOneAndUpdate({ _id: id }, { '$pull': { 'photos': { '_id': photoId } } }, { returnDocument: 'after' }).lean()

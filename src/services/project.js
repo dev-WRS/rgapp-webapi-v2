@@ -475,8 +475,8 @@ export default ({ db, config }) => {
 
 					let qualifyingCategories = null
 					if (project.taxYear >= 2023) {
-						qualifyingCategories = 'Whole Building'
-					} else if (!['25%', '50%', 'Possible 25%', 'Possible 50%'].includes(projectFields['PROJECT_FIELD_3'])) {
+						qualifyingCategories = projectFields['PROJECT_FIELD_3'] === 'TBD' ? projectFields['PROJECT_FIELD_3'] : 'Whole Building'
+					} else if (!['25%', '50%', 'Possible 25%', 'Possible 50%','TBD'].includes(projectFields['PROJECT_FIELD_3'])) {
 						qualifyingCategories = projectFields['PROJECT_FIELD_3'] === 'Lighting (Permanent)' ? 'Lighting' : projectFields['PROJECT_FIELD_3']
 					}
 	

@@ -119,7 +119,7 @@ const projectSchema = new mongoose.Schema({
 		},
 		qualifyingCategories: [{
 			type: String,
-			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV', 'Envelope', 'Whole Building']
+			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV', 'Envelope', 'Whole Building', 'TBD']
 		}],
 		area: {
 			type: Number
@@ -167,7 +167,7 @@ const projectSchema = new mongoose.Schema({
 		},
 		qualifyingCategories: [{
 			type: String,
-			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV', 'Envelope', 'Whole Building']
+			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV', 'Envelope', 'Whole Building', 'TBD']
 		}],
 		area: {
 			type: Number

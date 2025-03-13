@@ -1,14 +1,14 @@
 /* eslint-disable quotes */
 import PDFBuilder from '../pdf-builder/index.js'
-import helpers, { 
+import helpers, {
 	defaultFont, fonts, divideBuildings,
 	contentMarginTop, contentMarginRight, contentMarginBottom, contentMarginLeft, removeEndingDots,
 	formatDate, formatNumber, formatCurrency, formatPhone, asCommaSeparatedString, asBuildingsSubject,
 	QUALYFYING_CATEGORIES, WHOLE_BUILDING
 } from './helpers.js'
 
-export default async ({ 
-	theme, 
+export default async ({
+	theme,
 	reportTitle,
 	reportSubtitle1,
 	reportSubtitle2,
@@ -17,9 +17,9 @@ export default async ({
 	customer,
 	certifier,
 	logo,
-	signature, 
-	pdfFiles, 
-	photos 
+	signature,
+	pdfFiles,
+	photos
 }) => {
 	const {
 		coverImage,
@@ -28,12 +28,12 @@ export default async ({
 		headerBackground,
 		headerLogo,
 		headerText,
-		bulletTopLeft, 
+		bulletTopLeft,
 		coverLogo,
 		docTitle,
 		repoTitle,
 		repoSubtitle,
-		repoHeader, 
+		repoHeader,
 		sectionTitle,
 		sectionSubtitle,
 		sectionTitleParagraph,
@@ -47,95 +47,121 @@ export default async ({
 		sectionPdf
 	} = helpers({ theme, noBrand: customer.name == 'No Brand' })
 
-	const draftCoverArray = { items: [
-		sectionParagraph('INTERNAL REVENUE CODE SECTION 179D\nEPACT COMPLIANCE REPORT OF', {
-			size: 12,
-			align: 'center'
-		}),
-		sectionParagraph(project.legalEntity, {
-			size: 12,
-			align: 'center'	
-		}),
-		sectionParagraph(`${project.name}, ${project.state}`, {
-			size: 12,
-			align: 'center'	
-		}),
-		sectionParagraph(project.taxYear.toString(), {
-			size: 12,
-			align: 'center'	,
-			moveDown: 2
-		}),
-		sectionParagraph('ISSUED FOR REVIEW ONLY', {
-			size: 12,
-			align: 'center'
-		}),
-		sectionParagraph(`The enclosed report has been issued by Walker Reid Strategies for review by ${removeEndingDots(project.legalEntity)}. Any and/or all pages watermarked with DRAFT do not meet the regulations of 1.6001-1(a) requiring taxpayers to maintain books and records which are sufficient to establish the entitlement to, and amount of any deduction claimed by the taxpayer. Upon final approval, a final copy will be provided to ${project.legalEntity} meeting the regulations of 1.6001-1(a).`, {
-			moveDown: 10
-		}),
-		sectionParagraph('CONFIDENTIAL', {
-			size: 9,
-			align: 'center'	
-		}),
-		sectionParagraph('The contents of this document are confidential and are exclusive to the intended recipient and Walker Reid Strategies employees. Distribution or sharing of this information with persons or entities for which it is not intended is prohibited, in any form, without the express written consent of Walker Reid Strategies.', {
-			size: 9,
-			align: 'center'
-		})
-	] }
+	const draftCoverArray = {
+		items: [
+			sectionParagraph('INTERNAL REVENUE CODE SECTION 179D\nEPACT COMPLIANCE REPORT OF', {
+				size: 12,
+				align: 'center'
+			}),
+			sectionParagraph(project.legalEntity, {
+				size: 12,
+				align: 'center'
+			}),
+			sectionParagraph(`${project.name}, ${project.state}`, {
+				size: 12,
+				align: 'center'
+			}),
+			sectionParagraph(project.taxYear.toString(), {
+				size: 12,
+				align: 'center',
+				moveDown: 2
+			}),
+			sectionParagraph('ISSUED FOR REVIEW ONLY', {
+				size: 12,
+				align: 'center'
+			}),
+			sectionParagraph(`The enclosed report has been issued by Walker Reid Strategies for review by ${removeEndingDots(project.legalEntity)}. Any and/or all pages watermarked with DRAFT do not meet the regulations of 1.6001-1(a) requiring taxpayers to maintain books and records which are sufficient to establish the entitlement to, and amount of any deduction claimed by the taxpayer. Upon final approval, a final copy will be provided to ${project.legalEntity} meeting the regulations of 1.6001-1(a).`, {
+				moveDown: 10
+			}),
+			sectionParagraph('CONFIDENTIAL', {
+				size: 9,
+				align: 'center'
+			}),
+			sectionParagraph('The contents of this document are confidential and are exclusive to the intended recipient and Walker Reid Strategies employees. Distribution or sharing of this information with persons or entities for which it is not intended is prohibited, in any form, without the express written consent of Walker Reid Strategies.', {
+				size: 9,
+				align: 'center'
+			})
+		]
+	}
 	const noBrand = customer.name == 'No Brand'
 	const coverImageVectors = noBrand ? [] : [coverImage, ...coverVectors, coverLogo(logo)]
 
-	const pdf = new PDFBuilder({ 
+	const pdf = new PDFBuilder({
 		size: 'LETTER',
 		defaultFont, fonts,
 		margins: { top: contentMarginTop, right: contentMarginRight, bottom: contentMarginBottom, left: contentMarginLeft },
 		draftCover: project.draft === true || project.draft === undefined ? draftCoverArray : {},
 		cover: {
-			items: [...coverImageVectors,				
-				...docTitle('Certification', noBrand),
-				repoTitle(reportTitle, noBrand),
-				repoSubtitle(reportSubtitle1, noBrand),
-				repoHeader(reportSubtitle2, noBrand, {
-					marginBottom: 32
-				}),
-				repoHeader(project.legalEntity, noBrand, {
-					width: 200
-				}),
-				repoHeader(`${project.name}, ${project.state}`, noBrand, {
-					size: 12,
-					width: 200
-				}),
-				repoHeader(project.taxYear.toString(), noBrand, {
-					size: 12,
-					width: 200
-				})
+			items: [...coverImageVectors,
+			...docTitle('Certification', noBrand),
+			repoTitle(reportTitle, noBrand),
+			repoSubtitle(reportSubtitle1, noBrand),
+			repoHeader(reportSubtitle2, noBrand, {
+				marginBottom: 32
+			}),
+			repoHeader(project.legalEntity, noBrand, {
+				width: 200
+			}),
+			repoHeader(`${project.name}, ${project.state}`, noBrand, {
+				size: 12,
+				width: 200
+			}),
+			repoHeader(project.taxYear.toString(), noBrand, {
+				size: 12,
+				width: 200
+			})
 			]
 		},
 		tableOfContent: {
 			items: [
-				...sectionTitle('Table of Contents', noBrand, { 
+				...sectionTitle('Table of Contents', noBrand, {
 					isTitle: false
 				}),
 				sectionTopics()
-			]	
+			]
 		},
 		header: {
 			items: [headerBackground, {
 				...headerLogo,
 				value: logo
 			}, {
-				...headerText,
-				value: headerTitle
-			}, bulletTopLeft]
+					...headerText,
+					value: headerTitle
+				}, bulletTopLeft]
 		},
 		footer
 	})
 
 	const sections = []
 
-	const deductionFrom = project.taxYear === 2023 ? '2.68' : '2.83'
-	const deductionTo = project.taxYear === 2023 ? '5.36' : '5.65'
-	const rateFrom = project.taxYear === 2023 ? '0.54' : '0.57'
-	const rateTo = project.taxYear === 2023 ? '1.07' : '1.13'
+	let deductionFrom = 0;
+	let deductionTo = 0;
+	let rateFrom = 0;
+	let rateTo = 0;
+
+	switch (project.taxYear) {
+		case 2023: {
+			deductionFrom = '2.68'
+			deductionTo = '5.36'
+			rateFrom = '0.54'
+			rateTo = '1.07'
+			break;
+		}
+		case 2024: {
+			deductionFrom = '2.83'
+			deductionTo = '5.65'
+			rateFrom = '0.57'
+			rateTo = '1.13'
+			break;
+		}
+		case 2025: {
+			deductionFrom = '2.90'
+			deductionTo = '5.81'
+			rateFrom = '0.58'
+			rateTo = '1.16'
+			break;
+		}
+	}
 
 	const year = project.taxYear > 2015 ? '2007' : '2001'
 	const totalBuildingArea = project.buildings.reduce((result, building) => result + parseFloat(building.area), 0)
@@ -144,7 +170,7 @@ export default async ({
 	let qualifyingWholeBuilding = false
 	let qualifyingCategories = []
 	let buildingTypes = []
-	
+
 	for (let i = 0, ln = project.buildings.length; i < ln; i++) {
 		const building = project.buildings[i]
 		if (building.qualifyingCategories.indexOf(WHOLE_BUILDING) !== -1) {
@@ -203,11 +229,11 @@ export default async ({
 				'Installed on or in any building located in the United States and within the scope of Standard 90.1.',
 				'Installed as part of the interior lighting systems, the heating, cooling, ventilation, and hot water systems or the building envelope, and ',
 				'Certified in accordance with the tax law as part of a plan designed to reduce the total annual energy and power costs of the building by a minimum of 25% or more in comparison to a reference building meeting the minimum requirements of ASHRAE Standard 90.1.'
-			]),		
+			]),
 			sectionParagraph('Section 179D(d)(3) provides that for energy efficient commercial building property installed on or in property owned by a specified tax-exempt entity, the Secretary shall allow the allocation of the deduction to the person primarily responsible for designing the property in lieu of the owner of such property. Specified tax-exempt entities include the United States, any State or political subdivision thereof, Indian tribal governments, Alaska Native Corporations, and any tax-exempt organizations.'),
 			sectionParagraph('Section 179D(e) provides that if a deduction is allowed under this section with respect to any energy efficient commercial building property, the basis of such property shall be reduced by the amount of the deduction allowed.')
 		]
-	})	
+	})
 	sections.push({
 		items: [
 			sectionParagraph('Notice 2006-52 section 5.01 defines "building square footage" as the sum of the floor areas of the conditioned spaces within the building, including basements, mezzanine, and intermediate-floored tiers and penthouses with headroom height of 7.5 feet or greater. Building square footage is measured from the exterior faces of exterior walls or from the centerline of walls separating buildings, but excludes covered walkways, open roofed over areas, porches and similar spaces, pipe trenches, exterior terraces or steps, chimneys, roof overhangs and similar features.'),
@@ -217,7 +243,7 @@ export default async ({
 
 	let pwTotalDeduction = project.buildings.reduce((acc, row) => acc + (parseFloat(row.area) * parseFloat(row.pwRate.toFixed(2))), 0)
 
-	sections.push({ 
+	sections.push({
 		items: [
 			...sectionTitle('Calculation of Section 179D Deduction', noBrand),
 			sectionTitleParagraph('Summary of Deduction Calculation'),
@@ -295,7 +321,7 @@ export default async ({
 		sections.push({
 			horizontal: true,
 			items: itemsToAdd
-			
+
 		})
 	}
 	if (canAddParagraphs1TInSamePage === false) {
@@ -425,7 +451,7 @@ export default async ({
 	buildings = divideBuildings(project.buildings, 1)
 	let canAddParagraphs2TInSamePage = false
 	const paragraph2Table = [sectionParagraph(`*Note: The deduction amount is determined as the lesser of two options: (1) the capitalized cost incurred for energy-efficient property or (2) the per-square-foot allowance. Projects that meet the requirements of Section 2.02(2)(i) or (ii) (IRS BOC Exception: Physical Work Test or Five Percent Safe Harbor) of Notice 2022-61 before January 29, 2023, are exempt from the prevailing wage and apprenticeship requirements and can qualify for the deduction ranging from $${deductionFrom} to $${deductionTo} per square foot. For any property placed-in-service on or after January 1, 2023, and which does not meet the exception above, in order to qualify for the increased deduction level under 179D(b)(3), taxpayers must adhere to specific prevailing wage and apprenticeship requirements as outlined in Notice 2022-61.`)]
-	
+
 	for (let i = 0, ln = buildings.length; i < ln; i++) {
 		let itemsToAdd = []
 		if (i === 0) {
@@ -533,7 +559,7 @@ export default async ({
 			...sectionTitle('Section 179D Energy Study Report', noBrand)
 		]
 			.concat(
-				(photos.length > 0) ? 
+				(photos.length > 0) ?
 					[
 						sectionSubtitle(`${String.fromCharCode(charCode)}. Site Inspection Photographs`),
 						sectionParagraph('Site inspections were performed using methods and standards of the NREL Inspection Guidelines to verify the installation of energy efficient property per design documents. The following are arbitrary photos depicting typical components used within the energy efficient improvements.')

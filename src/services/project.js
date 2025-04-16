@@ -384,6 +384,16 @@ export default ({ db, config }) => {
 		return isNaN(parsed) ? 0 : parsed
 	}
 
+	const getYearFromString = (value = '') => {
+		if (!value) return 0;
+		const m = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+		if (m) {
+			const y = parseInt(m[3], 10);
+			return isNaN(y) ? 0 : y;
+		}
+		return parseIntSafe(value);
+	};
+
 	const getProjectByProjectID = async (id) => {
 		let project = {}
 		const definedStates = ['Multistate','AL', 'MT', 'AK', 'NE', 'DC', 'AZ', 'NV', 'AR', 'NH', 'CA', 'NJ', 'CO', 'NM', 'CT', 'NY', 'DE', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'MO', 'WY']
@@ -461,7 +471,7 @@ export default ({ db, config }) => {
 						projectID: id,
 						originalProjectID: id,
 						name: projectName,
-						taxYear: parseIntSafe(projectFields['PROJECT_FIELD_10']),
+						taxYear: getYearFromString(projectFields['PROJECT_FIELD_10']),
 						legalEntity: projectFields['PROJECT_FIELD_11'],
 						state: stateFromInsightly,
 						inspectionDate: projectFields['PROJECT_FIELD_9'],

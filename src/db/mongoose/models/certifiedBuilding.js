@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const certifiedBuildingSchema = new mongoose.Schema({
-    projectId: {
+	projectId: {
 		type: String,
 		required: true,
 	},
@@ -9,20 +9,20 @@ const certifiedBuildingSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-    taxYear: {
+	taxYear: {
 		type: Number,
 		required: true
 	},
-    legalEntity: {
+	legalEntity: {
 		type: String,
 		required: true
 	},
-    state: {
+	state: {
 		type: String,
 		required: true,
-		enum: ['Multistate','AL', 'MT', 'AK', 'NE', 'DC', 'AZ', 'NV', 'AR', 'NH', 'CA', 'NJ', 'CO', 'NM', 'CT', 'NY', 'DE', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'MO', 'WY']
+		enum: ['Multistate', 'AL', 'MT', 'AK', 'NE', 'DC', 'AZ', 'NV', 'AR', 'NH', 'CA', 'NJ', 'CO', 'NM', 'CT', 'NY', 'DE', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'MO', 'WY']
 	},
-    inspectionDate: {
+	inspectionDate: {
 		type: String
 	},
 	reportType: {
@@ -33,19 +33,19 @@ const certifiedBuildingSchema = new mongoose.Schema({
 		type: Boolean,
 		default: true
 	},
-    certifiedDate: {
+	certifiedDate: {
 		type: Date
 	},
-    certifier: {
+	certifier: {
 		type: String
 	},
-    customer: {
+	customer: {
 		type: String
 	},
-    totalDwellingUnits: {
+	totalDwellingUnits: {
 		type: Number
 	},
-    buildings: [{
+	buildings: [{
 		name: {
 			type: String,
 			required: true
@@ -59,7 +59,7 @@ const certifiedBuildingSchema = new mongoose.Schema({
 		},
 		qualifyingCategories: [{
 			type: String,
-			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L + ENV', 'Envelope', 'Whole Building', 'TBD']
+			enum: ['Lighting', 'HVAC', 'HVAC + L', 'HVAC + ENV', 'L+ENV', 'Envelope', 'Whole Building', 'TBD']
 		}],
 		area: {
 			type: Number
@@ -92,7 +92,7 @@ const certifiedBuildingSchema = new mongoose.Schema({
 		ashraeRequiredLpd: {
 			type: Number
 		}
-	}],    
+	}],
 });
 
 const CertifiedBuilding = mongoose.model('CertifiedBuilding', certifiedBuildingSchema)
